@@ -1,8 +1,9 @@
 version 2.0.9 (cvs):
-	* autogen.sh now runs ./configure when done.
 	* Call bind_textdomain_codeset to set UTF-8 encoding for all translations.
-	* Don't delete the GtkTextTag from the tag table (needed for shared
+	* Do not delete the GtkTextTag from the tag table (needed for shared
 	  tag tables).
+	* Disable word-breaking workarounds when Pango >= 1.8.0 (GNOME bug #97545).
+	* Many additional translations (see po/ChangeLog).
 
 version 2.0.8 (08-Oct-2004):
 	* Fix how the GtkTextTag is created to work with shared tag tables.

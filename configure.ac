@@ -22,7 +22,14 @@ AC_SUBST(GTKSPELL_LIBS)
 # check Pango version so we can use PANGO_UNDERLINE_ERROR when available:
 PKG_CHECK_MODULES(PANGO, [pango >= 1.3.5],
    [AC_DEFINE(HAVE_PANGO_UNDERLINE_ERROR, 1, [Define to 1 if PANGO_UNDERLINE_ERROR is available.])],
-   [AC_MSG_WARN([Disabling new error underlining since pango < 1.3.5])])                                                                                                                                               
+   [AC_MSG_WARN([Disabling new error underlining since pango < 1.3.5])])
+
+# check Pango version to see if word breaking bug is fixed:
+PKG_CHECK_MODULES(PANGO, [pango >= 1.8.0],
+   [AC_DEFINE(FIXED_PANGO, 1, [Define to 1 if pango >= 1.8.0.])],
+   [AC_MSG_WARN([Enabling word-breaking workarounds since pango < 1.8.0])])
+
+# gtk-doc check:
 # gtk-doc check:
 # from http://cvs.gnome.org/lxr/source/gtk-doc/examples/configure.in
 AC_ARG_WITH(html-dir, AC_HELP_STRING([--with-html-dir=PATH],[path to installed docs]))

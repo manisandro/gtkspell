@@ -1,5 +1,5 @@
 AC_PREREQ(2.57)
-AC_INIT([gtkspell],[2.0.6],[nathan@silverorange.com])
+AC_INIT([gtkspell],[2.0.7cvs],[nathan@silverorange.com])
 AC_CONFIG_SRCDIR(gtkspell/gtkspell.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AC_CONFIG_HEADERS([config.h])
@@ -66,7 +66,7 @@ AC_PROG_LIBTOOL
 AC_C_CONST
 
 # gettext 
-ALL_LINGUAS="be de eo fr ga pt_BR ro sr wa"
+ALL_LINGUAS="be de eo fr ga mn pt_BR ro sr wa"
 AM_GLIB_GNU_GETTEXT
 GETTEXT_PACKAGE=$PACKAGE
 AC_SUBST(GETTEXT_PACKAGE)

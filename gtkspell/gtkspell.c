@@ -366,31 +366,6 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 	
 	topmenu = menu = gtk_menu_new();
 
-	/* + Add to Dictionary */
-	label = g_strdup_printf("Add \"%s\" to Dictionary", word);
-	mi = gtk_image_menu_item_new_with_label(label);
-	g_free(label);
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(mi), 
-			gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
-	g_signal_connect(G_OBJECT(mi), "activate",
-			G_CALLBACK(add_to_dictionary), spell);
-	gtk_widget_show_all(mi);
-	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
-
-	/* - Ignore All */
-	mi = gtk_image_menu_item_new_with_label("Ignore All");
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(mi), 
-			gtk_image_new_from_stock(GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU));
-	g_signal_connect(G_OBJECT(mi), "activate",
-			G_CALLBACK(ignore_all), spell);
-	gtk_widget_show_all(mi);
-	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
-
-	/* Separator */
-	mi = gtk_menu_item_new();
-	gtk_widget_show(mi);
-	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
-
 	suggestions = aspell_speller_suggest(spell->speller, word, -1);
 	elements = aspell_word_list_elements(suggestions);
 
@@ -432,6 +407,31 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 	}
 
 	delete_aspell_string_enumeration(elements);
+
+	/* Separator */
+	mi = gtk_menu_item_new();
+	gtk_widget_show(mi);
+	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
+
+	/* + Add to Dictionary */
+	label = g_strdup_printf("Add \"%s\" to Dictionary", word);
+	mi = gtk_image_menu_item_new_with_label(label);
+	g_free(label);
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(mi), 
+			gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
+	g_signal_connect(G_OBJECT(mi), "activate",
+			G_CALLBACK(add_to_dictionary), spell);
+	gtk_widget_show_all(mi);
+	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
+
+	/* - Ignore All */
+	mi = gtk_image_menu_item_new_with_label("Ignore All");
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(mi), 
+			gtk_image_new_from_stock(GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU));
+	g_signal_connect(G_OBJECT(mi), "activate",
+			G_CALLBACK(ignore_all), spell);
+	gtk_widget_show_all(mi);
+	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
 
 	return topmenu;
 }

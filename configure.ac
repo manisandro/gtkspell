@@ -61,10 +61,15 @@ AC_PROG_LIBTOOL
 
 AC_C_CONST
 
-AM_GNU_GETTEXT
+# gettext 
+ALL_LINGUAS="pt_BR"
+AM_GLIB_GNU_GETTEXT
+GETTEXT_PACKAGE=$PACKAGE
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
 
 dnl AM_MAINTAINER_MODE
 
-AC_CONFIG_FILES(Makefile gtkspell/Makefile examples/Makefile gtkspell-2.0.pc gtkspell.spec docs/Makefile intl/Makefile po/Makefile.in m4/Makefile)
+AC_CONFIG_FILES(Makefile gtkspell/Makefile examples/Makefile gtkspell-2.0.pc gtkspell.spec docs/Makefile po/Makefile.in)
 AC_OUTPUT
 

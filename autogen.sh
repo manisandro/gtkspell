@@ -29,7 +29,7 @@ if $have_libtool ; then : ; else
 	DIE=1
 fi
 
-(gtkdocize --version) < /dev/null > /dev/null 2>&1 || {
+(gtkdoc-scan --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "You must have gtk-doc installed to compile $PROJECT."
 	echo "Install the appropriate package for your distribution,"

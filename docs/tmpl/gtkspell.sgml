@@ -1,0 +1,85 @@
+<!-- ##### SECTION Title ##### -->
+GtkSpell
+
+<!-- ##### SECTION Short_Description ##### -->
+GtkSpell objects and methods.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkSpell ##### -->
+<para>
+The opaque GtkSpell object.  It is created with gtkspell_new_attach() and
+freed with gtkspell_detach().
+</para>
+
+
+<!-- ##### FUNCTION gtkspell_new_attach ##### -->
+<para>
+
+</para>
+
+@view: 
+@lang: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtkspell_set_language ##### -->
+<para>
+
+</para>
+
+@spell: 
+@lang: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtkspell_recheck_all ##### -->
+<para>
+
+</para>
+
+@spell: 
+
+
+<!-- ##### FUNCTION gtkspell_get_from_text_view ##### -->
+<para>
+
+</para>
+
+@view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtkspell_detach ##### -->
+<para>
+
+</para>
+
+@spell: 
+
+
+<!-- ##### MACRO GTKSPELL_ERROR ##### -->
+<para>
+Error domain for GtkSpell functions. Errors in this domain will be from the
+#GtkSpellError enumeration. See #GError for information on error domains.
+</para>
+
+
+
+<!-- ##### ENUM GtkSpellError ##### -->
+<para>
+Currently there is only one type of error that GtkSpell can report.
+</para>
+
+@GTKSPELL_ERROR_BACKEND:  Aspell (or pspell) reported an error.
+

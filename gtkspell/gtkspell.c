@@ -5,8 +5,38 @@
 /* vim: set ts=4 sw=4 wm=5 : */
 
 #include <gtk/gtk.h>
-#include <pspell/pspell.h>
+#include "../config.h"
 #include "gtkspell.h"
+
+#ifdef HAVE_ASPELL_H
+   #define USING_ASPELL
+   #include <aspell.h>
+#elif defined HAVE_PSPELL_H
+   #define USING_PSPELL
+   #include <pspell/pspell.h>
+   #define AspellSpeller PspellManager
+   #define speller manager
+   #define aspell_speller_check pspell_manager_check
+   #define aspell_speller_add_to_session pspell_manager_add_to_session
+   #define aspell_speller_store_replacement pspell_manager_store_replacement
+   #define AspellWordList PspellWordList
+   #define AspellStringEnumeration PspellStringEmulation
+   #define aspell_speller_suggest pspell_manager_suggest
+   #define aspell_word_list_elements pspell_word_list_elements
+   #define aspell_string_enumeration_next pspell_string_emulation_next
+   #define delete_aspell_string_enumeration delete_pspell_string_emulation
+   #define AspellConfig PspellConfig
+   #define AspellCanHaveError PspellCanHaveError
+   #define new_aspell_config new_pspell_config
+   #define aspell_config_replace pspell_config_replace
+   #define new_aspell_speller new_pspell_manager
+   #define delete_aspell_config delete_pspell_config
+   #define aspell_error_message pspell_error_message
+   #define delete_aspell_speller delete_pspell_manager
+   #define to_aspell_speller to_pspell_manager
+   #define aspell_error_number pspell_error_number
+   #define aspell pspell
+#endif
 
 const int debug = 0;
 const int quiet = 0;
@@ -15,7 +45,7 @@ struct _GtkSpell {
 	GtkTextView *view;
 	GtkTextTag *tag_highlight;
 	GtkTextMark *mark_insert;
-	PspellManager *manager;
+	AspellSpeller *speller;
 };
 
 static void gtkspell_free(GtkSpell *spell);
@@ -30,13 +60,14 @@ gtkspell_error_quark(void) {
 	return q;
 }
 
+static gboolean
+gtkspell_text_iter_forward_word_end(GtkTextIter *i) {
+	GtkTextIter iter;
+
 /* heuristic: 
  * if we're on an singlequote/apostrophe and
  * if the next letter is alphanumeric,
  * this is an apostrophe. */
-static gboolean
-gtkspell_text_iter_forward_word_end(GtkTextIter *i) {
-	GtkTextIter iter;
 
 	if (!gtk_text_iter_forward_word_end(i))
 		return FALSE;
@@ -84,7 +115,7 @@ check_word(GtkSpell *spell, GtkTextBuffer *buffer,
 	char *text;
 	text = gtk_text_buffer_get_text(buffer, start, end, FALSE);
 	if (debug) g_print("checking: %s\n", text);
-	if (pspell_manager_check(spell->manager, text, -1) == FALSE)
+	if (aspell_speller_check(spell->speller, text, -1) == FALSE)
 		gtk_text_buffer_apply_tag(buffer, spell->tag_highlight, start, end);
 	g_free(text);
 }
@@ -207,7 +238,7 @@ add_to_dictionary(GtkWidget *menuitem, GtkSpell *spell) {
 	get_cur_word_extents(buffer, &start, &end);
 	word = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 	
-	pspell_manager_add_to_session(spell->manager, word, strlen(word));
+	aspell_speller_add_to_session(spell->speller, word, strlen(word));
 
 	gtk_text_buffer_remove_tag(buffer, spell->tag_highlight, &start, &end);
 
@@ -236,7 +267,7 @@ replace_word(GtkWidget *menuitem, GtkSpell *spell) {
 	gtk_text_buffer_delete(buffer, &start, &end);
 	gtk_text_buffer_insert(buffer, &start, newword, -1);
 
-	pspell_manager_store_replacement(spell->manager, 
+	aspell_speller_store_replacement(spell->speller, 
 			oldword, strlen(oldword),
 			newword, strlen(newword));
 
@@ -252,8 +283,8 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 	GtkWidget *hbox;
 	int count = 0;
 	void *spelldata;
-	const PspellWordList *suggestions;
-	PspellStringEmulation *elements;
+	const AspellWordList *suggestions;
+	AspellStringEnumeration *elements;
 	char *label;
 	
 	topmenu = menu = gtk_menu_new();
@@ -274,10 +305,10 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 	gtk_widget_show(mi);
 	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
 
-	suggestions = pspell_manager_suggest(spell->manager, word, -1);
-	elements = pspell_word_list_elements(suggestions);
+	suggestions = aspell_speller_suggest(spell->speller, word, -1);
+	elements = aspell_word_list_elements(suggestions);
 
-	suggestion = pspell_string_emulation_next(elements);
+	suggestion = aspell_string_enumeration_next(elements);
 	if (suggestion == NULL) {
 		/* no suggestions.  put something in the menu anyway... */
 		GtkWidget *label;
@@ -310,11 +341,11 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 			gtk_widget_show(mi);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
 			count++;
-			suggestion = pspell_string_emulation_next(elements);
+			suggestion = aspell_string_enumeration_next(elements);
 		}
 	}
 
-	delete_pspell_string_emulation(elements);
+	delete_aspell_string_enumeration(elements);
 
 	return topmenu;
 }
@@ -377,9 +408,9 @@ button_press_event(GtkTextView *view, GdkEventButton *event, gpointer data) {
 
 static gboolean
 gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **error) {
-	PspellConfig *config;
-	PspellCanHaveError *err;
-	PspellManager *manager;
+	AspellConfig *config;
+	AspellCanHaveError *err;
+	AspellSpeller *speller;
 
 	if (lang == NULL) {
 		lang = g_getenv("LANG");
@@ -391,25 +422,42 @@ gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **erro
 		}
 	}
 
-	config = new_pspell_config();
+	config = new_aspell_config();
 	if (lang)
-		pspell_config_replace(config, "language-tag", lang);
-	pspell_config_replace(config, "encoding", "utf-8");
-	err = new_pspell_manager(config);
-	delete_pspell_config(config);
+		aspell_config_replace(config, "language-tag", lang);
+	aspell_config_replace(config, "encoding", "utf-8");
+	err = new_aspell_speller(config);
+	delete_aspell_config(config);
 
-	if (pspell_error_number(err) != 0) {
-		g_set_error(error, GTKSPELL_ERROR, GTKSPELL_ERROR_PSPELL,
-				"pspell: %s", pspell_error_message(err));
+	if (aspell_error_number(err) != 0) {
+#ifdef USING_ASPELL
+		g_set_error(error, GTKSPELL_ERROR, GTKSPELL_ERROR_BACKEND,
+				"aspell: %s", aspell_error_message(err));
+#elif defined USING_PSPELL
+		g_set_error(error, GTKSPELL_ERROR, GTKSPELL_ERROR_BACKEND,
+				"pspell: %s", aspell_error_message(err));
+#endif
 		return FALSE;
 	} 
-	if (spell->manager)
-		delete_pspell_manager(spell->manager);
-	spell->manager = to_pspell_manager(err);
+	if (spell->speller)
+		delete_aspell_speller(spell->speller);
+	spell->speller = to_aspell_speller(err);
 
 	return TRUE;
 }
 
+/**
+ * gtkspell_set_language:
+ * @spell:  The #GtkSpell object.
+ * @lang: The language to use, in a form pspell understands (it appears to
+ * be a locale specifier?).
+ * @error: Return location for error.
+ *
+ * Set the language on @spell to @lang, possibily returning an error in
+ * @error.
+ *
+ * Returns: FALSE if there was an error.
+ */
 gboolean
 gtkspell_set_language(GtkSpell *spell, const gchar *lang, GError **error) {
 	gboolean ret;
@@ -424,6 +472,12 @@ gtkspell_set_language(GtkSpell *spell, const gchar *lang, GError **error) {
 	return ret;
 }
 
+/**
+ * gtkspell_recheck_all:
+ * @spell:  The #GtkSpell object.
+ *
+ * Recheck the spelling in the entire buffer.
+ */
 void
 gtkspell_recheck_all(GtkSpell *spell) {
 	GtkTextBuffer *buffer;
@@ -436,6 +490,17 @@ gtkspell_recheck_all(GtkSpell *spell) {
 	check_range(spell, buffer, start, end);
 }
 
+/**
+ * gtkspell_new_attach:
+ * @view: The #GtkTextView to attach to.
+ * @lang: The language to use, in a form pspell understands (it appears to
+ * be a locale specifier?).
+ * @error: Return location for error.
+ *
+ * Create a new #GtkSpell object attached to @view with language @lang.
+ *
+ * Returns: a new #GtkSpell object, or %NULL on error.
+ */
 GtkSpell*
 gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 	GtkTextBuffer *buffer;
@@ -510,7 +575,7 @@ gtkspell_free(GtkSpell *spell) {
 
 	gtk_text_buffer_delete_mark(buffer, spell->mark_insert);
 
-	delete_pspell_manager(spell->manager);
+	delete_aspell_speller(spell->speller);
 
 	g_signal_handlers_disconnect_matched(spell->view,
 			G_SIGNAL_MATCH_DATA,
@@ -523,11 +588,28 @@ gtkspell_free(GtkSpell *spell) {
 	g_free(spell);
 }
 
+/**
+ * gtkspell_get_from_text_view:
+ * @view: A #GtkTextView.
+ *
+ * Retrieves the #GtkSpell object attached to a text view.
+ *
+ * Returns: the #GtkSpell object, or %NULL if there is no #GtkSpell
+ * attached to @view.
+ */
 GtkSpell*
 gtkspell_get_from_text_view(GtkTextView *view) {
 	return g_object_get_data(G_OBJECT(view), GTKSPELL_OBJECT_KEY);
 }
-	
+
+/**
+ * gtkspell_detach:
+ * @spell: A #GtkSpell.
+ *
+ * Detaches this #GtkSpell from its text view.  Use
+ * gtkspell_get_from_text_view() to retrieve a GtkSpell from a
+ * #GtkTextView.
+ */
 void
 gtkspell_detach(GtkSpell *spell) {
 	g_return_if_fail(spell != NULL);
@@ -536,15 +618,4 @@ gtkspell_detach(GtkSpell *spell) {
 	gtkspell_free(spell);
 }
 
-/* backward compatibility functions. */
 
-int
-gtkspell_init() {
-	/* we do nothing. */
-	return 0;
-}
-
-void
-gtkspell_attach(GtkTextView *view) {
-	gtkspell_new_attach(view, NULL, NULL);
-}

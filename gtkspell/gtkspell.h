@@ -10,7 +10,7 @@
 #define GTKSPELL_ERROR gtkspell_error_quark()
 
 typedef enum {
-	GTKSPELL_ERROR_PSPELL,
+	GTKSPELL_ERROR_BACKEND,
 } GtkSpellError;
 
 GQuark gtkspell_error_quark();
@@ -21,23 +21,27 @@ typedef struct _GtkSpell GtkSpell;
  * GtkTextBuffer-- it lives as an attribute of the GtkTextView but
  * it can be referred to directly. */
 
-extern GtkSpell* gtkspell_new_attach(GtkTextView *view,
+GtkSpell* gtkspell_new_attach(GtkTextView *view,
                                      const gchar *lang, GError **error);
-extern GtkSpell* gtkspell_get_from_text_view(GtkTextView *view);
-extern void      gtkspell_detach(GtkSpell *spell);
+GtkSpell* gtkspell_get_from_text_view(GtkTextView *view);
+void      gtkspell_detach(GtkSpell *spell);
 
-extern gboolean  gtkspell_set_language(GtkSpell *spell,
+gboolean  gtkspell_set_language(GtkSpell *spell,
                                        const gchar *lang, GError **error);
 
-extern void      gtkspell_recheck_all(GtkSpell *spell);
+void      gtkspell_recheck_all(GtkSpell *spell);
 
 
-/*** old API-- deprecated. **x*/
+/*** old API-- deprecated. ***/
+#ifndef GTKSPELL_DISABLE_DEPRECATED
+#define GTKSPELL_ERROR_PSPELL GTKSPELL_ERROR_BACKEND
 
-extern int gtkspell_init();
+int gtkspell_init();
 /* no-op. */
 
-extern void gtkspell_attach(GtkTextView *view);
+void gtkspell_attach(GtkTextView *view);
 /* gtkspell_new_attach(view, NULL, NULL); */
+
+#endif /* GTKSPELL_DISABLE_DEPRECATED */
 
 #endif /* GTKSPELL_H */

@@ -1,3 +1,9 @@
+Wed, 11 Dec 2002 21:17:13 -0800  Evan Martin  <martine@cs.washington.edu>
+
+	* Conditionally use Aspell if it's available, otherwise
+	  fall back to Pspell (Ramon Medina).
+	* docs/ directory and beginning documentation added.
+
 Wed, 13 Nov 2002 19:05:25 -0800  Evan Martin  <martine@cs.washington.edu>
 
 	* 2.0.3 released.

@@ -7,6 +7,6 @@ Name: GTKSpell
 Description: GTK spelling library
 Version: @VERSION@
 Requires: @GTKSPELL_PACKAGES@
-Libs: -L${libdir} -lgtkspell -lpspell
+Libs: -L${libdir} -lgtkspell @SPELLER_LIB@
 Cflags: -I${includedir}/gtkspell-2.0
 

@@ -47,6 +47,7 @@ Thanks
 ------
 Ari Pollak <ari@debian.org> - Debian packages.
 Alex <hansolo@rochester.rr.com> - Redhat packages.
+Ramon Medina <rmedina@rochester.rr.com> - Patch to conditionally use Aspell.
 
 
 vim: tw=72

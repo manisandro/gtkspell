@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY gtkspell-gtkspell SYSTEM "xml/gtkspell.xml">
+]>
+<!-- vim: set ts=8 sw=2 : -->
+<book id="index">
+  <bookinfo>
+    <title>GtkSpell Manual</title>
+    <author><firstname>Evan</firstname><surname>Martin</surname></author>
+  </bookinfo>
+
+  <part id="tutorial">
+    <title>Tutorial</title>
+    <partintro>
+    <para>The tutorial goes around here somewhere.</para>
+    </partintro>
+  </part>
+
+  <part id="reference">
+    <title>Function Reference</title>
+    &gtkspell-gtkspell;
+  </part>
+</book>

@@ -20,7 +20,7 @@ AC_SUBST(GTKSPELL_CFLAGS)
 AC_SUBST(GTKSPELL_LIBS)
 
 # check Pango version so we can use PANGO_UNDERLINE_ERROR when available:
-PKG_CHECK_MODULES(PANGO, [pango >= 1.3.5],
+PKG_CHECK_MODULES(PANGO, [pango >= 3.3.5],
    [AC_DEFINE(HAVE_PANGO_UNDERLINE_ERROR, 1, [Define to 1 if PANGO_UNDERLINE_ERROR is available.])],
    [AC_MSG_WARN([Disabling new error underlining since pango < 1.3.5])])                                                                                                                                               
 # gtk-doc check:
@@ -66,7 +66,7 @@ AC_PROG_LIBTOOL
 AC_C_CONST
 
 # gettext 
-ALL_LINGUAS="be de eo ga pt_BR sr"
+ALL_LINGUAS="be de eo ga pt_BR ro sr"
 AM_GLIB_GNU_GETTEXT
 GETTEXT_PACKAGE=$PACKAGE
 AC_SUBST(GETTEXT_PACKAGE)

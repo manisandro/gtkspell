@@ -44,7 +44,9 @@ const int quiet = 0;
 struct _GtkSpell {
 	GtkTextView *view;
 	GtkTextTag *tag_highlight;
-	GtkTextMark *mark_insert;
+	GtkTextMark *mark_insert_start;
+	GtkTextMark *mark_insert_end;
+	gboolean deferred_check;
 	AspellSpeller *speller;
 	GtkTextMark *mark_click;
 };
@@ -131,12 +133,13 @@ print_iter(char *name, GtkTextIter *iter) {
 
 static void
 check_range(GtkSpell *spell, GtkTextBuffer *buffer,
-            GtkTextIter start, GtkTextIter end) {
+            GtkTextIter start, GtkTextIter end, gboolean force_all) {
 	/* we need to "split" on word boundaries.
 	 * luckily, pango knows what "words" are 
 	 * so we don't have to figure it out. */
 
-	GtkTextIter wstart, wend;
+	GtkTextIter wstart, wend, cursor, precursor;
+	gboolean inword, highlight;
 	if (debug) {
 		g_print("check_range: "); print_iter("s", &start); print_iter("e", &end); g_print(" -> ");
 	}
@@ -156,6 +159,14 @@ check_range(GtkSpell *spell, GtkTextBuffer *buffer,
 				gtk_text_iter_backward_word_start(&start);
 		}
 	}
+	gtk_text_buffer_get_iter_at_mark(buffer, &cursor,
+			gtk_text_buffer_get_insert(buffer));
+
+	precursor = cursor;
+	gtk_text_iter_backward_char(&precursor);
+	highlight = gtk_text_iter_has_tag(&cursor, spell->tag_highlight) ||
+			gtk_text_iter_has_tag(&precursor, spell->tag_highlight);
+	
 	gtk_text_buffer_remove_tag(buffer, spell->tag_highlight, &start, &end);
 
 	if (debug) {print_iter("s", &start); print_iter("e", &end); g_print("\n");}
@@ -166,7 +177,21 @@ check_range(GtkSpell *spell, GtkTextBuffer *buffer,
 		wend = wstart;
 		gtk_text_iter_forward_word_end(&wend);
 
-		check_word(spell, buffer, &wstart, &wend);
+		inword = (gtk_text_iter_compare(&wstart, &cursor) < 0) && 
+				(gtk_text_iter_compare(&cursor, &wend) <= 0);
+
+		if (inword && !force_all) {
+			/* this word is being actively edited, 
+			 * only check if it's already highligted,
+			 * otherwise defer this check until later. */
+			if (highlight)
+				check_word(spell, buffer, &wstart, &wend);
+			else
+				spell->deferred_check = TRUE;
+		} else {
+			check_word(spell, buffer, &wstart, &wend);
+			spell->deferred_check = FALSE;
+		}
 
 		/* now move wend to the beginning of the next word, */
 		gtk_text_iter_forward_word_end(&wend);
@@ -180,6 +205,14 @@ check_range(GtkSpell *spell, GtkTextBuffer *buffer,
 	}
 }
 
+static void
+check_deferred_range(GtkSpell *spell, GtkTextBuffer *buffer, gboolean force_all) {
+	GtkTextIter start, end;
+	gtk_text_buffer_get_iter_at_mark(buffer, &start, spell->mark_insert_start);
+	gtk_text_buffer_get_iter_at_mark(buffer, &end, spell->mark_insert_end);
+	check_range(spell, buffer, start, end, force_all);
+}
+
 /* insertion works like this:
  *  - before the text is inserted, we mark the position in the buffer.
  *  - after the text is inserted, we see where our mark is and use that and
@@ -190,7 +223,7 @@ check_range(GtkSpell *spell, GtkTextBuffer *buffer,
 static void
 insert_text_before(GtkTextBuffer *buffer, GtkTextIter *iter,
                    gchar *text, gint len, GtkSpell *spell) {
-	gtk_text_buffer_move_mark(buffer, spell->mark_insert, iter);
+	gtk_text_buffer_move_mark(buffer, spell->mark_insert_start, iter);
 }
 
 static void
@@ -199,8 +232,10 @@ insert_text_after(GtkTextBuffer *buffer, GtkTextIter *iter,
 	GtkTextIter start;
 
 	/* we need to check a range of text. */
-	gtk_text_buffer_get_iter_at_mark(buffer, &start, spell->mark_insert);
-	check_range(spell, buffer, start, *iter);
+	gtk_text_buffer_get_iter_at_mark(buffer, &start, spell->mark_insert_start);
+	check_range(spell, buffer, start, *iter, FALSE);
+	
+	gtk_text_buffer_move_mark(buffer, spell->mark_insert_end, iter);
 }
 
 /* deleting is more simple:  we're given the range of deleted text.
@@ -213,7 +248,15 @@ insert_text_after(GtkTextBuffer *buffer, GtkTextIter *iter,
 static void
 delete_range_after(GtkTextBuffer *buffer,
                    GtkTextIter *start, GtkTextIter *end, GtkSpell *spell) {
-	check_range(spell, buffer, *start, *end);
+	check_range(spell, buffer, *start, *end, FALSE);
+}
+
+static void
+mark_set(GtkTextBuffer *buffer, GtkTextIter *iter, 
+		 GtkTextMark *mark, GtkSpell *spell) {
+	/* if the cursor has moved and there is a deferred check so handle it now */
+	if ((mark == gtk_text_buffer_get_insert(buffer)) && spell->deferred_check)
+		check_deferred_range(spell, buffer, FALSE);
 }
 
 static void
@@ -394,6 +437,10 @@ button_press_event(GtkTextView *view, GdkEventButton *event, GtkSpell *spell) {
 		GtkTextIter iter;
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(view);
 
+		/* handle deferred check if it exists */
+		if (spell->deferred_check)
+			check_deferred_range(spell, buffer, TRUE);
+
 		gtk_text_view_window_to_buffer_coords(view, 
 				GTK_TEXT_WINDOW_TEXT, 
 				event->x, event->y,
@@ -486,7 +533,7 @@ gtkspell_recheck_all(GtkSpell *spell) {
 
 	gtk_text_buffer_get_bounds(buffer, &start, &end);
 
-	check_range(spell, buffer, start, end);
+	check_range(spell, buffer, start, end, TRUE);
 }
 
 /**
@@ -540,6 +587,9 @@ gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 	g_signal_connect_after(G_OBJECT(buffer),
 			"delete-range",
 			G_CALLBACK(delete_range_after), spell);
+	g_signal_connect(G_OBJECT(buffer),
+			"mark-set",
+			G_CALLBACK(mark_set), spell);
 
 	spell->tag_highlight = gtk_text_buffer_create_tag(buffer,
 			"gtkspell-misspelled",
@@ -550,12 +600,17 @@ gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 	/* we create the mark here, but we don't use it until text is
 	 * inserted, so we don't really care where iter points.  */
 	gtk_text_buffer_get_bounds(buffer, &start, &end);
-	spell->mark_insert = gtk_text_buffer_create_mark(buffer,
-			"gtkspell-insert",
+	spell->mark_insert_start = gtk_text_buffer_create_mark(buffer,
+			"gtkspell-insert-start",
+			&start, TRUE);
+	spell->mark_insert_end = gtk_text_buffer_create_mark(buffer,
+			"gtkspell-insert-end",
 			&start, TRUE);
 	spell->mark_click = gtk_text_buffer_create_mark(buffer,
 			"gtkspell-click",
 			&start, TRUE);
+		
+	spell->deferred_check = FALSE;
 
 	/* now check the entire text buffer. */
 	gtkspell_recheck_all(spell);
@@ -575,7 +630,8 @@ gtkspell_free(GtkSpell *spell) {
 	gtk_text_buffer_remove_tag(buffer, spell->tag_highlight, &start, &end);
 	gtk_text_tag_table_remove(table, spell->tag_highlight);
 
-	gtk_text_buffer_delete_mark(buffer, spell->mark_insert);
+	gtk_text_buffer_delete_mark(buffer, spell->mark_insert_start);
+	gtk_text_buffer_delete_mark(buffer, spell->mark_insert_end);
 	gtk_text_buffer_delete_mark(buffer, spell->mark_click);
 
 	delete_aspell_speller(spell->speller);

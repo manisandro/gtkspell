@@ -10,7 +10,7 @@
 #include "../config.h"
 #include "gtkspell.h"
 
-#define _(String) gettext (String)
+#define _(String) dgettext (PACKAGE, String)
 
 #ifdef HAVE_ASPELL_H
    #define USING_ASPELL
@@ -616,9 +616,7 @@ gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 	GtkSpell *spell;
 
 #ifdef ENABLE_NLS
-	setlocale(LC_ALL, "");
 	bindtextdomain(PACKAGE, LOCALEDIR);
-	textdomain(PACKAGE);
 #endif
 
 	if (error)

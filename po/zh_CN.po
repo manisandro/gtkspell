@@ -1,0 +1,41 @@
+# gtkspell 的简体中文翻译
+# Copyright (C) 2004 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Meng Jie <zuxyhere@eastday.com>, 2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtkspell 2.0.6-pre1Report-Msgid-Bugs-To: nathan@silverorange.com\n"
+"Report-Msgid-Bugs-To: nathan@silverorange.com\n"
+"POT-Creation-Date: 2004-06-10 19:31-0400\n"
+"PO-Revision-Date: 2004-10-23 01:52+0800\n"
+"Last-Translator: Meng Jie <zuxyhere@eastday.com>\n"
+"Language-Team: Chinese (simplified) <i18n-translation@lists.linux.net.cn>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: CHINA\n"
+
+#: gtkspell/gtkspell.c:381
+msgid "<i>(no suggestions)</i>"
+msgstr "<i>(没有建议)</i>"
+
+#: gtkspell/gtkspell.c:395
+msgid "More..."
+msgstr "更多..."
+
+#. + Add to Dictionary
+#: gtkspell/gtkspell.c:421
+#, c-format
+msgid "Add \"%s\" to Dictionary"
+msgstr "将“%s”添加至词典"
+
+#. - Ignore All
+#: gtkspell/gtkspell.c:432
+msgid "Ignore All"
+msgstr "全部忽略"
+
+#: gtkspell/gtkspell.c:465
+msgid "Spelling Suggestions"
+msgstr "拼写建议"

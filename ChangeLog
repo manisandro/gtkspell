@@ -1,5 +1,6 @@
 version 2.0.9 (cvs):
 	* autogen.sh now runs ./configure when done.
+	* Call bind_textdomain_codeset to set UTF-8 encoding for all translations.
 	* Don't delete the GtkTextTag from the tag table (needed for shared
 	  tag tables).
 

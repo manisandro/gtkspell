@@ -620,6 +620,7 @@ gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 
 #ifdef ENABLE_NLS
 	bindtextdomain(PACKAGE, LOCALEDIR);
+	bind_textdomain_codeset(PACKAGE, "UTF-8");
 #endif
 
 	if (error)

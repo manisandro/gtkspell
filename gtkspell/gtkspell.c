@@ -172,6 +172,15 @@ check_range(GtkSpell *spell, GtkTextBuffer *buffer,
 	
 	gtk_text_buffer_remove_tag(buffer, spell->tag_highlight, &start, &end);
 
+	/* Fix a corner case when replacement occurs at beginning of buffer:
+	 * An iter at offset 0 seems to always be inside a word,
+	 * even if it's not.  Possibly a pango bug.
+	 */
+	if (gtk_text_iter_get_offset(&start) == 0) {
+		gtk_text_iter_forward_word_end(&start);
+		gtk_text_iter_backward_word_start(&start);
+	}
+
 	if (debug) {print_iter("s", &start); print_iter("e", &end); g_print("\n");}
 
 	wstart = start;
@@ -234,6 +243,8 @@ insert_text_after(GtkTextBuffer *buffer, GtkTextIter *iter,
                   gchar *text, gint len, GtkSpell *spell) {
 	GtkTextIter start;
 
+	if (debug) g_print("insert\n");
+
 	/* we need to check a range of text. */
 	gtk_text_buffer_get_iter_at_mark(buffer, &start, spell->mark_insert_start);
 	check_range(spell, buffer, start, *iter, FALSE);
@@ -251,6 +262,7 @@ insert_text_after(GtkTextBuffer *buffer, GtkTextIter *iter,
 static void
 delete_range_after(GtkTextBuffer *buffer,
                    GtkTextIter *start, GtkTextIter *end, GtkSpell *spell) {
+	if (debug) g_print("delete\n");
 	check_range(spell, buffer, *start, *end, FALSE);
 }
 

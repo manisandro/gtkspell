@@ -93,6 +93,7 @@ all-no:
 $(srcdir)/$(GETTEXT_PACKAGE).pot: $(POTFILES)
 	$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) --directory=$(top_srcdir) \
 	  --add-comments --keyword=_ --keyword=N_ \
+	  --msgid-bugs-address=@PACKAGE_BUGREPORT@ \
 	  --files-from=$(srcdir)/POTFILES.in \
 	&& test ! -f $(GETTEXT_PACKAGE).po \
 	   || ( rm -f $(srcdir)/$(GETTEXT_PACKAGE).pot \

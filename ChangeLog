@@ -1,3 +1,11 @@
+Mon, 19 Jan 2003 23:22:34 EST    Nathan Fredrickson <nathan@silverorange.com>
+	
+	* Change behavior on a right click so that cutting/copying with
+	  the mouse works again.
+	* Add deferred checking: make the misspelled word highlighting 
+	  work like other apps and delay checking the current word until 
+	  the cursor exits it.
+
 Wed, 01 Jan 2003 18:20:07 -0800  Evan Martin  <martine@cs.washington.edu>
 
 	* 2.0.4.

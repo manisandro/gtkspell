@@ -18,6 +18,8 @@
    #define speller manager
    #define aspell_speller_check pspell_manager_check
    #define aspell_speller_add_to_session pspell_manager_add_to_session
+   #define aspell_speller_add_to_personal pspell_manager_add_to_personal
+   #define aspell_speller_save_all_word_lists pspell_manager_save_all_word_lists
    #define aspell_speller_store_replacement pspell_manager_store_replacement
    #define AspellWordList PspellWordList
    #define AspellStringEnumeration PspellStringEmulation
@@ -281,9 +283,28 @@ add_to_dictionary(GtkWidget *menuitem, GtkSpell *spell) {
 	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
 	word = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 	
+	aspell_speller_add_to_personal(spell->speller, word, strlen(word));
+	aspell_speller_save_all_word_lists(spell->speller);
+
+	gtkspell_recheck_all(spell);
+
+	g_free(word);
+}
+
+static void
+ignore_all(GtkWidget *menuitem, GtkSpell *spell) {
+	char *word;
+	GtkTextIter start, end;
+	GtkTextBuffer *buffer;
+	
+	buffer = gtk_text_view_get_buffer(spell->view);
+
+	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
+	word = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+	
 	aspell_speller_add_to_session(spell->speller, word, strlen(word));
 
-	gtk_text_buffer_remove_tag(buffer, spell->tag_highlight, &start, &end);
+	gtkspell_recheck_all(spell);
 
 	g_free(word);
 }
@@ -340,6 +361,15 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 			gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
 	g_signal_connect(G_OBJECT(mi), "activate",
 			G_CALLBACK(add_to_dictionary), spell);
+	gtk_widget_show_all(mi);
+	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
+
+	/* - Ignore All */
+	mi = gtk_image_menu_item_new_with_label("Ignore All");
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(mi), 
+			gtk_image_new_from_stock(GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU));
+	g_signal_connect(G_OBJECT(mi), "activate",
+			G_CALLBACK(ignore_all), spell);
 	gtk_widget_show_all(mi);
 	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
 

@@ -1,3 +1,8 @@
+Mon, 20 Jan 2003 21:10:10 EST    Nathan Fredrickson <nathan@silverorange.com>
+	
+	* "Add to Dictionary" now actually adds to personal dictionary.
+	* New "Ignore All" menuitem to add a word to the current session.
+
 Mon, 20 Jan 2003 18:08:12 EST    Nathan Fredrickson <nathan@silverorange.com>
 	
 	* Updates of autogen.sh and conifgure.ac to use newer 

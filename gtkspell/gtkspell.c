@@ -499,6 +499,20 @@ button_press_event(GtkTextView *view, GdkEventButton *event, GtkSpell *spell) {
 					 we don't want to eat any events. */
 }
 
+/* This event occurs when the popup menu is requested through a key-binding
+ * (Menu Key or <shift>+F10 by default).  In this case we want to set
+ * spell->mark_click to the cursor position. */
+static gboolean
+popup_menu_event(GtkTextView *view, GtkSpell *spell) {
+	GtkTextIter iter;
+	GtkTextBuffer *buffer = gtk_text_view_get_buffer(view);
+
+	gtk_text_buffer_get_iter_at_mark(buffer, &iter, 
+			gtk_text_buffer_get_insert(buffer));
+	gtk_text_buffer_move_mark(buffer, spell->mark_click, &iter);
+	return FALSE; /* false: let gtk process this event, too. */
+}
+
 static gboolean
 gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **error) {
 	AspellConfig *config;
@@ -628,6 +642,8 @@ gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 			G_CALLBACK(button_press_event), spell);
 	g_signal_connect(G_OBJECT(view), "populate-popup",
 			G_CALLBACK(populate_popup), spell);
+	g_signal_connect(G_OBJECT(view), "popup-menu",
+			G_CALLBACK(popup_menu_event), spell);
 
 	buffer = gtk_text_view_get_buffer(view);
 

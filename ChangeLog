@@ -1,3 +1,8 @@
+version 2.0.7 (cvs):
+	* Activating the menu through a keybinding now properly checks the
+	  word currently under the cursor.
+	* Additional translations (see po/ChangeLog).
+
 version 2.0.6 (26-Jun-2004):
 	* Use new PANGO_UNDERLINE_ERROR style when available to highlight
 	  misspelled words with squiggly red underline.

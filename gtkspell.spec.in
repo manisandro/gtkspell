@@ -1,0 +1,59 @@
+Name: gtkspell
+Version: @VERSION@
+Release: 1
+#Epoch: 1
+License: GPL
+Group: X11/Libraries
+Source0: http://gtkspell.sf.net/download/gtkspell-${version}.tar.gz
+URL: http://gtkspell.sf.net/ 
+BuildRoot: %{_tmppath}/%{name}-root
+Requires: /sbin/ldconfig
+Summary: GTK2 Spell Checker Interface Library.
+%description
+GtkSpell provides MSWord/MacOSX-style highlighting of misspelled words
+in a GtkTextView widget. Right-clicking a misspelled word pops up a
+menu of suggested replacements.
+
+%package devel
+Summary: Static libraries and header files from gtkspell.
+Group: X11/Libraries
+Requires: %{name} = %{version}
+Requires: pkgconfig
+
+%description devel
+Static libraries and header files from gtkspell.
+
+%prep
+%setup -q
+
+%build
+%configure
+make 
+
+%install
+rm -rf %{buildroot}
+%makeinstall
+
+%clean
+rm -rf %{buildroot}
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
+%files
+%defattr(-, root, root)
+%doc AUTHORS COPYING ChangeLog NEWS README TODO
+%{_libdir}/*.so.*
+
+%files devel
+%defattr(-, root, root)
+%{_libdir}/*.a
+%{_libdir}/*.la
+%{_libdir}/*.so
+%{_libdir}/pkgconfig/*
+%{_includedir}/gtkspell-2.0
+
+%changelog
+* Sat Oct 26 2002 Alex Converse 
+- Initial RPM release.

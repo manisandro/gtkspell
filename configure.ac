@@ -20,6 +20,6 @@ AC_C_CONST
 
 dnl AM_MAINTAINER_MODE
 
-AC_CONFIG_FILES(Makefile gtkspell/Makefile examples/Makefile gtkspell-2.0.pc)
+AC_CONFIG_FILES(Makefile gtkspell/Makefile examples/Makefile gtkspell-2.0.pc gtkspell.spec)
 AC_OUTPUT
 

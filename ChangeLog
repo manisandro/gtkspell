@@ -1,3 +1,10 @@
+Mon, 04 Nov 2002 14:00:58 -0800  Evan Martin  <martine@cs.washington.edu>
+	
+	* gtkspell.spec.in: RPM .spec file template.
+	  From Alex <hansolo@rochester.rr.com>.
+	* configure.ac: Generate gtkspell.spec from gtkspell.spec.in.
+	* README: Add Ari and Alex to a "Thanks" section.
+
 Mon, 04 Nov 2002 09:56:44 -0800  Evan Martin  <martine@cs.washington.edu>
 
 	* configure.ac: Check for libpspell earlier and die if we don't

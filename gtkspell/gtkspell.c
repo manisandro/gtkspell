@@ -46,7 +46,7 @@
    #define aspell pspell
 #endif
 
-const int debug = 0;
+const int debug = 1;
 const int quiet = 0;
 
 struct _GtkSpell {
@@ -71,7 +71,6 @@ gtkspell_error_quark(void) {
 	return q;
 }
 
-#ifndef FIXED_PANGO
 static gboolean
 gtkspell_text_iter_forward_word_end(GtkTextIter *i) {
 	GtkTextIter iter;
@@ -120,7 +119,6 @@ gtkspell_text_iter_backward_word_start(GtkTextIter *i) {
 
 #define gtk_text_iter_backward_word_start gtkspell_text_iter_backward_word_start
 #define gtk_text_iter_forward_word_end gtkspell_text_iter_forward_word_end
-#endif
 
 static void
 check_word(GtkSpell *spell, GtkTextBuffer *buffer,

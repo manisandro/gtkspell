@@ -25,9 +25,9 @@ PKG_CHECK_MODULES(PANGO, [pango >= 1.3.5],
    [AC_MSG_WARN([Disabling new error underlining since pango < 1.3.5])])
 
 # check Pango version to see if word breaking bug is fixed:
-PKG_CHECK_MODULES(PANGO, [pango >= 1.8.0],
-   [AC_DEFINE(FIXED_PANGO, 1, [Define to 1 if pango >= 1.8.0.])],
-   [AC_MSG_WARN([Enabling word-breaking workarounds since pango < 1.8.0])])
+#PKG_CHECK_MODULES(PANGO, [pango >= 1.8.0],
+#   [AC_DEFINE(FIXED_PANGO, 1, [Define to 1 if pango >= 1.8.0.])],
+#   [AC_MSG_WARN([Enabling word-breaking workarounds since pango < 1.8.0])])
 
 # gtk-doc check:
 # gtk-doc check:

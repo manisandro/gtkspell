@@ -1,84 +1,47 @@
-Thu, 10 Jun 2004 01:20:13 EST    Nathan Fredrickson <nathan@silverorange.com>
-
-	* gettextize: Add i18l support.
+version 2.0.6cvs:
+	* Internationalize with GNU Gettext. All five strings now translatable.
 	  Thanks to Adriano Del Vigna de Almeida <katmandu@fs.inf.br>
+	* New po/ChangeLog to track translation additions/updates.
 
-Mon, 26 Jan 2003 14:21:45 EST    Nathan Fredrickson <nathan@silverorange.com>
-
-	* 2.0.5.
-
-Tue, 20 Jan 2003 21:14:16 EST    Nathan Fredrickson <nathan@silverorange.com>
-	
+version 2.0.5 (26-Jan-2004):
 	* Don't check numeric words.  Combined with word breaking changes 
 	  recently committed to Pango, this will handle all letter-number
 	  combinations nicely.
-
-Tue, 20 Jan 2003 21:10:10 EST    Nathan Fredrickson <nathan@silverorange.com>
-	
 	* "Add to Dictionary" now actually adds to personal dictionary.
 	* New "Ignore All" menuitem to add a word to the current session.
-
-Tue, 20 Jan 2003 18:08:12 EST    Nathan Fredrickson <nathan@silverorange.com>
-	
 	* Updates of autogen.sh and conifgure.ac to use newer 
 	  autoconf/automake/libtool.
-
-Mon, 19 Jan 2003 23:22:34 EST    Nathan Fredrickson <nathan@silverorange.com>
-	
 	* Change behavior on a right click so that cutting/copying with
 	  the mouse works again.
 	* Add deferred checking: make the misspelled word highlighting 
 	  work like other apps and delay checking the current word until 
 	  the cursor exits it.
 
-Wed, 01 Jan 2003 18:20:07 -0800  Evan Martin  <martine@cs.washington.edu>
-
-	* 2.0.4.
-
-Wed, 01 Jan 2003 17:49:43 -0800  Bas Mevissen <pan-devel@basmevissen.nl>
-
+version 2.0.4 (01-Jan-2003):
 	* gtkspell.spec.in: Typo fix.
-
-Wed, 11 Dec 2002 21:17:13 -0800  Evan Martin  <martine@cs.washington.edu>
-
 	* Conditionally use Aspell if it's available, otherwise
 	  fall back to Pspell (Ramon Medina).
 	* docs/ directory and beginning documentation added.
 
-Wed, 13 Nov 2002 19:05:25 -0800  Evan Martin  <martine@cs.washington.edu>
-
-	* 2.0.3 released.
-
-Wed, 13 Nov 2002 18:53:20 -0800  Evan Martin  <martine@cs.washington.edu>
-
+version 2.0.3 (13-Nov-2002):
 	* gtkspell.c: Hack around Pango wordbreaking bug (also logged
 	with their developers at:
 	http://bugzilla.gnome.org/show_bug.cgi?id=97545 ).
-
-Mon, 04 Nov 2002 14:00:58 -0800  Evan Martin  <martine@cs.washington.edu>
-	
 	* gtkspell.spec.in: RPM .spec file template.
 	  From Alex <hansolo@rochester.rr.com>.
 	* configure.ac: Generate gtkspell.spec from gtkspell.spec.in.
 	* README: Add Ari and Alex to a "Thanks" section.
-
-Mon, 04 Nov 2002 09:56:44 -0800  Evan Martin  <martine@cs.washington.edu>
-
 	* configure.ac: Check for libpspell earlier and die if we don't
 	  find it.  Prerequire autoconf 2.52.  
 	* gtkspell/Makefile.am, examples/Makefile.am: Set CFLAGS instead
 	  of foo_CFLAGS (why does the old way not work anymore?).
 	* autogen.sh: Don't automatically run configure.
 
-Tue Aug 13 13:14:16 PDT 2002  Evan Martin  <martine@cs.washington.edu>
+version 2.0.2 (Aug-13-2002):
+	* minor bugfix
 
-	* 2.0.2 released (minor bugfix).
+version 2.0.1 (Aug-08-2002):
 
-Thu Aug 08 11:38:07 PST 2002  Evan Martin  <martine@cs.washington.edu>
-
-	* 2.0.1 released.
-
-Fri Mar 29 17:05:52 PST 2002  Evan Martin  <martine@cs.washington.edu>
-
+version 2.0.0 (Mar-29-2002):
 	* Initial release.
 

@@ -1,15 +1,19 @@
-Mon, 20 Jan 2003 21:14:16 EST    Nathan Fredrickson <nathan@silverorange.com>
+Mon, 26 Jan 2003 14:21:45 EST    Nathan Fredrickson <nathan@silverorange.com>
+
+	* 2.0.5.
+
+Tue, 20 Jan 2003 21:14:16 EST    Nathan Fredrickson <nathan@silverorange.com>
 	
 	* Don't check numeric words.  Combined with word breaking changes 
 	  recently committed to Pango, this will handle all letter-number
 	  combinations nicely.
 
-Mon, 20 Jan 2003 21:10:10 EST    Nathan Fredrickson <nathan@silverorange.com>
+Tue, 20 Jan 2003 21:10:10 EST    Nathan Fredrickson <nathan@silverorange.com>
 	
 	* "Add to Dictionary" now actually adds to personal dictionary.
 	* New "Ignore All" menuitem to add a word to the current session.
 
-Mon, 20 Jan 2003 18:08:12 EST    Nathan Fredrickson <nathan@silverorange.com>
+Tue, 20 Jan 2003 18:08:12 EST    Nathan Fredrickson <nathan@silverorange.com>
 	
 	* Updates of autogen.sh and conifgure.ac to use newer 
 	  autoconf/automake/libtool.

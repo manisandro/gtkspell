@@ -120,8 +120,9 @@ check_word(GtkSpell *spell, GtkTextBuffer *buffer,
 	char *text;
 	text = gtk_text_buffer_get_text(buffer, start, end, FALSE);
 	if (debug) g_print("checking: %s\n", text);
-	if (aspell_speller_check(spell->speller, text, -1) == FALSE)
-		gtk_text_buffer_apply_tag(buffer, spell->tag_highlight, start, end);
+	if (g_unichar_isdigit(*text) == FALSE) /* don't check numbers */
+		if (aspell_speller_check(spell->speller, text, -1) == FALSE)
+			gtk_text_buffer_apply_tag(buffer, spell->tag_highlight, start, end);
 	g_free(text);
 }
 

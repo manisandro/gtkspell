@@ -1,3 +1,9 @@
+Mon, 20 Jan 2003 21:14:16 EST    Nathan Fredrickson <nathan@silverorange.com>
+	
+	* Don't check numeric words.  Combined with word breaking changes 
+	  recently committed to Pango, this will handle all letter-number
+	  combinations nicely.
+
 Mon, 20 Jan 2003 21:10:10 EST    Nathan Fredrickson <nathan@silverorange.com>
 	
 	* "Add to Dictionary" now actually adds to personal dictionary.

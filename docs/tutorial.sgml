@@ -1,0 +1,77 @@
+<chapter id="chapter-tutorial">
+<title>GtkSpell Tutorial</title>
+
+<para>GtkSpell is pretty simple; including it in your program can
+be as simple as calling <function>gtkspell_new_attach</function> to
+attach GtkSpell to a GtkTextView.  GtkSpell then watches modifications
+to the GtkTextView and tries to highlight the misspellings.</para>
+
+<sect1 id="tutorial-basic">
+<title>Basic GtkSpell</title>
+
+<sect2 id="tutorial-basic-first">
+<para>Ignoring error-checking, a basic GtkSpell-using program
+will call <function>gtkspell_new_attach</function> like this:</para>
+<programlisting><![CDATA[
+view = gtk_text_view_new();
+gtkspell_new_attach(GTK_TEXT_VIEW(view), NULL, NULL);
+]]></programlisting>
+
+<note>
+<para>I leave the details of setting up the GtkTextView (setting the word wrap
+mode, packing it into a GtkScrolledWindow) for the GTK documentation to
+describe.
+</para>
+</note>
+
+<para><function>gtkspell_new_attach</function> returns <literal>FALSE</literal>
+if there was an error (currently, the only error is one from the spell-checking
+backend).  If a <parameter>GError **</parameter> was provided as the
+last argument, the error message can be displayed to the user:</para>
+
+<programlisting><![CDATA[
+GError *err = NULL; /* this initialization is important. */
+
+/* ... */
+
+if (!gtkspell_new_attach(GTK_TEXT_VIEW(view), NULL, &err)) {
+	GtkWidget *errdlg;
+	errdlg = gtk_message_dialog_new(main_application_window,
+			GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_MESSAGE_ERROR,
+			GTK_BUTTONS_CLOSE,
+			"Error initializing spell checking: %s",
+			err->message);
+	gtk_dialog_run(GTK_DIALOG(errdlg));
+	gtk_widget_destroy(errdlg);
+	g_error_free(err); /* don't forget to free GErrors when you're done! */
+}]]></programlisting>
+</sect2>
+</sect1>
+
+<sect1 id="tutorial-building">
+<title>Building using GtkSpell</title>
+
+<sect2 id="tutorial-building-basic">
+<title>Simple Programs</title>
+<para>The program must be compiled with the GtkSpell C flags and built with the
+GtkSpell libs.  Depending on how your program is compiled, you must include the
+module <literal>gtkspell-2.0</literal> along with <literal>gtk+-2.0</literal>
+in your calls to <command>pkg-config</command>.</para>
+</sect2>
+
+<sect2 id="tutorial-building-autoconf">
+<title>Building Using Autoconf</title>
+<para>In <filename>configure.ac</filename>, modify the call to
+<function>PKG_CHECK_MODULES</function> to include
+<literal>gtkspell-2.0</literal>, like this:</para>
+<programlisting><![CDATA[
+PKG_CHECK_MODULES(MYPROGRAM, gtk+-2.0 gtkspell-2.0)
+]]></programlisting>
+
+<para>FIXME: finish this.</para>
+</sect2>
+
+</sect1>
+
+</chapter>

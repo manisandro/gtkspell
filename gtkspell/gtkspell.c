@@ -46,7 +46,7 @@
    #define aspell pspell
 #endif
 
-const int debug = 1;
+const int debug = 0;
 const int quiet = 0;
 
 struct _GtkSpell {

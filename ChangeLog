@@ -1,4 +1,4 @@
-version 2.0.7 (cvs):
+version 2.0.7 (22-Aug-2004):
 	* Activating the menu through a keybinding now properly checks the
 	  word currently under the cursor.
 	* Prevent the trampling on an application's textdomain (Stu Tomlinson).

@@ -1,7 +1,6 @@
 Name: gtkspell
 Version: @VERSION@
 Release: 1
-#Epoch: 1
 License: GPL
 Group: X11/Libraries
 Source0: http://gtkspell.sf.net/download/gtkspell-%{version}.tar.gz

@@ -1,5 +1,6 @@
 version 2.0.9 (12-Feb-2005):
-	* Call bind_textdomain_codeset to set UTF-8 encoding for all translations.
+	* Enable building outside of srcdir (Mike Castle)
+	* Use bind_textdomain_codeset to set UTF-8 encoding for all translations.
 	* Do not delete the GtkTextTag from the tag table (needed for shared
 	  tag tables).
 	* Disable word-breaking workarounds when Pango >= 1.8.0 (GNOME bug #97545).

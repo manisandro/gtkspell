@@ -1,3 +1,8 @@
+Thu, 10 Jun 2004 01:20:13 EST    Nathan Fredrickson <nathan@silverorange.com>
+
+	* gettextize: Add i18l support.
+	  Thanks to Adriano Del Vigna de Almeida <katmandu@fs.inf.br>
+
 Mon, 26 Jan 2003 14:21:45 EST    Nathan Fredrickson <nathan@silverorange.com>
 
 	* 2.0.5.

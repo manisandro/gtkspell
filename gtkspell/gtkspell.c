@@ -5,8 +5,12 @@
 /* vim: set ts=4 sw=4 wm=5 : */
 
 #include <gtk/gtk.h>
+#include <libintl.h>
+#include <locale.h>
 #include "../config.h"
 #include "gtkspell.h"
+
+#define _(String) gettext (String)
 
 #ifdef HAVE_ASPELL_H
    #define USING_ASPELL
@@ -374,7 +378,7 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 		/* no suggestions.  put something in the menu anyway... */
 		GtkWidget *label;
 		label = gtk_label_new("");
-		gtk_label_set_markup(GTK_LABEL(label), "<i>(no suggestions)</i>");
+		gtk_label_set_markup(GTK_LABEL(label), _("<i>(no suggestions)</i>"));
 
 		mi = gtk_menu_item_new();
 		gtk_container_add(GTK_CONTAINER(mi), label);
@@ -388,7 +392,7 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 				gtk_widget_show(mi);
 				gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
 
-				mi = gtk_menu_item_new_with_label("More...");
+				mi = gtk_menu_item_new_with_label(_("More..."));
 				gtk_widget_show(mi);
 				gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
 
@@ -414,7 +418,7 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
 
 	/* + Add to Dictionary */
-	label = g_strdup_printf("Add \"%s\" to Dictionary", word);
+	label = g_strdup_printf(_("Add \"%s\" to Dictionary"), word);
 	mi = gtk_image_menu_item_new_with_label(label);
 	g_free(label);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(mi), 
@@ -425,7 +429,7 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
 
 	/* - Ignore All */
-	mi = gtk_image_menu_item_new_with_label("Ignore All");
+	mi = gtk_image_menu_item_new_with_label(_("Ignore All"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(mi), 
 			gtk_image_new_from_stock(GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU));
 	g_signal_connect(G_OBJECT(mi), "activate",
@@ -458,7 +462,7 @@ populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpell *spell) {
 
 	/* then, on top of it, the suggestions menu. */
 	img = gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK, GTK_ICON_SIZE_MENU);
-	mi = gtk_image_menu_item_new_with_label("Spelling Suggestions");
+	mi = gtk_image_menu_item_new_with_label(_("Spelling Suggestions"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(mi), img);
 
 	word = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
@@ -596,6 +600,12 @@ gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 	GtkTextIter start, end;
 
 	GtkSpell *spell;
+
+#ifdef ENABLE_NLS
+	setlocale(LC_ALL, "");
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomain(PACKAGE);
+#endif
 
 	if (error)
 		g_return_val_if_fail(*error == NULL, NULL);

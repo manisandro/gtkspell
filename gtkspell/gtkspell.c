@@ -30,6 +30,54 @@ gtkspell_error_quark(void) {
 	return q;
 }
 
+/* heuristic: 
+ * if we're on an singlequote/apostrophe and
+ * if the next letter is alphanumeric,
+ * this is an apostrophe. */
+static gboolean
+gtkspell_text_iter_forward_word_end(GtkTextIter *i) {
+	GtkTextIter iter;
+
+	if (!gtk_text_iter_forward_word_end(i))
+		return FALSE;
+
+	if (gtk_text_iter_get_char(i) != '\'')
+		return TRUE;
+
+	iter = *i;
+	if (gtk_text_iter_forward_char(&iter)) {
+		if (g_unichar_isalpha(gtk_text_iter_get_char(&iter))) {
+			return (gtk_text_iter_forward_word_end(i));
+		}
+	}
+
+	return TRUE;
+}
+
+static gboolean
+gtkspell_text_iter_backward_word_start(GtkTextIter *i) {
+	GtkTextIter iter;
+
+	if (!gtk_text_iter_backward_word_start(i))
+		return FALSE;
+
+	iter = *i;
+	if (gtk_text_iter_backward_char(&iter)) {
+		if (gtk_text_iter_get_char(&iter) == '\'') {
+			if (gtk_text_iter_backward_char(&iter)) {
+				if (g_unichar_isalpha(gtk_text_iter_get_char(&iter))) {
+					return (gtk_text_iter_backward_word_start(i));
+				}
+			}
+		}
+	}
+
+	return TRUE;
+}
+
+#define gtk_text_iter_backward_word_start gtkspell_text_iter_backward_word_start
+#define gtk_text_iter_forward_word_end gtkspell_text_iter_forward_word_end
+
 static void
 check_word(GtkSpell *spell, GtkTextBuffer *buffer,
            GtkTextIter *start, GtkTextIter *end) {

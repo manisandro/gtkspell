@@ -1,3 +1,9 @@
+Wed, 13 Nov 2002 18:53:20 -0800  Evan Martin  <martine@cs.washington.edu>
+
+	* gtkspell.c: Hack around Pango wordbreaking bug (also logged
+	with their developers at:
+	http://bugzilla.gnome.org/show_bug.cgi?id=97545 ).
+
 Mon, 04 Nov 2002 14:00:58 -0800  Evan Martin  <martine@cs.washington.edu>
 	
 	* gtkspell.spec.in: RPM .spec file template.

@@ -1,5 +1,5 @@
 AC_PREREQ(2.57)
-AC_INIT([gtkspell],[2.0.5],[nathan@silverorange.com])
+AC_INIT([gtkspell],[2.0.6cvs],[nathan@silverorange.com])
 AC_CONFIG_SRCDIR(gtkspell/gtkspell.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AC_CONFIG_HEADERS([config.h])
@@ -19,6 +19,10 @@ PKG_CHECK_MODULES(GTKSPELL, $GTKSPELL_PACKAGES)
 AC_SUBST(GTKSPELL_CFLAGS)
 AC_SUBST(GTKSPELL_LIBS)
 
+# check Pango version so we can use PANGO_UNDERLINE_ERROR when available:
+PKG_CHECK_MODULES(PANGO, [pango >= 1.3.5],
+   [AC_DEFINE(HAVE_PANGO_UNDERLINE_ERROR, 1, [Define to 1 if PANGO_UNDERLINE_ERROR is available.])],
+   [AC_MSG_WARN([Disabling new error underlining since pango < 1.3.5])])                                                                                                                                               
 # gtk-doc check:
 # from http://cvs.gnome.org/lxr/source/gtk-doc/examples/configure.in
 AC_ARG_WITH(html-dir, AC_HELP_STRING([--with-html-dir=PATH],[path to installed docs]))

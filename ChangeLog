@@ -1,4 +1,6 @@
 version 2.0.6cvs:
+	* Use new PANGO_UNDERLINE_ERROR style when available to highlight
+	  misspelled words.
 	* Internationalize with GNU Gettext. All five strings now translatable.
 	  Thanks to Adriano Del Vigna de Almeida <katmandu@fs.inf.br>
 	* New po/ChangeLog to track translation additions/updates.

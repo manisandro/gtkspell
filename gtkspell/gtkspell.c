@@ -646,8 +646,12 @@ gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 
 	spell->tag_highlight = gtk_text_buffer_create_tag(buffer,
 			"gtkspell-misspelled",
+#ifdef HAVE_PANGO_UNDERLINE_ERROR
+			"underline", PANGO_UNDERLINE_ERROR,
+#else
 			"foreground", "red", 
 			"underline", PANGO_UNDERLINE_SINGLE,
+#endif
 			NULL);
 
 	/* we create the mark here, but we don't use it until text is

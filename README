@@ -38,9 +38,14 @@ the entire buffer, but it shouldn't be necessary.
 Finally, gtkspell.h serves as an API reference.
 
 
-Author
-------
+Original Author
+---------------
 Evan Martin - martine@cs.washington.edu - http://neugierig.org
+
+
+Maintainer
+----------
+Nathan Fredrickson - nathan@silverorange.com
 
 
 Thanks

@@ -13,10 +13,10 @@ FILE=gtkspell
 DIE=0
 
 have_libtool=false
-if libtool --version < /dev/null > /dev/null 2>&1 ; then
-	libtool_version=`libtoolize --version |  libtoolize --version | sed 's/^[^0-9]*\([0-9.][0-9.]*\).*/\1/'`
+if libtoolize --version < /dev/null > /dev/null 2>&1 ; then
+	libtool_version=`libtoolize --version | sed 's/^[^0-9]*\([0-9].[0-9.]*\).*/\1/'`
 	case $libtool_version in
-	    1.4*)
+	    1.4*|1.5*)
 		have_libtool=true
 		;;
 	esac
@@ -25,7 +25,7 @@ if $have_libtool ; then : ; else
 	echo
 	echo "You must have libtool 1.4 installed to compile $PROJECT."
 	echo "Install the appropriate package for your distribution,"
-	echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
+	echo "or get the source tarball at http://ftp.gnu.org/gnu/libtool/"
 	DIE=1
 fi
 
@@ -33,26 +33,18 @@ fi
 	echo
 	echo "You must have autoconf installed to compile $PROJECT."
 	echo "libtool the appropriate package for your distribution,"
-	echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
+	echo "or get the source tarball at http://ftp.gnu.org/gnu/autoconf/"
 	DIE=1
 }
 
-have_automake=false
-if automake-1.4 --version < /dev/null > /dev/null 2>&1 ; then
-	automake_version=`automake-1.4 --version | grep 'automake (GNU automake)' | sed 's/^[^0-9]*\(.*\)/\1/'`
-	case $automake_version in
-	   1.2*|1.3*|1.4) 
-		;;
-	   *)
-		have_automake=true
-		;;
-	esac
-fi
-if $have_automake ; then : ; else
+if automake-1.7 --version < /dev/null > /dev/null 2>&1 ; then
+    AUTOMAKE=automake-1.7
+    ACLOCAL=aclocal-1.7
+else
 	echo
-	echo "You must have automake 1.4-p1 installed to compile $PROJECT."
-	echo "Get ftp://ftp.gnu.org/pub/gnu/automake/automake-1.4-p1.tar.gz"
-	echo "(or a newer version if it is available)"
+	echo "You must have automake 1.7.x installed to compile $PROJECT."
+	echo "Install the appropriate package for your distribution,"
+	echo "or get the source tarball at http://ftp.gnu.org/gnu/automake/"
 	DIE=1
 fi
 
@@ -65,36 +57,15 @@ test $TEST_TYPE $FILE || {
 	exit 1
 }
 
-case $CC in
-*xlc | *xlc\ * | *lcc | *lcc\ *) am_opt=--include-deps;;
-esac
+$ACLOCAL $ACLOCAL_FLAGS || exit 1
 
-if test -z "$ACLOCAL_FLAGS"; then
-
-	acdir=`aclocal-1.4 --print-ac-dir`
-        m4list="glib-2.0.m4 glib-gettext.m4"
-
-	for file in $m4list
-	do
-		if [ ! -f "$acdir/$file" ]; then
-			echo "WARNING: aclocal's directory is $acdir, but..."
-			echo "         no file $acdir/$file"
-			echo "         You may see fatal macro warnings below."
-			echo "         If these files are installed in /some/dir, set the ACLOCAL_FLAGS "
-			echo "         environment variable to \"-I /some/dir\", or install"
-			echo "         $acdir/$file."
-			echo ""
-		fi
-	done
-fi
-
-aclocal-1.4 $ACLOCAL_FLAGS
+libtoolize --force || exit 1
 
 # optionally feature autoheader
 (autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
 
-automake-1.4 -a $am_opt
-autoconf
+$AUTOMAKE --add-missing || exit 1
+autoconf || exit 1
 cd $ORIGDIR
 
 echo "If there were no errors, you can now run ./configure ."

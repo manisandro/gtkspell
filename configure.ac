@@ -1,8 +1,8 @@
-AC_PREREQ(2.52)
-AC_INIT(gtkspell, 2.0.4, martine@cs.washington.edu)
+AC_PREREQ(2.57)
+AC_INIT([gtkspell],[2.0.4],[martine@cs.washington.edu])
 AC_CONFIG_SRCDIR(gtkspell/gtkspell.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 AC_CHECK_HEADER(aspell.h, [AC_DEFINE(HAVE_ASPELL_H,1, 
    [Define to 1 if you have the <aspell.h> header file.] )] )

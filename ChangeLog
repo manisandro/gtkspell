@@ -1,3 +1,8 @@
+Mon, 20 Jan 2003 18:08:12 EST    Nathan Fredrickson <nathan@silverorange.com>
+	
+	* Updates of autogen.sh and conifgure.ac to use newer 
+	  autoconf/automake/libtool.
+
 Mon, 19 Jan 2003 23:22:34 EST    Nathan Fredrickson <nathan@silverorange.com>
 	
 	* Change behavior on a right click so that cutting/copying with

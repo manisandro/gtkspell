@@ -1,0 +1,14 @@
+Makefile
+Makefile.in
+gtkspell-decl-list.txt
+gtkspell-decl.txt
+gtkspell-undocumented.txt
+gtkspell-unused.txt
+gtkspell.args
+gtkspell.hierarchy
+gtkspell.interfaces
+gtkspell.prerequisites
+gtkspell.signals
+html
+*.stamp
+xml

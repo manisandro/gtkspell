@@ -1,4 +1,5 @@
 version 2.0.9 (cvs):
+	* autogen.sh now runs ./configure when done.
 	* Don't delete the GtkTextTag from the tag table (needed for shared
 	  tag tables).
 

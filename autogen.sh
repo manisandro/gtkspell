@@ -76,4 +76,10 @@ $AUTOMAKE --add-missing || exit 1
 autoconf || exit 1
 cd $ORIGDIR
 
-echo "If there were no errors, you can now run ./configure ."
+if test x$NOCONFIGURE = x; then
+	echo "Running $srcdir/configure $@ ..."
+	$srcdir/configure $@ \
+	&& echo "Now type 'make' to compile $PROJECT"  || exit 1
+else
+	echo "Skipping configure process."
+fi

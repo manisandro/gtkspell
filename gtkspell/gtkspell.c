@@ -12,6 +12,8 @@
 
 #define _(String) dgettext (PACKAGE, String)
 
+#define GTKSPELL_MISSPELLED_TAG "gtkspell-misspelled"
+
 #ifdef HAVE_ASPELL_H
    #define USING_ASPELL
    #include <aspell.h>
@@ -611,6 +613,7 @@ gtkspell_recheck_all(GtkSpell *spell) {
 GtkSpell*
 gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 	GtkTextBuffer *buffer;
+	GtkTextTagTable *tagtable;
 	GtkTextIter start, end;
 
 	GtkSpell *spell;
@@ -658,15 +661,20 @@ gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 			"mark-set",
 			G_CALLBACK(mark_set), spell);
 
-	spell->tag_highlight = gtk_text_buffer_create_tag(buffer,
-			"gtkspell-misspelled",
+	tagtable = gtk_text_buffer_get_tag_table(buffer);
+	spell->tag_highlight = gtk_text_tag_table_lookup(tagtable, GTKSPELL_MISSPELLED_TAG);
+
+	if (spell->tag_highlight == NULL) {
+		spell->tag_highlight = gtk_text_buffer_create_tag(buffer,
+				GTKSPELL_MISSPELLED_TAG,
 #ifdef HAVE_PANGO_UNDERLINE_ERROR
-			"underline", PANGO_UNDERLINE_ERROR,
+				"underline", PANGO_UNDERLINE_ERROR,
 #else
-			"foreground", "red", 
-			"underline", PANGO_UNDERLINE_SINGLE,
+				"foreground", "red", 
+				"underline", PANGO_UNDERLINE_SINGLE,
 #endif
-			NULL);
+				NULL);
+	}
 
 	/* we create the mark here, but we don't use it until text is
 	 * inserted, so we don't really care where iter points.  */

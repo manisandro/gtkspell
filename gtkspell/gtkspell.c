@@ -46,6 +46,7 @@ struct _GtkSpell {
 	GtkTextTag *tag_highlight;
 	GtkTextMark *mark_insert;
 	AspellSpeller *speller;
+	GtkTextMark *mark_click;
 };
 
 static void gtkspell_free(GtkSpell *spell);
@@ -216,10 +217,9 @@ delete_range_after(GtkTextBuffer *buffer,
 }
 
 static void
-get_cur_word_extents(GtkTextBuffer *buffer,
-                     GtkTextIter *start, GtkTextIter *end) {
-	gtk_text_buffer_get_iter_at_mark(buffer, start, 
-			gtk_text_buffer_get_insert(buffer));
+get_word_extents_from_mark(GtkTextBuffer *buffer,
+                     GtkTextIter *start, GtkTextIter *end, GtkTextMark *mark) {
+	gtk_text_buffer_get_iter_at_mark(buffer, start, mark);
 	if (!gtk_text_iter_starts_word(start)) 
 		gtk_text_iter_backward_word_start(start);
 	*end = *start;
@@ -235,7 +235,7 @@ add_to_dictionary(GtkWidget *menuitem, GtkSpell *spell) {
 	
 	buffer = gtk_text_view_get_buffer(spell->view);
 
-	get_cur_word_extents(buffer, &start, &end);
+	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
 	word = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 	
 	aspell_speller_add_to_session(spell->speller, word, strlen(word));
@@ -254,7 +254,7 @@ replace_word(GtkWidget *menuitem, GtkSpell *spell) {
 	
 	buffer = gtk_text_view_get_buffer(spell->view);
 
-	get_cur_word_extents(buffer, &start, &end);
+	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
 	oldword = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 	newword = gtk_label_get_text(GTK_LABEL(GTK_BIN(menuitem)->child));
 
@@ -358,7 +358,7 @@ populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpell *spell) {
 	char *word;
 
 	/* we need to figure out if they picked a misspelled word. */
-	get_cur_word_extents(buffer, &start, &end);
+	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
 
 	/* if our highlight algorithm ever messes up, 
 	 * this isn't correct, either. */
@@ -385,22 +385,21 @@ populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpell *spell) {
 }
 
 /* when the user right-clicks on a word, they want to check that word.
- * here, we move the cursor to the location of the clicked-upon word.
- * is this necessary?  we could maybe just check the word from its
- * existing location... */
+ * here, we do NOT  move the cursor to the location of the clicked-upon word
+ * since that prevents the use of edit functions on the context menu. */
 static gboolean
-button_press_event(GtkTextView *view, GdkEventButton *event, gpointer data) {
+button_press_event(GtkTextView *view, GdkEventButton *event, GtkSpell *spell) {
 	if (event->button == 3) {
 		gint x, y;
 		GtkTextIter iter;
+		GtkTextBuffer *buffer = gtk_text_view_get_buffer(view);
 
 		gtk_text_view_window_to_buffer_coords(view, 
 				GTK_TEXT_WINDOW_TEXT, 
 				event->x, event->y,
 				&x, &y);
 		gtk_text_view_get_iter_at_location(view, &iter, x, y);
-		gtk_text_buffer_place_cursor(gtk_text_view_get_buffer(view),
-				&iter);
+		gtk_text_buffer_move_mark(buffer, spell->mark_click, &iter);
 	}
 	return FALSE; /* false: let gtk process this event, too.
 					 we don't want to eat any events. */
@@ -554,6 +553,9 @@ gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 	spell->mark_insert = gtk_text_buffer_create_mark(buffer,
 			"gtkspell-insert",
 			&start, TRUE);
+	spell->mark_click = gtk_text_buffer_create_mark(buffer,
+			"gtkspell-click",
+			&start, TRUE);
 
 	/* now check the entire text buffer. */
 	gtkspell_recheck_all(spell);
@@ -574,6 +576,7 @@ gtkspell_free(GtkSpell *spell) {
 	gtk_text_tag_table_remove(table, spell->tag_highlight);
 
 	gtk_text_buffer_delete_mark(buffer, spell->mark_insert);
+	gtk_text_buffer_delete_mark(buffer, spell->mark_click);
 
 	delete_aspell_speller(spell->speller);
 

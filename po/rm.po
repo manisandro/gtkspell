@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 2.0.6-pre1\n"
 "Report-Msgid-Bugs-To: nathan@silverorange.com\n"
-"POT-Creation-Date: 2004-06-10 19:31-0400\n"
+"POT-Creation-Date: 2005-02-08 02:31-0500\n"
 "PO-Revision-Date: 2005-02-06 12:28+0100\n"
 "Last-Translator: Florian Verdet _goto <fvgoto@linuxbourg.ch>\n"
 "Language-Team: Rhaeto-Romance <gnu-rumantsch@guglielmtux.ch>\n"
@@ -17,25 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.2\n"
 
-#: gtkspell/gtkspell.c:381
+#: gtkspell/gtkspell.c:385
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(ingünas propostas)</i>"
 
-#: gtkspell/gtkspell.c:395
+#: gtkspell/gtkspell.c:399
 msgid "More..."
 msgstr "Daplü..."
 
 #. + Add to Dictionary
-#: gtkspell/gtkspell.c:421
+#: gtkspell/gtkspell.c:425
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Agiundscher \"%s\" al dicziunari"
 
 #. - Ignore All
-#: gtkspell/gtkspell.c:432
+#: gtkspell/gtkspell.c:436
 msgid "Ignore All"
 msgstr "Ignorar tuots"
 
-#: gtkspell/gtkspell.c:465
+#: gtkspell/gtkspell.c:469
 msgid "Spelling Suggestions"
 msgstr "Proposta da custabgiaziun"

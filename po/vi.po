@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell-2.0.6-pre1\n"
 "Report-Msgid-Bugs-To: nathan@silverorange.com\n"
-"POT-Creation-Date: 2004-06-10 19:31-0400\n"
+"POT-Creation-Date: 2005-02-08 02:31-0500\n"
 "PO-Revision-Date: 2005-01-18 20:36+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net> \n"
@@ -15,25 +15,25 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtkspell/gtkspell.c:381
+#: gtkspell/gtkspell.c:385
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(không có góp ý nào)</i>"
 
-#: gtkspell/gtkspell.c:395
+#: gtkspell/gtkspell.c:399
 msgid "More..."
 msgstr "Thêm nữa..."
 
 #. + Add to Dictionary
-#: gtkspell/gtkspell.c:421
+#: gtkspell/gtkspell.c:425
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Thêm \"%s\" vào Từ điển"
 
 #. - Ignore All
-#: gtkspell/gtkspell.c:432
+#: gtkspell/gtkspell.c:436
 msgid "Ignore All"
 msgstr "Bỏ qua tất cả"
 
-#: gtkspell/gtkspell.c:465
+#: gtkspell/gtkspell.c:469
 msgid "Spelling Suggestions"
 msgstr "Góp ý chính tả"

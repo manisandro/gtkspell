@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 2.0.6-pre1\n"
 "Report-Msgid-Bugs-To: nathan@silverorange.com\n"
-"POT-Creation-Date: 2004-06-10 19:31-0400\n"
+"POT-Creation-Date: 2005-02-08 02:31-0500\n"
 "PO-Revision-Date: 2005-01-14 14:35+0000\n"
 "Last-Translator: Marco Colombo <m.colombo@ed.ac.uk>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -15,25 +15,25 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtkspell/gtkspell.c:381
+#: gtkspell/gtkspell.c:385
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(nessun suggerimento)</i>"
 
-#: gtkspell/gtkspell.c:395
+#: gtkspell/gtkspell.c:399
 msgid "More..."
 msgstr "Ancora..."
 
 #. + Add to Dictionary
-#: gtkspell/gtkspell.c:421
+#: gtkspell/gtkspell.c:425
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Aggiungi \"%s\" al dizionario"
 
 #. - Ignore All
-#: gtkspell/gtkspell.c:432
+#: gtkspell/gtkspell.c:436
 msgid "Ignore All"
 msgstr "Ignora tutti"
 
-#: gtkspell/gtkspell.c:465
+#: gtkspell/gtkspell.c:469
 msgid "Spelling Suggestions"
 msgstr "Suggerimenti ortografici"

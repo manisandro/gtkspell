@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 2.0.6-pre1\n"
 "Report-Msgid-Bugs-To: nathan@silverorange.com\n"
-"POT-Creation-Date: 2004-10-08 13:18-0400\n"
+"POT-Creation-Date: 2005-02-08 02:31-0500\n"
 "PO-Revision-Date: 2004-10-06 23:57+0200\n"
 "Last-Translator: Mikel Olasagasti <hey_neken@mundurat.net>\n"
 "Language-Team: Basque <translation-team-eu@lists.sourceforge.net>\n"
@@ -17,25 +17,25 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtkspell/gtkspell.c:383
+#: gtkspell/gtkspell.c:385
 msgid "<i>(no suggestions)</i>"
 msgstr "<i> (ez dago iradokizunik) </i>"
 
-#: gtkspell/gtkspell.c:397
+#: gtkspell/gtkspell.c:399
 msgid "More..."
 msgstr "Gehiago..."
 
 #. + Add to Dictionary
-#: gtkspell/gtkspell.c:423
+#: gtkspell/gtkspell.c:425
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Gehitu \"%s\" hiztegiari"
 
 #. - Ignore All
-#: gtkspell/gtkspell.c:434
+#: gtkspell/gtkspell.c:436
 msgid "Ignore All"
 msgstr "Ignoratu guztiak"
 
-#: gtkspell/gtkspell.c:467
+#: gtkspell/gtkspell.c:469
 msgid "Spelling Suggestions"
 msgstr "Idazkera iradokizunak"

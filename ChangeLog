@@ -1,3 +1,7 @@
+version 2.0.9 (cvs):
+	* Don't delete the GtkTextTag from the tag table (needed for shared
+	  tag tables).
+
 version 2.0.8 (08-Oct-2004):
 	* Fix how the GtkTextTag is created to work with shared tag tables.
 	* Additional translation (see po/ChangeLog).

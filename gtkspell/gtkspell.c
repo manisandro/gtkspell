@@ -707,7 +707,6 @@ gtkspell_free(GtkSpell *spell) {
 
 	gtk_text_buffer_get_bounds(buffer, &start, &end);
 	gtk_text_buffer_remove_tag(buffer, spell->tag_highlight, &start, &end);
-	gtk_text_tag_table_remove(table, spell->tag_highlight);
 
 	gtk_text_buffer_delete_mark(buffer, spell->mark_insert_start);
 	gtk_text_buffer_delete_mark(buffer, spell->mark_insert_end);

@@ -4,7 +4,7 @@ Release: 1
 #Epoch: 1
 License: GPL
 Group: X11/Libraries
-Source0: http://gtkspell.sf.net/download/gtkspell-${version}.tar.gz
+Source0: http://gtkspell.sf.net/download/gtkspell-%{version}.tar.gz
 URL: http://gtkspell.sf.net/ 
 BuildRoot: %{_tmppath}/%{name}-root
 Requires: /sbin/ldconfig

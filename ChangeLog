@@ -1,3 +1,7 @@
+Wed, 01 Jan 2003 17:49:43 -0800  Bas Mevissen <pan-devel@basmevissen.nl>
+
+	* gtkspell.spec.in: Typo fix.
+
 Wed, 11 Dec 2002 21:17:13 -0800  Evan Martin  <martine@cs.washington.edu>
 
 	* Conditionally use Aspell if it's available, otherwise

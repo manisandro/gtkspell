@@ -1,3 +1,11 @@
+Mon, 04 Nov 2002 09:56:44 -0800  Evan Martin  <martine@cs.washington.edu>
+
+	* configure.ac: Check for libpspell earlier and die if we don't
+	  find it.  Prerequire autoconf 2.52.  
+	* gtkspell/Makefile.am, examples/Makefile.am: Set CFLAGS instead
+	  of foo_CFLAGS (why does the old way not work anymore?).
+	* autogen.sh: Don't automatically run configure.
+
 Tue Aug 13 13:14:16 PDT 2002  Evan Martin  <martine@cs.washington.edu>
 
 	* 2.0.2 released (minor bugfix).

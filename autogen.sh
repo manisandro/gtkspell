@@ -65,13 +65,6 @@ test $TEST_TYPE $FILE || {
 	exit 1
 }
 
-if test -z "$AUTOGEN_SUBDIR_MODE"; then
-        if test -z "$*"; then
-                echo "I am going to run ./configure with no arguments - if you wish "
-                echo "to pass any to it, please specify them on the $0 command line."
-        fi
-fi
-
 case $CC in
 *xlc | *xlc\ * | *lcc | *lcc\ *) am_opt=--include-deps;;
 esac
@@ -104,9 +97,4 @@ automake-1.4 -a $am_opt
 autoconf
 cd $ORIGDIR
 
-if test -z "$AUTOGEN_SUBDIR_MODE"; then
-        $srcdir/configure --enable-maintainer-mode "$@"
-
-        echo 
-        echo "Now type 'make' to compile $PROJECT."
-fi
+echo "If there were no errors, you can now run ./configure ."

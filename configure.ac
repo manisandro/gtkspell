@@ -19,14 +19,9 @@ PKG_CHECK_MODULES(GTKSPELL, $GTKSPELL_PACKAGES)
 AC_SUBST(GTKSPELL_CFLAGS)
 AC_SUBST(GTKSPELL_LIBS)
 
-# This is a check for gtk-doc which you can insert into your configure.in.
-# You shouldn't need to change it at all.
-
-##################################################
-# Check for gtk-doc.
-##################################################
-
-AC_ARG_WITH(html-dir, [  --with-html-dir=PATH path to installed docs ])
+# gtk-doc check:
+# from http://cvs.gnome.org/lxr/source/gtk-doc/examples/configure.in
+AC_ARG_WITH(html-dir, AC_HELP_STRING([--with-html-dir=PATH],[path to installed docs]))
 
 if test "x$with_html_dir" = "x" ; then
   HTML_DIR='${datadir}/gtk-doc/html'
@@ -36,28 +31,18 @@ fi
 
 AC_SUBST(HTML_DIR)
 
-AC_CHECK_PROG(GTKDOC, gtkdoc-mkdb, true, false)
-
-dnl XXX EVAN HACK; TEST DOES NOT WORK FOR VERSION 0.10
-dnl gtk_doc_min_version=0.6
-dnl if $GTKDOC ; then 
-dnl     gtk_doc_version=`gtkdoc-mkdb --version`
-dnl     AC_MSG_CHECKING([gtk-doc version ($gtk_doc_version) >= $gtk_doc_min_version])
-dnl     if perl <<EOF ; then
-dnl       exit (("$gtk_doc_version" =~ /^[[0-9]]+\.[[0-9]]+$/) &&
-dnl             ("$gtk_doc_version" >= "$gtk_doc_min_version") ? 0 : 1);
-dnl EOF
-dnl       AC_MSG_RESULT(yes)
-dnl    else
-dnl       AC_MSG_RESULT(no)
-dnl       GTKDOC=false
-dnl    fi
-dnl fi
-GTKDOC=true
-dnl XXX END EVAN HACK
+gtk_doc_min_version=1.0
+AC_MSG_CHECKING([gtk-doc version >= $gtk_doc_min_version])
+if pkg-config --atleast-version=$gtk_doc_min_version gtk-doc; then
+  AC_MSG_RESULT(yes)
+  GTKDOC=true
+else
+  AC_MSG_RESULT(no)
+  GTKDOC=false
+fi
 
 dnl Let people disable the gtk-doc stuff.
-AC_ARG_ENABLE(gtk-doc, [  --enable-gtk-doc  Use gtk-doc to build documentation [default=auto]], enable_gtk_doc="$enableval", enable_gtk_doc=auto)
+AC_ARG_ENABLE(gtk-doc, AC_HELP_STRING([--enable-gtk-doc],[Use gtk-doc to build documentation [[default=auto]]]), enable_gtk_doc="$enableval", enable_gtk_doc=auto)
 
 if test x$enable_gtk_doc = xauto ; then
   if test x$GTKDOC = xtrue ; then

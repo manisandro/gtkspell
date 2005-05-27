@@ -1,3 +1,5 @@
+version 2.0.12 (cvs):
+
 version 2.0.11 (27-May-2005):
 	* Re-enable apostrophe word-breaking workarounds (GNOME bug #97545).
 	* Additional translations (see po/ChangeLog).

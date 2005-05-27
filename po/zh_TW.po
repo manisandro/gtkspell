@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 2.0.6-pre1\n"
 "Report-Msgid-Bugs-To: nathan@silverorange.com\n"
-"POT-Creation-Date: 2004-06-10 19:31-0400\n"
+"POT-Creation-Date: 2005-05-27 18:37-0300\n"
 "PO-Revision-Date: 2005-04-13 07:06+0800\n"
 "Last-Translator: Abel Cheung <abelcheung@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -14,25 +14,25 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtkspell/gtkspell.c:381
+#: gtkspell/gtkspell.c:383
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(沒有建議)</i>"
 
-#: gtkspell/gtkspell.c:395
+#: gtkspell/gtkspell.c:397
 msgid "More..."
 msgstr "還有..."
 
 #. + Add to Dictionary
-#: gtkspell/gtkspell.c:421
+#: gtkspell/gtkspell.c:423
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "將“%s”加入字典"
 
 #. - Ignore All
-#: gtkspell/gtkspell.c:432
+#: gtkspell/gtkspell.c:434
 msgid "Ignore All"
 msgstr "全部忽略"
 
-#: gtkspell/gtkspell.c:465
+#: gtkspell/gtkspell.c:467
 msgid "Spelling Suggestions"
 msgstr "拼法建議"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 2.0.10\n"
 "Report-Msgid-Bugs-To: nathan@silverorange.com\n"
-"POT-Creation-Date: 2005-03-03 23:43+0900\n"
+"POT-Creation-Date: 2005-05-27 18:37-0300\n"
 "PO-Revision-Date: 2005-03-04 00:38+0900\n"
 "Last-Translator: Daichi Kawahata <daichik@users.sourceforge.net>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -15,25 +15,25 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtkspell/gtkspell.c:385
+#: gtkspell/gtkspell.c:383
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(訂正案はありません)</i>"
 
-#: gtkspell/gtkspell.c:399
+#: gtkspell/gtkspell.c:397
 msgid "More..."
 msgstr "さらに表示..."
 
 #. + Add to Dictionary
-#: gtkspell/gtkspell.c:425
+#: gtkspell/gtkspell.c:423
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "\"%s\" を辞書に追加する"
 
 #. - Ignore All
-#: gtkspell/gtkspell.c:436
+#: gtkspell/gtkspell.c:434
 msgid "Ignore All"
 msgstr "全て無視する"
 
-#: gtkspell/gtkspell.c:469
+#: gtkspell/gtkspell.c:467
 msgid "Spelling Suggestions"
 msgstr "綴りの訂正案"

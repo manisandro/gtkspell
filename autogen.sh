@@ -45,16 +45,13 @@ fi
 	DIE=1
 }
 
-if automake-1.7 --version < /dev/null > /dev/null 2>&1 ; then
-    AUTOMAKE=automake-1.7
-    ACLOCAL=aclocal-1.7
-else
+(automake --version) < /dev/null > /dev/null 2>&1 || {
 	echo
-	echo "You must have automake 1.7.x installed to compile $PROJECT."
+	echo "You must have automake installed to compile $PROJECT."
 	echo "Install the appropriate package for your distribution,"
 	echo "or get the source tarball at http://ftp.gnu.org/gnu/automake/"
 	DIE=1
-fi
+}
 
 if test "$DIE" -eq 1; then
 	exit 1
@@ -65,14 +62,14 @@ test $TEST_TYPE $FILE || {
 	exit 1
 }
 
-$ACLOCAL $ACLOCAL_FLAGS || exit 1
+aclocal $ACLOCAL_FLAGS || exit 1
 
 libtoolize --force || exit 1
 
 # optionally feature autoheader
 (autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
 
-$AUTOMAKE --add-missing || exit 1
+automake --add-missing || exit 1
 autoconf || exit 1
 cd $ORIGDIR
 

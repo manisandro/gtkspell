@@ -46,8 +46,8 @@
    #define aspell pspell
 #endif
 
-const int debug = 0;
-const int quiet = 0;
+static const int debug = 0;
+static const int quiet = 0;
 
 struct _GtkSpell {
 	GtkTextView *view;
@@ -357,7 +357,7 @@ replace_word(GtkWidget *menuitem, GtkSpell *spell) {
 	g_free(oldword);
 }
 
-GtkWidget*
+static GtkWidget*
 build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
                       const char *word) {
 	const char *suggestion;

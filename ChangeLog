@@ -2,6 +2,8 @@ version 2.0.12 (cvs):
 	* Make debug, quiet and build_suggestion_menu static in gtkspell.c
 	  to prevent exporting them.
 	* One additional translation (see po/ChangeLog).
+	* Move spell-checking library from Libs to Libs.private in
+	  gtkspell-2.0.pc 
 
 version 2.0.11 (27-May-2005):
 	* Re-enable apostrophe word-breaking workarounds (GNOME bug #97545).

@@ -4,6 +4,7 @@
 
 /* vim: set ts=4 sw=4 wm=5 : */
 
+#include <string.h>
 #include <gtk/gtk.h>
 #include <libintl.h>
 #include <locale.h>

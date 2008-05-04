@@ -1,5 +1,5 @@
 AC_PREREQ(2.57)
-AC_INIT([gtkspell],[2.0.12cvs],[nathan@silverorange.com])
+AC_INIT([gtkspell],[2.0.12],[nathan@silverorange.com])
 AC_CONFIG_SRCDIR(gtkspell/gtkspell.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AC_CONFIG_HEADERS([config.h])
@@ -79,6 +79,12 @@ GETTEXT_PACKAGE=$PACKAGE
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
 IT_PROG_INTLTOOL([0.35.0])
+
+
+
+AM_PROG_LIBTOOL
+
+
 
 dnl AM_MAINTAINER_MODE
 

@@ -4,6 +4,7 @@ version 2.0.12 (cvs):
 	* One additional translation (see po/ChangeLog).
 	* Move spell-checking library from Libs to Libs.private in
 	  gtkspell-2.0.pc 
+	* Update autogen.sh to use intltool
 
 version 2.0.11 (27-May-2005):
 	* Re-enable apostrophe word-breaking workarounds (GNOME bug #97545).

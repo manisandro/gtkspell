@@ -4,79 +4,156 @@
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
-ORIGDIR=`pwd`
-cd $srcdir
-PROJECT=gtkspell
-TEST_TYPE=-d
-FILE=gtkspell
-
 DIE=0
 
-have_libtool=false
-if libtoolize --version < /dev/null > /dev/null 2>&1 ; then
-	libtool_version=`libtoolize --version | sed 's/^[^0-9]*\([0-9].[0-9.]*\).*/\1/'`
-	case $libtool_version in
-	    1.4*|1.5*)
-		have_libtool=true
-		;;
-	esac
-fi
-if $have_libtool ; then : ; else
-	echo
-	echo "You must have libtool 1.4 installed to compile $PROJECT."
-	echo "Install the appropriate package for your distribution,"
-	echo "or get the source tarball at http://ftp.gnu.org/gnu/libtool/"
-	DIE=1
+if [ -n "$GNOME2_DIR" ]; then
+	ACLOCAL_FLAGS="-I $GNOME2_DIR/share/aclocal $ACLOCAL_FLAGS"
+	LD_LIBRARY_PATH="$GNOME2_DIR/lib:$LD_LIBRARY_PATH"
+	PATH="$GNOME2_DIR/bin:$PATH"
+	export PATH
+	export LD_LIBRARY_PATH
 fi
 
-(gtkdoc-scan --version) < /dev/null > /dev/null 2>&1 || {
-	echo
-	echo "You must have gtk-doc installed to compile $PROJECT."
-	echo "Install the appropriate package for your distribution,"
-	echo "or get the source tarball at http://ftp.gnome.org/pub/GNOME/sources/gtk-doc/"
-	DIE=1
+(test -f $srcdir/configure.ac) || {
+    echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
+    echo " top-level package directory"
+    exit 1
 }
 
 (autoconf --version) < /dev/null > /dev/null 2>&1 || {
-	echo
-	echo "You must have autoconf installed to compile $PROJECT."
-	echo "libtool the appropriate package for your distribution,"
-	echo "or get the source tarball at http://ftp.gnu.org/gnu/autoconf/"
-	DIE=1
+  echo
+  echo "**Error**: You must have \`autoconf' installed."
+  echo "Download the appropriate package for your distribution,"
+  echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
+  DIE=1
+}
+
+(grep "^IT_PROG_INTLTOOL" $srcdir/configure.ac >/dev/null) && {
+  (intltoolize --version) < /dev/null > /dev/null 2>&1 || {
+    echo 
+    echo "**Error**: You must have \`intltool' installed."
+    echo "You can get it from:"
+    echo "  ftp://ftp.gnome.org/pub/GNOME/"
+    DIE=1
+  }
+}
+
+(grep "^AM_PROG_XML_I18N_TOOLS" $srcdir/configure.ac >/dev/null) && {
+  (xml-i18n-toolize --version) < /dev/null > /dev/null 2>&1 || {
+    echo
+    echo "**Error**: You must have \`xml-i18n-toolize' installed."
+    echo "You can get it from:"
+    echo "  ftp://ftp.gnome.org/pub/GNOME/"
+    DIE=1
+  }
+}
+
+(grep "^AM_PROG_LIBTOOL" $srcdir/configure.ac >/dev/null) && {
+  (libtool --version) < /dev/null > /dev/null 2>&1 || {
+    echo
+    echo "**Error**: You must have \`libtool' installed."
+    echo "You can get it from: ftp://ftp.gnu.org/pub/gnu/"
+    DIE=1
+  }
+}
+
+(grep "^AM_GLIB_GNU_GETTEXT" $srcdir/configure.ac >/dev/null) && {
+  (grep "sed.*POTFILES" $srcdir/configure.ac) > /dev/null || \
+  (glib-gettextize --version) < /dev/null > /dev/null 2>&1 || {
+    echo
+    echo "**Error**: You must have \`glib' installed."
+    echo "You can get it from: ftp://ftp.gtk.org/pub/gtk"
+    DIE=1
+  }
 }
 
 (automake --version) < /dev/null > /dev/null 2>&1 || {
-	echo
-	echo "You must have automake installed to compile $PROJECT."
-	echo "Install the appropriate package for your distribution,"
-	echo "or get the source tarball at http://ftp.gnu.org/gnu/automake/"
-	DIE=1
+  echo
+  echo "**Error**: You must have \`automake' installed."
+  echo "You can get it from: ftp://ftp.gnu.org/pub/gnu/"
+  DIE=1
+  NO_AUTOMAKE=yes
+}
+
+
+# if no automake, don't bother testing for aclocal
+test -n "$NO_AUTOMAKE" || (aclocal --version) < /dev/null > /dev/null 2>&1 || {
+  echo
+  echo "**Error**: Missing \`aclocal'.  The version of \`automake'"
+  echo "installed doesn't appear recent enough."
+  echo "You can get automake from ftp://ftp.gnu.org/pub/gnu/"
+  DIE=1
 }
 
 if test "$DIE" -eq 1; then
-	exit 1
+  exit 1
 fi
 
-test $TEST_TYPE $FILE || {
-	echo "You must run this script in the top-level $PROJECT directory"
-	exit 1
-}
+if test -z "$*"; then
+  echo "**Warning**: I am going to run \`configure' with no arguments."
+  echo "If you wish to pass any to it, please specify them on the"
+  echo \`$0\'" command line."
+  echo
+fi
 
-aclocal $ACLOCAL_FLAGS || exit 1
+case $CC in
+xlc )
+  am_opt=--include-deps;;
+esac
 
-libtoolize --force || exit 1
+for coin in `find $srcdir -path $srcdir/CVS -prune -o -name configure.ac -print`
+do 
+  dr=`dirname $coin`
+  if test -f $dr/NO-AUTO-GEN; then
+    echo skipping $dr -- flagged as no auto-gen
+  else
+    echo processing $dr
+    ( cd $dr
 
-# optionally feature autoheader
-(autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
+      aclocalinclude="$ACLOCAL_FLAGS"
 
-automake --add-missing || exit 1
-autoconf || exit 1
-cd $ORIGDIR
+      if grep "^AM_GLIB_GNU_GETTEXT" configure.ac >/dev/null; then
+	echo "Creating $dr/aclocal.m4 ..."
+	test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
+	echo "Running glib-gettextize...  Ignore non-fatal messages."
+	echo "no" | glib-gettextize --force --copy
+	echo "Making $dr/aclocal.m4 writable ..."
+	test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
+      fi
+      if grep "^IT_PROG_INTLTOOL" configure.ac >/dev/null; then
+        echo "Running intltoolize..."
+	intltoolize --copy --force --automake
+      fi
+      if grep "^AM_PROG_XML_I18N_TOOLS" configure.ac >/dev/null; then
+        echo "Running xml-i18n-toolize..."
+	xml-i18n-toolize --copy --force --automake
+      fi
+      if grep "^AM_PROG_LIBTOOL" configure.ac >/dev/null; then
+	if test -z "$NO_LIBTOOLIZE" ; then 
+	  echo "Running libtoolize..."
+	  libtoolize --force --copy
+	fi
+      fi
+      echo "Running aclocal $aclocalinclude ..."
+      aclocal $aclocalinclude
+      if grep "^AM_CONFIG_HEADER" configure.ac >/dev/null; then
+	echo "Running autoheader..."
+	autoheader
+      fi
+      echo "Running automake --gnu $am_opt ..."
+      automake --add-missing --gnu $am_opt
+      echo "Running autoconf ..."
+      autoconf
+    )
+  fi
+done
+
+conf_flags="--enable-maintainer-mode"
 
 if test x$NOCONFIGURE = x; then
-	echo "Running $srcdir/configure $@ ..."
-	$srcdir/configure $@ \
-	&& echo "Now type 'make' to compile $PROJECT"  || exit 1
+  echo Running $srcdir/configure $conf_flags "$@" ...
+  $srcdir/configure $conf_flags "$@" \
+  && echo Now type \`make\' to compile. || exit 1
 else
-	echo "Skipping configure process."
+  echo Skipping configure process.
 fi

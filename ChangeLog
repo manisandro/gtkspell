@@ -5,6 +5,7 @@ version 2.0.12 (cvs):
 	* Move spell-checking library from Libs to Libs.private in
 	  gtkspell-2.0.pc 
 	* Update autogen.sh to use intltool
+	* Fix warnings with -Wstrict-prototypes by Richard Laager
 
 version 2.0.11 (2005-05-27):
 	* Re-enable apostrophe word-breaking workarounds (GNOME bug #97545).

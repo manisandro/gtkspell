@@ -13,7 +13,7 @@ typedef enum {
 	GTKSPELL_ERROR_BACKEND,
 } GtkSpellError;
 
-GQuark gtkspell_error_quark();
+GQuark gtkspell_error_quark(void);
 
 typedef struct _GtkSpell GtkSpell;
 
@@ -36,7 +36,7 @@ void      gtkspell_recheck_all(GtkSpell *spell);
 #ifndef GTKSPELL_DISABLE_DEPRECATED
 #define GTKSPELL_ERROR_PSPELL GTKSPELL_ERROR_BACKEND
 
-int gtkspell_init();
+int gtkspell_init(void);
 /* no-op. */
 
 void gtkspell_attach(GtkTextView *view);

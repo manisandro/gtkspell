@@ -1,4 +1,6 @@
-version 2.0.12 (cvs):
+version 2.0.13 (cvs):
+
+version 2.0.12 (2008-05-09):
 	* Make debug, quiet and build_suggestion_menu static in gtkspell.c
 	  to prevent exporting them.
 	* One additional translation (see po/ChangeLog).

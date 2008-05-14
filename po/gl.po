@@ -1,0 +1,38 @@
+# Mensaxes en galego de gtkspell
+# This file is distributed under the same license as the gtkspell package.
+# Copyright (C) 2008 THE PACKAGE'S COPYRIGHT HOLDER.
+# Diego Pérez Montes <kabute@gulo.org> 2008
+msgid ""
+msgstr ""
+"Project-Id-Version: gtkspell-2.0.12\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-05-13 22:39+0200\n"
+"PO-Revision-Date: 2008-05-14 00:17+0100\n"
+"Last-Translator: Diego Pérez Montes <kabute@gulo.org>\n"
+"Language-Team: Galician <proxecto@trasno.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../gtkspell/gtkspell.c:384
+msgid "<i>(no suggestions)</i>"
+msgstr "<i>(non hai recomendacións)</i>"
+
+#: ../gtkspell/gtkspell.c:398
+msgid "More..."
+msgstr "Máis..."
+
+#. + Add to Dictionary
+#: ../gtkspell/gtkspell.c:424
+#, c-format
+msgid "Add \"%s\" to Dictionary"
+msgstr "Engadir \"%s\" ó Diccionario"
+
+#. - Ignore All
+#: ../gtkspell/gtkspell.c:435
+msgid "Ignore All"
+msgstr "Ignorar Todo"
+
+#: ../gtkspell/gtkspell.c:468
+msgid "Spelling Suggestions"
+msgstr "Recomendacións de Ortografía"

@@ -2,13 +2,14 @@
 # Copyright (C) 2005 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtkspell package.
 # Jan Claeys <janc@lugwv.be>, 2005.
+# Reinout van Schouwen <reinout@cs.vu.nl>, 2005
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 2.0.6-pre1\n"
 "Report-Msgid-Bugs-To: nathan@silverorange.com\n"
-"POT-Creation-Date: 2005-05-27 18:37-0300\n"
-"PO-Revision-Date: 2005-02-25 17:13+0100\n"
+"POT-Creation-Date: 2004-06-10 19:31-0400\n"
+"PO-Revision-Date: 2005-11-29 10:52+0100\n"
 "Last-Translator: Jan Claeys <janc@lugwv.be>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,25 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Dutch\n"
 
-#: gtkspell/gtkspell.c:383
+#: gtkspell/gtkspell.c:381
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(geen suggesties)</i>"
 
-#: gtkspell/gtkspell.c:397
+#: gtkspell/gtkspell.c:395
 msgid "More..."
 msgstr "Meer..."
 
 #. + Add to Dictionary
-#: gtkspell/gtkspell.c:423
+#: gtkspell/gtkspell.c:421
 #, c-format
 msgid "Add \"%s\" to Dictionary"
-msgstr "\"%s\" Toevoegen aan Woordenboek"
+msgstr "\"%s\" toevoegen aan woordenboek"
 
 #. - Ignore All
-#: gtkspell/gtkspell.c:434
+#: gtkspell/gtkspell.c:432
 msgid "Ignore All"
-msgstr "Alles Negeren"
+msgstr "Alles negeren"
 
-#: gtkspell/gtkspell.c:467
+#: gtkspell/gtkspell.c:465
 msgid "Spelling Suggestions"
 msgstr "Spellingsuggesties"

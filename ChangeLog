@@ -1,4 +1,4 @@
-version 2.0.13 (cvs):
+version 2.0.13 (2008-05-20):
 	* Additional translations (see po/ChangeLog).
 	* Enchant support (support for pspell/aspell dropped) (Dom Lachowicz)
 

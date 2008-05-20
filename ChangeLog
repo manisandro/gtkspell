@@ -1,5 +1,6 @@
 version 2.0.13 (cvs):
 	* Additional translations (see po/ChangeLog).
+	* Enchant support (support for pspell/aspell dropped) (Dom Lachowicz)
 
 version 2.0.12 (2008-05-09):
 	* Make debug, quiet and build_suggestion_menu static in gtkspell.c

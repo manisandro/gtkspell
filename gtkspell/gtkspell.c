@@ -15,37 +15,7 @@
 
 #define GTKSPELL_MISSPELLED_TAG "gtkspell-misspelled"
 
-#ifdef HAVE_ASPELL_H
-   #define USING_ASPELL
-   #include <aspell.h>
-#elif defined HAVE_PSPELL_H
-   #define USING_PSPELL
-   #include <pspell/pspell.h>
-   #define AspellSpeller PspellManager
-   #define speller manager
-   #define aspell_speller_check pspell_manager_check
-   #define aspell_speller_add_to_session pspell_manager_add_to_session
-   #define aspell_speller_add_to_personal pspell_manager_add_to_personal
-   #define aspell_speller_save_all_word_lists pspell_manager_save_all_word_lists
-   #define aspell_speller_store_replacement pspell_manager_store_replacement
-   #define AspellWordList PspellWordList
-   #define AspellStringEnumeration PspellStringEmulation
-   #define aspell_speller_suggest pspell_manager_suggest
-   #define aspell_word_list_elements pspell_word_list_elements
-   #define aspell_string_enumeration_next pspell_string_emulation_next
-   #define delete_aspell_string_enumeration delete_pspell_string_emulation
-   #define AspellConfig PspellConfig
-   #define AspellCanHaveError PspellCanHaveError
-   #define new_aspell_config new_pspell_config
-   #define aspell_config_replace pspell_config_replace
-   #define new_aspell_speller new_pspell_manager
-   #define delete_aspell_config delete_pspell_config
-   #define aspell_error_message pspell_error_message
-   #define delete_aspell_speller delete_pspell_manager
-   #define to_aspell_speller to_pspell_manager
-   #define aspell_error_number pspell_error_number
-   #define aspell pspell
-#endif
+#include <enchant.h>
 
 static const int debug = 0;
 static const int quiet = 0;
@@ -56,7 +26,8 @@ struct _GtkSpell {
 	GtkTextMark *mark_insert_start;
 	GtkTextMark *mark_insert_end;
 	gboolean deferred_check;
-	AspellSpeller *speller;
+	EnchantBroker *broker;
+	EnchantDict *speller;
 	GtkTextMark *mark_click;
 };
 
@@ -125,10 +96,12 @@ static void
 check_word(GtkSpell *spell, GtkTextBuffer *buffer,
            GtkTextIter *start, GtkTextIter *end) {
 	char *text;
+	if (!spell->speller)
+		return;
 	text = gtk_text_buffer_get_text(buffer, start, end, FALSE);
 	if (debug) g_print("checking: %s\n", text);
 	if (g_unichar_isdigit(*text) == FALSE) /* don't check numbers */
-		if (aspell_speller_check(spell->speller, text, -1) == FALSE)
+		if (enchant_dict_check(spell->speller, text, strlen(text)) != 0)
 			gtk_text_buffer_apply_tag(buffer, spell->tag_highlight, start, end);
 	g_free(text);
 }
@@ -303,8 +276,7 @@ add_to_dictionary(GtkWidget *menuitem, GtkSpell *spell) {
 	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
 	word = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 	
-	aspell_speller_add_to_personal(spell->speller, word, strlen(word));
-	aspell_speller_save_all_word_lists(spell->speller);
+	enchant_dict_add_to_pwl( spell->speller, word, strlen(word));
 
 	gtkspell_recheck_all(spell);
 
@@ -322,7 +294,7 @@ ignore_all(GtkWidget *menuitem, GtkSpell *spell) {
 	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
 	word = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 	
-	aspell_speller_add_to_session(spell->speller, word, strlen(word));
+	enchant_dict_add_to_session(spell->speller, word, strlen(word));
 
 	gtkspell_recheck_all(spell);
 
@@ -336,6 +308,9 @@ replace_word(GtkWidget *menuitem, GtkSpell *spell) {
 	GtkTextIter start, end;
 	GtkTextBuffer *buffer;
 	
+	if (!spell->speller)
+		return;
+
 	buffer = gtk_text_view_get_buffer(spell->view);
 
 	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
@@ -351,7 +326,7 @@ replace_word(GtkWidget *menuitem, GtkSpell *spell) {
 	gtk_text_buffer_delete(buffer, &start, &end);
 	gtk_text_buffer_insert(buffer, &start, newword, -1);
 
-	aspell_speller_store_replacement(spell->speller, 
+	enchant_dict_store_replacement(spell->speller, 
 			oldword, strlen(oldword),
 			newword, strlen(newword));
 
@@ -365,19 +340,19 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 	GtkWidget *topmenu, *menu;
 	GtkWidget *mi;
 	GtkWidget *hbox;
-	int count = 0;
 	void *spelldata;
-	const AspellWordList *suggestions;
-	AspellStringEnumeration *elements;
+	char **suggestions;
+	size_t n_suggs, i;
 	char *label;
 	
 	topmenu = menu = gtk_menu_new();
 
-	suggestions = aspell_speller_suggest(spell->speller, word, -1);
-	elements = aspell_word_list_elements(suggestions);
+	if (!spell->speller)
+		return topmenu;
 
-	suggestion = aspell_string_enumeration_next(elements);
-	if (suggestion == NULL) {
+	suggestions = enchant_dict_suggest(spell->speller, word, strlen(word), &n_suggs);
+
+	if (suggestions == NULL || !n_suggs) {
 		/* no suggestions.  put something in the menu anyway... */
 		GtkWidget *label;
 		label = gtk_label_new("");
@@ -389,8 +364,8 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 		gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), mi);
 	} else {
 		/* build a set of menus with suggestions. */
-		while (suggestion != NULL) {
-			if (count == 10) {
+		for (i = 0; i < n_suggs; i++ ) {
+			if (i > 0 && i % 10 == 0) {
 				mi = gtk_menu_item_new();
 				gtk_widget_show(mi);
 				gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
@@ -401,19 +376,16 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 
 				menu = gtk_menu_new();
 				gtk_menu_item_set_submenu(GTK_MENU_ITEM(mi), menu);
-				count = 0;
 			}
-			mi = gtk_menu_item_new_with_label(suggestion);
+			mi = gtk_menu_item_new_with_label(suggestions[i]);
 			g_signal_connect(G_OBJECT(mi), "activate",
 					G_CALLBACK(replace_word), spell);
 			gtk_widget_show(mi);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
-			count++;
-			suggestion = aspell_string_enumeration_next(elements);
 		}
 	}
 
-	delete_aspell_string_enumeration(elements);
+	enchant_dict_free_suggestions(spell->speller, suggestions);
 
 	/* Separator */
 	mi = gtk_menu_item_new();
@@ -518,9 +490,6 @@ popup_menu_event(GtkTextView *view, GtkSpell *spell) {
 
 static gboolean
 gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **error) {
-	AspellConfig *config;
-	AspellCanHaveError *err;
-	AspellSpeller *speller;
 
 	if (lang == NULL) {
 		lang = g_getenv("LANG");
@@ -532,26 +501,25 @@ gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **erro
 		}
 	}
 
-	config = new_aspell_config();
-	if (lang)
-		aspell_config_replace(config, "language-tag", lang);
-	aspell_config_replace(config, "encoding", "utf-8");
-	err = new_aspell_speller(config);
-	delete_aspell_config(config);
+	if (!spell->broker)
+		spell->broker = enchant_broker_init();
 
-	if (aspell_error_number(err) != 0) {
-#ifdef USING_ASPELL
+	if (spell->speller) {
+		enchant_broker_free_dict(spell->broker, spell->speller);
+		spell->speller = NULL;
+	}
+
+	if (!lang) {
+		lang = "en";
+	}
+
+	spell->speller = enchant_broker_request_dict(spell->broker, lang );
+
+	if (!spell->speller) {
 		g_set_error(error, GTKSPELL_ERROR, GTKSPELL_ERROR_BACKEND,
-				"aspell: %s", aspell_error_message(err));
-#elif defined USING_PSPELL
-		g_set_error(error, GTKSPELL_ERROR, GTKSPELL_ERROR_BACKEND,
-				"pspell: %s", aspell_error_message(err));
-#endif
+			_("enchant error for language: %s"),lang);
 		return FALSE;
 	} 
-	if (spell->speller)
-		delete_aspell_speller(spell->speller);
-	spell->speller = to_aspell_speller(err);
 
 	return TRUE;
 }
@@ -714,8 +682,13 @@ gtkspell_free(GtkSpell *spell) {
 	gtk_text_buffer_delete_mark(buffer, spell->mark_insert_end);
 	gtk_text_buffer_delete_mark(buffer, spell->mark_click);
 
-	delete_aspell_speller(spell->speller);
 
+	if (spell->broker) {
+		if (spell->speller) {
+			enchant_broker_free_dict(spell->broker, spell->speller);
+		}
+		enchant_broker_free(spell->broker);
+	}
 	g_signal_handlers_disconnect_matched(spell->view,
 			G_SIGNAL_MATCH_DATA,
 			0, 0, NULL, NULL,

@@ -81,5 +81,5 @@ Error domain for GtkSpell functions. Errors in this domain will be from the
 Currently there is only one type of error that GtkSpell can report.
 </para>
 
-@GTKSPELL_ERROR_BACKEND:  Aspell (or pspell) reported an error.
+@GTKSPELL_ERROR_BACKEND:  Spell backend reported an error.
 

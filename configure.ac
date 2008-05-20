@@ -4,18 +4,12 @@ AC_CONFIG_SRCDIR(gtkspell/gtkspell.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AC_CONFIG_HEADERS([config.h])
 
-AC_CHECK_HEADER(aspell.h, [AC_DEFINE(HAVE_ASPELL_H,1, 
-   [Define to 1 if you have the <aspell.h> header file.] )] )
-AC_CHECK_HEADER(pspell/pspell.h, [AC_DEFINE(HAVE_PSPELL_H,1, 
-   [Define to 1 if you have the <pspell/pspell.h> header file.] )] )
-AC_CHECK_LIB(aspell, new_aspell_speller, SPELLER_LIB="-laspell",
-   [AC_CHECK_LIB(pspell, new_pspell_manager, SPELLER_LIB="-lpspell",
-      [AC_MSG_ERROR([You must have the aspell or pspell dev libraries to build gtkspell.]) ] ) ] )
+SPELLER_LIB=-lenchant
       
 AC_SUBST(SPELLER_LIB)
 GTKSPELL_PACKAGES=gtk+-2.0
 AC_SUBST(GTKSPELL_PACKAGES)
-PKG_CHECK_MODULES(GTKSPELL, $GTKSPELL_PACKAGES)
+PKG_CHECK_MODULES(GTKSPELL, $GTKSPELL_PACKAGES enchant >= 0.4.0 )
 AC_SUBST(GTKSPELL_CFLAGS)
 AC_SUBST(GTKSPELL_LIBS)
 

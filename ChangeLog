@@ -1,3 +1,6 @@
+version 2.0.13+cvs (cvs):
+	* Changed bug reporting address at configure.ac:AC_INIT
+
 version 2.0.13 (2008-05-20):
 	* Additional translations (see po/ChangeLog).
 	* Enchant support (support for pspell/aspell dropped) (Dom Lachowicz)

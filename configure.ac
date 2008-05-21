@@ -1,5 +1,13 @@
+dnl Process this file with autoconf to produce a configure script.
+
 AC_PREREQ(2.57)
-AC_INIT([gtkspell],[2.0.13],[nathan@silverorange.com])
+AC_INIT([gtkspell],[2.0.13+cvs],[gtkspell-devel@lists.sourceforge.net])
+dnl N.B. After 0.40, please change to `0.40+cvs' instead of `0.41cvs'.
+dnl Rationale: (i) placate simple version comparison software such as
+dnl `dpkg --compare-versions'.  (ii) We don't always know what the next
+dnl version is going to be called until about the time we release it
+dnl (whereas we always know what the previous version was called).
+dnl (extracted from inkscape/configure.ac)
 AC_CONFIG_SRCDIR(gtkspell/gtkspell.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AC_CONFIG_HEADERS([config.h])

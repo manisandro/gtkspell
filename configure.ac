@@ -1,5 +1,5 @@
 AC_PREREQ(2.57)
-AC_INIT([gtkspell],[2.0.12],[nathan@silverorange.com])
+AC_INIT([gtkspell],[2.0.13],[nathan@silverorange.com])
 AC_CONFIG_SRCDIR(gtkspell/gtkspell.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AC_CONFIG_HEADERS([config.h])

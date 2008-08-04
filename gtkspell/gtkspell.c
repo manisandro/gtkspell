@@ -323,8 +323,10 @@ replace_word(GtkWidget *menuitem, GtkSpell *spell) {
 		g_print("\nnew word: '%s'\n", newword);
 	}
 
+	gtk_text_buffer_begin_user_action(buffer);
 	gtk_text_buffer_delete(buffer, &start, &end);
 	gtk_text_buffer_insert(buffer, &start, newword, -1);
+	gtk_text_buffer_end_user_action(buffer);
 
 	enchant_dict_store_replacement(spell->speller, 
 			oldword, strlen(oldword),

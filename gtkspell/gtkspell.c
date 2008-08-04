@@ -732,4 +732,47 @@ gtkspell_detach(GtkSpell *spell) {
 	gtkspell_free(spell);
 }
 
+/**
+ * gtkspell_get_suggestions_menu:
+ * @iter: Textiter of position in buffer to be corrected if necessary.
+ *
+ * Retrieves a submenu of replacement spellings, or NULL if the word at @iter is
+ * not misspelt.
+ *
+ * Returns: the #GtkMenu widget, or %NULL if there is no need for a menu
+ */
+GtkWidget*
+gtkspell_get_suggestions_menu(GtkSpell *spell, GtkTextIter *iter) {
+	GtkWidget *submenu = NULL;
+	GtkTextIter start, end;
 
+	g_return_val_if_fail(spell != NULL, NULL);
+#ifdef ENCHANT_H
+	/* avoid an empty submenu when enchant is not working properly */
+	if (!spell->speller)
+		return NULL;
+#endif
+
+	start = *iter;
+	/* use the same lazy test, with same risk, as does the default menu arrangement */
+	if (gtk_text_iter_has_tag(&start, spell->tag_highlight)) {
+		/* word was mis-spelt */
+		gchar *badword;
+		GtkTextBuffer *buffer;
+		buffer = gtk_text_view_get_buffer(spell->view);
+		/* in case a fix is requested, move the attention-point */
+		gtk_text_buffer_move_mark(buffer, spell->mark_click, iter);
+		if (!gtk_text_iter_starts_word(&start))
+			gtk_text_iter_backward_word_start(&start);
+		end = start;
+		if (gtk_text_iter_inside_word(&end))
+			gtk_text_iter_forward_word_end(&end);
+		badword = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+
+		submenu = build_suggestion_menu (spell, buffer, badword);
+		gtk_widget_show (submenu);
+
+		g_free (badword);
+	}
+	return submenu;
+}

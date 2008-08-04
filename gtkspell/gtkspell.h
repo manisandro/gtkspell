@@ -25,6 +25,9 @@ GtkSpell* gtkspell_new_attach(GtkTextView *view,
                                      const gchar *lang, GError **error);
 GtkSpell* gtkspell_get_from_text_view(GtkTextView *view);
 void      gtkspell_detach(GtkSpell *spell);
+/* enable an application to create its own context-menu with a
+ * spell-correction sub-menu */
+GtkWidget* gtkspell_get_suggestions_menu(GtkSpell *spell, GtkTextIter *iter);
 
 gboolean  gtkspell_set_language(GtkSpell *spell,
                                        const gchar *lang, GError **error);

@@ -1,4 +1,5 @@
 version 2.0.14 (2008-08-15):
+	* Additional translations (see po/ChangeLog).
 	* Changed bug reporting address at configure.ac:AC_INIT
 	* undo/redo in the calling application (Liviu Andronic)
 	* gtkspell_get_suggestions_menu() (Liviu Andronic)

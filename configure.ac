@@ -75,7 +75,7 @@ AC_PROG_LIBTOOL
 AC_C_CONST
 
 # gettext 
-ALL_LINGUAS="be cs de el eo es eu fi fr ga gl hu hy id it ja ky lt mn nb nl pl pt_BR rm ro ru rw sk sl sr sv tr uk vi wa zh_CN zh_HK zh_TW"
+ALL_LINGUAS="be cs da de el eo es eu fi fr ga gl hu hy id it ja ky lt mn nb nl pl pt_BR rm ro ru rw sk sl sr sv tr uk vi wa zh_CN zh_HK zh_TW"
 AM_GLIB_GNU_GETTEXT
 GETTEXT_PACKAGE=$PACKAGE
 AC_SUBST(GETTEXT_PACKAGE)

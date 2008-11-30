@@ -7,6 +7,8 @@
 #ifndef GTKSPELL_H
 #define GTKSPELL_H
 
+G_BEGIN_DECLS
+
 #define GTKSPELL_ERROR gtkspell_error_quark()
 
 typedef enum {
@@ -46,5 +48,7 @@ void gtkspell_attach(GtkTextView *view);
 /* gtkspell_new_attach(view, NULL, NULL); */
 
 #endif /* GTKSPELL_DISABLE_DEPRECATED */
+
+G_END_DECLS
 
 #endif /* GTKSPELL_H */

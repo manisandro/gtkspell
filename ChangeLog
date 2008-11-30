@@ -1,5 +1,6 @@
 version 2.0.14+cvs (cvs):
 	* Additional translations (see po/ChangeLog).
+	* Add missing G_BEGIN_DECLS/G_END_DECLS for C++ support
 
 version 2.0.14 (2008-08-15):
 	* Additional translations (see po/ChangeLog).

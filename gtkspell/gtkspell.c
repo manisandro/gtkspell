@@ -335,11 +335,12 @@ replace_word(GtkWidget *menuitem, GtkSpell *spell) {
 	g_free(oldword);
 }
 
-static GtkWidget*
-build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
-                      const char *word) {
+/* This function populates suggestions at the top of the passed menu */
+static void
+add_suggestion_menus(GtkSpell *spell, GtkTextBuffer *buffer,
+                      const char *word, GtkWidget *topmenu) {
 	const char *suggestion;
-	GtkWidget *topmenu, *menu;
+	GtkWidget *menu;
 	GtkWidget *mi;
 	GtkWidget *hbox;
 	void *spelldata;
@@ -347,10 +348,12 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 	size_t n_suggs, i;
 	char *label;
 	
-	topmenu = menu = gtk_menu_new();
+	menu = topmenu;
 
 	if (!spell->speller)
-		return topmenu;
+		return;
+
+	gint menu_position = 0;
 
 	suggestions = enchant_dict_suggest(spell->speller, word, strlen(word), &n_suggs);
 
@@ -363,18 +366,16 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 		mi = gtk_menu_item_new();
 		gtk_container_add(GTK_CONTAINER(mi), label);
 		gtk_widget_show_all(mi);
-		gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), mi);
+		gtk_menu_shell_insert(GTK_MENU_SHELL(menu), mi, menu_position++);
 	} else {
 		/* build a set of menus with suggestions. */
+		gboolean inside_more_submenu = FALSE;
 		for (i = 0; i < n_suggs; i++ ) {
 			if (i > 0 && i % 10 == 0) {
-				mi = gtk_menu_item_new();
-				gtk_widget_show(mi);
-				gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
-
+				inside_more_submenu = TRUE;
 				mi = gtk_menu_item_new_with_label(_("More..."));
 				gtk_widget_show(mi);
-				gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
+				gtk_menu_shell_insert(GTK_MENU_SHELL(menu), mi, menu_position++);
 
 				menu = gtk_menu_new();
 				gtk_menu_item_set_submenu(GTK_MENU_ITEM(mi), menu);
@@ -383,16 +384,12 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 			g_signal_connect(G_OBJECT(mi), "activate",
 					G_CALLBACK(replace_word), spell);
 			gtk_widget_show(mi);
-			gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
+			if (inside_more_submenu) gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
+			else gtk_menu_shell_insert(GTK_MENU_SHELL(menu), mi, menu_position++);
 		}
 	}
 
 	enchant_dict_free_suggestions(spell->speller, suggestions);
-
-	/* Separator */
-	mi = gtk_menu_item_new();
-	gtk_widget_show(mi);
-	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
 
 	/* + Add to Dictionary */
 	label = g_strdup_printf(_("Add \"%s\" to Dictionary"), word);
@@ -403,7 +400,7 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 	g_signal_connect(G_OBJECT(mi), "activate",
 			G_CALLBACK(add_to_dictionary), spell);
 	gtk_widget_show_all(mi);
-	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
+	gtk_menu_shell_insert(GTK_MENU_SHELL(topmenu), mi, menu_position++);
 
 	/* - Ignore All */
 	mi = gtk_image_menu_item_new_with_label(_("Ignore All"));
@@ -412,14 +409,22 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 	g_signal_connect(G_OBJECT(mi), "activate",
 			G_CALLBACK(ignore_all), spell);
 	gtk_widget_show_all(mi);
-	gtk_menu_shell_append(GTK_MENU_SHELL(topmenu), mi);
+	gtk_menu_shell_insert(GTK_MENU_SHELL(topmenu), mi, menu_position++);
+}
+
+static GtkWidget*
+build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
+                      const char *word) {
+	GtkWidget *topmenu;
+	topmenu = gtk_menu_new();
+	add_suggestion_menus(spell, buffer, word, topmenu);
 
 	return topmenu;
 }
 
 static void
 populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpell *spell) {
-	GtkWidget *img, *mi;
+	GtkWidget *mi;
 	GtkTextBuffer *buffer = gtk_text_view_get_buffer(textview);
 	GtkTextIter start, end;
 	char *word;
@@ -437,18 +442,9 @@ populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpell *spell) {
 	gtk_widget_show(mi);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), mi);
 
-	/* then, on top of it, the suggestions menu. */
-	img = gtk_image_new_from_stock(GTK_STOCK_SPELL_CHECK, GTK_ICON_SIZE_MENU);
-	mi = gtk_image_menu_item_new_with_label(_("Spelling Suggestions"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(mi), img);
-
 	word = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mi),
-			build_suggestion_menu(spell, buffer, word));
+	add_suggestion_menus(spell, buffer, word, GTK_WIDGET (menu) );
 	g_free(word);
-
-	gtk_widget_show_all(mi);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), mi);
 }
 
 /* when the user right-clicks on a word, they want to check that word.

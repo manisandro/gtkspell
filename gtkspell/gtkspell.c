@@ -423,11 +423,68 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 }
 
 static void
+language_change_callback(GtkWidget *mi, GtkSpell* spell) {
+	GError* error = NULL;
+	gchar *name;
+	g_object_get(G_OBJECT(mi), "name", &name, NULL);
+	gtkspell_set_language(spell, name, &error);
+	g_free(name);
+}
+
+struct _languages_cb_struct {GtkWidget *menu; GtkSpell *spell;};
+
+static void
+dict_describe_cb(const char * const lang_tag,
+		 const char * const provider_name,
+		 const char * const provider_desc,
+		 const char * const provider_file,
+		 void * user_data) {
+
+	GtkWidget* mi;
+	struct _languages_cb_struct *languages_cb_struct = (struct _languages_cb_struct *)user_data;
+	GtkWidget* menu = languages_cb_struct->menu;
+	GtkSpell* spell = languages_cb_struct->spell;
+
+	/* TODO get the language code translation to the current locale */
+	/* TODO add a radiobutton with the currently selected language */
+	mi = gtk_menu_item_new_with_label(lang_tag);
+	g_object_set(G_OBJECT(mi), "name", lang_tag, NULL);
+	g_signal_connect(G_OBJECT(mi), "activate",
+		G_CALLBACK(language_change_callback), spell);
+	gtk_widget_show(mi);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
+}
+
+static GtkWidget*
+build_languages_menu(GtkSpell *spell) {
+	GtkWidget* menu = gtk_menu_new();
+
+	struct _languages_cb_struct languages_cb_struct;
+	languages_cb_struct.menu = menu;
+	languages_cb_struct.spell = spell;
+
+	enchant_broker_list_dicts(spell->broker, dict_describe_cb, &languages_cb_struct);
+
+	return menu;
+}
+
+static void
 populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpell *spell) {
 	GtkWidget *mi;
 	GtkTextBuffer *buffer = gtk_text_view_get_buffer(textview);
 	GtkTextIter start, end;
 	char *word;
+
+	/* menu separator comes first. */
+	mi = gtk_separator_menu_item_new();
+	gtk_widget_show(mi);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), mi);
+
+	/* on top: language selection */
+	mi = gtk_menu_item_new_with_label(_("Languages"));
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mi), build_languages_menu(spell));
+	gtk_widget_show_all(mi);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), mi);
 
 	/* we need to figure out if they picked a misspelled word. */
 	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
@@ -437,11 +494,7 @@ populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpell *spell) {
 	if (!gtk_text_iter_has_tag(&start, spell->tag_highlight))
 		return; /* word wasn't misspelled. */
 
-	/* menu separator comes first. */
-	mi = gtk_menu_item_new();
-	gtk_widget_show(mi);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), mi);
-
+	/* then, on top of it, the suggestions */
 	word = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 	add_suggestion_menus(spell, buffer, word, GTK_WIDGET (menu) );
 	g_free(word);

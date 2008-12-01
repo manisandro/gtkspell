@@ -5,6 +5,8 @@ version 2.0.14+cvs (cvs):
 	  of the context menu as any other in-line spell checker does.
 	* Fix feature request #1523881, #1643622 and #2054637
 	  by adding a Language selector sub-menu.
+	* Fix feature request #1362304 by fixing docs/Makefile.am
+	  to install gtkspell.devhelp so that it shows in devhelp
 
 version 2.0.14 (2008-08-15):
 	* Additional translations (see po/ChangeLog).

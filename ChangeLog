@@ -1,4 +1,4 @@
-version 2.0.14+cvs (cvs):
+version 2.0.15 (2008-12-01):
 	* Additional translations (see po/ChangeLog).
 	* Add missing G_BEGIN_DECLS/G_END_DECLS for C++ support
 	* Fix feature request #2101451 by removing the sub-menu

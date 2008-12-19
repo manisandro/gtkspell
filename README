@@ -40,19 +40,22 @@ Finally, gtkspell.h serves as an API reference.
 
 Original Author
 ---------------
-Evan Martin - martine@cs.washington.edu - http://neugierig.org
+Evan Martin <martine@danga.com> - http://neugierig.org/
+
+Previous Maintainer
+-------------------
+Nathan Fredrickson <nathan@silverorange.com>
 
 
-Maintainer
-----------
-Nathan Fredrickson - nathan@silverorange.com
+Current Developer and Maintainer
+--------------------------------
+Eduardo Pérez Ureta <eperez@users.sourceforge.net> - http://edpeur.blogspot.com/
 
 
 Thanks
 ------
 Ari Pollak <ari@debian.org> - Debian packages.
 Alex <hansolo@rochester.rr.com> - Redhat packages.
-Ramon Medina <rmedina@rochester.rr.com> - Patch to conditionally use Aspell.
 
 
 vim: tw=72

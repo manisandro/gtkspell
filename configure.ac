@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([gtkspell],[2.0.14],[gtkspell-devel@lists.sourceforge.net])
+AC_INIT([gtkspell],[2.0.15],[gtkspell-devel@lists.sourceforge.net])
 dnl N.B. After 0.40, please change to `0.40+cvs' instead of `0.41cvs'.
 dnl Rationale: (i) placate simple version comparison software such as
 dnl `dpkg --compare-versions'.  (ii) We don't always know what the next

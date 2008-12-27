@@ -339,11 +339,8 @@ replace_word(GtkWidget *menuitem, GtkSpell *spell) {
 static void
 add_suggestion_menus(GtkSpell *spell, GtkTextBuffer *buffer,
                       const char *word, GtkWidget *topmenu) {
-	const char *suggestion;
 	GtkWidget *menu;
 	GtkWidget *mi;
-	GtkWidget *hbox;
-	void *spelldata;
 	char **suggestions;
 	size_t n_suggs, i;
 	char *label;

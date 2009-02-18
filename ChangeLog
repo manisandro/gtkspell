@@ -1,3 +1,7 @@
+version 2.0.15+cvs (cvs):
+	* Fix Bug #2431005 In some cases is default language for
+	  spelling is set to EN (Blondak)
+
 version 2.0.15 (2008-12-01):
 	* Additional translations (see po/ChangeLog).
 	* Add missing G_BEGIN_DECLS/G_END_DECLS for C++ support

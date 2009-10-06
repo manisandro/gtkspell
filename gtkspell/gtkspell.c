@@ -386,7 +386,8 @@ add_suggestion_menus(GtkSpell *spell, GtkTextBuffer *buffer,
 		}
 	}
 
-	enchant_dict_free_suggestions(spell->speller, suggestions);
+	if (suggestions)
+		enchant_dict_free_string_list(spell->speller, suggestions);
 
 	/* + Add to Dictionary */
 	label = g_strdup_printf(_("Add \"%s\" to Dictionary"), word);

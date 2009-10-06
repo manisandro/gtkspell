@@ -429,7 +429,7 @@ language_change_callback(GtkWidget *mi, GtkSpell* spell) {
 	g_free(name);
 }
 
-struct _languages_cb_struct {GtkWidget *menu; GtkSpell *spell;};
+struct _languages_cb_struct {GList *langs;};
 
 static void
 dict_describe_cb(const char * const lang_tag,
@@ -438,30 +438,41 @@ dict_describe_cb(const char * const lang_tag,
 		 const char * const provider_file,
 		 void * user_data) {
 
-	GtkWidget* mi;
 	struct _languages_cb_struct *languages_cb_struct = (struct _languages_cb_struct *)user_data;
-	GtkWidget* menu = languages_cb_struct->menu;
-	GtkSpell* spell = languages_cb_struct->spell;
 
-	/* TODO get the language code translation to the current locale */
-	/* TODO add a radiobutton with the currently selected language */
-	mi = gtk_menu_item_new_with_label(lang_tag);
-	g_object_set(G_OBJECT(mi), "name", lang_tag, NULL);
-	g_signal_connect(G_OBJECT(mi), "activate",
-		G_CALLBACK(language_change_callback), spell);
-	gtk_widget_show(mi);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
+	languages_cb_struct->langs = g_list_insert_sorted(
+		languages_cb_struct->langs, g_strdup(lang_tag),
+		(GCompareFunc) strcmp);
 }
 
 static GtkWidget*
 build_languages_menu(GtkSpell *spell) {
 	GtkWidget* menu = gtk_menu_new();
+	GList *langs;
 
 	struct _languages_cb_struct languages_cb_struct;
-	languages_cb_struct.menu = menu;
-	languages_cb_struct.spell = spell;
+	languages_cb_struct.langs = NULL;
 
 	enchant_broker_list_dicts(spell->broker, dict_describe_cb, &languages_cb_struct);
+
+	langs = languages_cb_struct.langs;
+
+	for (; langs; langs = langs->next) {
+		gchar *lang_tag = langs->data;
+		GtkWidget* mi = gtk_menu_item_new_with_label(lang_tag);
+
+		/* TODO get the language code translation to the current locale */
+		/* TODO add a radiobutton with the currently selected language */
+		g_object_set(G_OBJECT(mi), "name", lang_tag, NULL);
+		g_signal_connect(G_OBJECT(mi), "activate",
+			G_CALLBACK(language_change_callback), spell);
+		gtk_widget_show(mi);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
+
+		g_free(lang_tag);
+	}
+
+	g_list_free(languages_cb_struct.langs);
 
 	return menu;
 }

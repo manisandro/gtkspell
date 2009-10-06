@@ -542,7 +542,7 @@ gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **erro
 	if (lang == NULL) {
 		lang = g_getenv("LANG");
 		if (lang) {
-			if ((g_strcmp0(lang, "C") == 0) || (g_strcmp0(lang, "c") == 0))
+			if ((strcmp(lang, "C") == 0) || (strcmp(lang, "c") == 0))
 				lang = NULL;
 			else if (lang[0] == 0)
 				lang = NULL;

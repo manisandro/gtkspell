@@ -12,7 +12,7 @@ G_BEGIN_DECLS
 #define GTKSPELL_ERROR gtkspell_error_quark()
 
 typedef enum {
-	GTKSPELL_ERROR_BACKEND,
+	GTKSPELL_ERROR_BACKEND
 } GtkSpellError;
 
 GQuark gtkspell_error_quark(void);

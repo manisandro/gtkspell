@@ -1,6 +1,8 @@
 version 2.0.15+cvs (cvs):
 	* Fix Bug #2431005 In some cases is default language for
 	  spelling is set to EN (Blondak)
+	* Fix Bug #2715972 Remove an extra comma at the end of the GtkSpellError
+	  enum definition.
 
 version 2.0.15 (2008-12-01):
 	* Additional translations (see po/ChangeLog).

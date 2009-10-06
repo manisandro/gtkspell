@@ -29,6 +29,7 @@ struct _GtkSpell {
 	EnchantBroker *broker;
 	EnchantDict *speller;
 	GtkTextMark *mark_click;
+	gchar *lang;
 };
 
 static void gtkspell_free(GtkSpell *spell);
@@ -421,12 +422,14 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 }
 
 static void
-language_change_callback(GtkWidget *mi, GtkSpell* spell) {
-	GError* error = NULL;
-	gchar *name;
-	g_object_get(G_OBJECT(mi), "name", &name, NULL);
-	gtkspell_set_language(spell, name, &error);
-	g_free(name);
+language_change_callback(GtkCheckMenuItem *mi, GtkSpell* spell) {
+	if (gtk_check_menu_item_get_active(mi)) {
+		GError* error = NULL;
+		gchar *name;
+		g_object_get(G_OBJECT(mi), "name", &name, NULL);
+		gtkspell_set_language(spell, name, &error);
+		g_free(name);
+	}
 }
 
 struct _languages_cb_struct {GList *langs;};
@@ -447,8 +450,9 @@ dict_describe_cb(const char * const lang_tag,
 
 static GtkWidget*
 build_languages_menu(GtkSpell *spell) {
-	GtkWidget* menu = gtk_menu_new();
+	GtkWidget *active_item = NULL, *menu = gtk_menu_new();
 	GList *langs;
+	GSList *menu_group = NULL;
 
 	struct _languages_cb_struct languages_cb_struct;
 	languages_cb_struct.langs = NULL;
@@ -459,18 +463,22 @@ build_languages_menu(GtkSpell *spell) {
 
 	for (; langs; langs = langs->next) {
 		gchar *lang_tag = langs->data;
-		GtkWidget* mi = gtk_menu_item_new_with_label(lang_tag);
+		GtkWidget* mi = gtk_radio_menu_item_new_with_label(menu_group, lang_tag);
+		menu_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(mi));
 
-		/* TODO get the language code translation to the current locale */
-		/* TODO add a radiobutton with the currently selected language */
 		g_object_set(G_OBJECT(mi), "name", lang_tag, NULL);
-		g_signal_connect(G_OBJECT(mi), "activate",
-			G_CALLBACK(language_change_callback), spell);
+		if (strcmp(spell->lang, lang_tag) == 0)
+			active_item = mi;
+		else
+			g_signal_connect(G_OBJECT(mi), "activate",
+				G_CALLBACK(language_change_callback), spell);
 		gtk_widget_show(mi);
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), mi);
 
 		g_free(lang_tag);
 	}
+	if (active_item)
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(active_item), TRUE);
 
 	g_list_free(languages_cb_struct.langs);
 
@@ -548,6 +556,19 @@ popup_menu_event(GtkTextView *view, GtkSpell *spell) {
 	return FALSE; /* false: let gtk process this event, too. */
 }
 
+static void
+_set_lang_from_dict(const char * const lang_tag,
+		    const char * const provider_name,
+		    const char * const provider_desc,
+		    const char * const provider_dll_file,
+		    void * user_data)
+{
+	GtkSpell *spell = user_data;
+
+	g_free(spell->lang);
+	spell->lang = g_strdup(lang_tag);
+}
+
 static gboolean
 gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **error) {
 	EnchantDict *dict;
@@ -579,6 +600,8 @@ gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **erro
 	if (spell->speller)
 		enchant_broker_free_dict(spell->broker, spell->speller);
 	spell->speller = dict;
+
+	enchant_dict_describe(dict, _set_lang_from_dict, spell);
 
 	return TRUE;
 }
@@ -758,6 +781,7 @@ gtkspell_free(GtkSpell *spell) {
 			G_SIGNAL_MATCH_DATA,
 			0, 0, NULL, NULL,
 			spell);
+	g_free(spell->lang);
 	g_free(spell);
 }
 
@@ -806,11 +830,10 @@ gtkspell_get_suggestions_menu(GtkSpell *spell, GtkTextIter *iter) {
 	GtkTextIter start, end;
 
 	g_return_val_if_fail(spell != NULL, NULL);
-#ifdef ENCHANT_H
+
 	/* avoid an empty submenu when enchant is not working properly */
 	if (!spell->speller)
 		return NULL;
-#endif
 
 	start = *iter;
 	/* use the same lazy test, with same risk, as does the default menu arrangement */

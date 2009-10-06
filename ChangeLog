@@ -1,9 +1,12 @@
 version 2.0.15+cvs (cvs):
+	* Additional translations (see po/ChangeLog).
 	* Fix Bug #2431005 In some cases is default language for
 	  spelling is set to EN (Blondak)
 	* Fix Bug #2715972 Remove an extra comma at the end of the GtkSpellError
 	  enum definition.
 	* Fix Bug #2526949 Sort languages list submenu.
+	* Currently selected language appears with radio button selection in
+	  Language selector sub-menu (Feature request #2526959)
 
 version 2.0.15 (2008-12-01):
 	* Additional translations (see po/ChangeLog).

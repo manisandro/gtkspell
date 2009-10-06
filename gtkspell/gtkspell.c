@@ -550,6 +550,7 @@ popup_menu_event(GtkTextView *view, GtkSpell *spell) {
 
 static gboolean
 gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **error) {
+	EnchantDict *dict;
 
 	if (lang == NULL) {
 		lang = g_getenv("LANG");
@@ -564,22 +565,20 @@ gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **erro
 	if (!spell->broker)
 		spell->broker = enchant_broker_init();
 
-	if (spell->speller) {
-		enchant_broker_free_dict(spell->broker, spell->speller);
-		spell->speller = NULL;
-	}
-
-	if (!lang) {
+	if (!lang)
 		lang = "en";
+
+	dict = enchant_broker_request_dict(spell->broker, lang);
+
+	if (!dict) {
+		g_set_error(error, GTKSPELL_ERROR, GTKSPELL_ERROR_BACKEND,
+			_("enchant error for language: %s"), lang);
+		return FALSE;
 	}
 
-	spell->speller = enchant_broker_request_dict(spell->broker, lang );
-
-	if (!spell->speller) {
-		g_set_error(error, GTKSPELL_ERROR, GTKSPELL_ERROR_BACKEND,
-			_("enchant error for language: %s"),lang);
-		return FALSE;
-	} 
+	if (spell->speller)
+		enchant_broker_free_dict(spell->broker, spell->speller);
+	spell->speller = dict;
 
 	return TRUE;
 }
@@ -587,7 +586,7 @@ gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **erro
 /**
  * gtkspell_set_language:
  * @spell:  The #GtkSpell object.
- * @lang: The language to use, in a form pspell understands (it appears to
+ * @lang: The language to use, in a form enchant understands (it appears to
  * be a locale specifier?).
  * @error: Return location for error.
  *

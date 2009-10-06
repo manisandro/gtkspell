@@ -662,6 +662,8 @@ gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 	spell = g_new0(GtkSpell, 1);
 	spell->view = view;
 	if (!gtkspell_set_language_internal(spell, lang, error)) {
+		if (spell->broker)
+			enchant_broker_free(spell->broker);
 		g_free(spell);
 		return NULL;
 	}

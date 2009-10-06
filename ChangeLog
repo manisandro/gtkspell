@@ -7,6 +7,9 @@ version 2.0.15+cvs (cvs):
 	* Fix Bug #2526949 Sort languages list submenu.
 	* Currently selected language appears with radio button selection in
 	  Language selector sub-menu (Feature request #2526959)
+	* Fix Bug #2642198 Enchant Broker should be a singleton.
+	  This will cause significantly lower memory usage when using multiple
+	  GtkSpell instances.
 
 version 2.0.15 (2008-12-01):
 	* Additional translations (see po/ChangeLog).

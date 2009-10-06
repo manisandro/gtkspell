@@ -20,13 +20,15 @@
 static const int debug = 0;
 static const int quiet = 0;
 
+static EnchantBroker *broker = NULL;
+static int broker_ref_cnt;
+
 struct _GtkSpell {
 	GtkTextView *view;
 	GtkTextTag *tag_highlight;
 	GtkTextMark *mark_insert_start;
 	GtkTextMark *mark_insert_end;
 	gboolean deferred_check;
-	EnchantBroker *broker;
 	EnchantDict *speller;
 	GtkTextMark *mark_click;
 	gchar *lang;
@@ -457,7 +459,7 @@ build_languages_menu(GtkSpell *spell) {
 	struct _languages_cb_struct languages_cb_struct;
 	languages_cb_struct.langs = NULL;
 
-	enchant_broker_list_dicts(spell->broker, dict_describe_cb, &languages_cb_struct);
+	enchant_broker_list_dicts(broker, dict_describe_cb, &languages_cb_struct);
 
 	langs = languages_cb_struct.langs;
 
@@ -583,13 +585,10 @@ gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **erro
 		}
 	}
 
-	if (!spell->broker)
-		spell->broker = enchant_broker_init();
-
 	if (!lang)
 		lang = "en";
 
-	dict = enchant_broker_request_dict(spell->broker, lang);
+	dict = enchant_broker_request_dict(broker, lang);
 
 	if (!dict) {
 		g_set_error(error, GTKSPELL_ERROR, GTKSPELL_ERROR_BACKEND,
@@ -598,7 +597,7 @@ gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **erro
 	}
 
 	if (spell->speller)
-		enchant_broker_free_dict(spell->broker, spell->speller);
+		enchant_broker_free_dict(broker, spell->speller);
 	spell->speller = dict;
 
 	enchant_dict_describe(dict, _set_lang_from_dict, spell);
@@ -680,12 +679,25 @@ gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 	spell = g_object_get_data(G_OBJECT(view), GTKSPELL_OBJECT_KEY);
 	g_assert(spell == NULL);
 
+	/* We don't need to worry about thread safety.
+	 * Stuff shouldn't be attaching to a GtkTextView from anything other
+	 * than the mainloop thread */
+	if (!broker) {
+		broker = enchant_broker_init();
+		broker_ref_cnt = 0;
+	}
+	broker_ref_cnt++;
+
+
 	/* attach to the widget */
 	spell = g_new0(GtkSpell, 1);
 	spell->view = view;
 	if (!gtkspell_set_language_internal(spell, lang, error)) {
-		if (spell->broker)
-			enchant_broker_free(spell->broker);
+		broker_ref_cnt--;
+		if (broker_ref_cnt == 0) {
+			enchant_broker_free(broker);
+			broker = NULL;
+		}
 		g_free(spell);
 		return NULL;
 	}
@@ -767,11 +779,15 @@ gtkspell_free(GtkSpell *spell) {
 	gtk_text_buffer_delete_mark(buffer, spell->mark_click);
 
 
-	if (spell->broker) {
+	if (broker) {
 		if (spell->speller) {
-			enchant_broker_free_dict(spell->broker, spell->speller);
+			enchant_broker_free_dict(broker, spell->speller);
 		}
-		enchant_broker_free(spell->broker);
+		broker_ref_cnt--;
+		if (broker_ref_cnt == 0) {
+			enchant_broker_free(broker);
+			broker = NULL;
+		}
 	}
 	g_signal_handlers_disconnect_matched(spell->view,
 			G_SIGNAL_MATCH_DATA,

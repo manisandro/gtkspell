@@ -1,0 +1,47 @@
+# Albanian translation of the gtkspell package.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Besnik Bleta <besnik@programeshqip.org>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Gtkspell-2.0.15\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-09-18 12:20+0300\n"
+"PO-Revision-Date: 2009-09-18 12:25+0200\n"
+"Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
+"Language-Team: Albanian <besnik@programeshqip.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../gtkspell/gtkspell.c:364
+msgid "<i>(no suggestions)</i>"
+msgstr "<i>(p këshillime)</i>"
+
+#: ../gtkspell/gtkspell.c:376
+msgid "More..."
+msgstr "Më tepër..."
+
+#. + Add to Dictionary
+#: ../gtkspell/gtkspell.c:395
+#, c-format
+msgid "Add \"%s\" to Dictionary"
+msgstr "Shtoje \"%s\" te Fjalori"
+
+#. - Ignore All
+#: ../gtkspell/gtkspell.c:406
+msgid "Ignore All"
+msgstr "Shpërfilli të Tëra"
+
+#. on top: language selection
+#: ../gtkspell/gtkspell.c:484
+msgid "Languages"
+msgstr "Gjuhë"
+
+#: ../gtkspell/gtkspell.c:571
+#, c-format
+msgid "enchant error for language: %s"
+msgstr "gabim \"enchant\" për gjuhën: %s"
+

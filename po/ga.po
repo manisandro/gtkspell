@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 2.0.6-pre1\n"
 "Report-Msgid-Bugs-To: nathan@silverorange.com\n"
-"POT-Creation-Date: 2005-05-27 18:37-0300\n"
+"POT-Creation-Date: 2004-06-10 19:31-0400\n"
 "PO-Revision-Date: 2004-06-11 12:05-0500\n"
 "Last-Translator: Kevin Patrick Scannell <scannell@SLU.EDU>\n"
 "Language-Team: Irish <ga@li.org>\n"
@@ -15,25 +15,25 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtkspell/gtkspell.c:383
+#: gtkspell/gtkspell.c:381
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(níl aon mholadh)</i>"
 
-#: gtkspell/gtkspell.c:397
+#: gtkspell/gtkspell.c:395
 msgid "More..."
 msgstr "Tuilleadh..."
 
 #. + Add to Dictionary
-#: gtkspell/gtkspell.c:423
+#: gtkspell/gtkspell.c:421
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Cuir \"%s\" isteach san fhoclóir"
 
 #. - Ignore All
-#: gtkspell/gtkspell.c:434
+#: gtkspell/gtkspell.c:432
 msgid "Ignore All"
 msgstr "Déan neamhshuim ar gach"
 
-#: gtkspell/gtkspell.c:467
+#: gtkspell/gtkspell.c:465
 msgid "Spelling Suggestions"
 msgstr "Moltaí Litrithe"

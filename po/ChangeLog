@@ -1,5 +1,10 @@
-version 2.0.16:
+version 2.0.15+cvs:
+	* Afrikaans translation added (Dwayne Bailey)
 	* Albanian translation added (Besnik Bleta)
+	* Latvian translation added (Rihards Prieditis)
+	* Malay translation added (Muhammad Najmi Ahmad Zabidi)
+	* Portuguese translation added (Hugo Patrício)
+	* Thai translation added (Seksan Poltree)
 
 version 2.0.15:
 	* Danish translation added (Joe Hansen)

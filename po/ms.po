@@ -1,38 +1,40 @@
-# Mensaxes en galego de gtkspell
+# translation of gtkspell-2.0.12.ms.po to Malay
+# Copyright (C) 2009
 # This file is distributed under the same license as the gtkspell package.
-# Copyright (C) 2008 THE PACKAGE'S COPYRIGHT HOLDER.
-# Diego Pérez Montes <kabute@gulo.org> 2008
+#
+# Muhammad Najmi Ahmad Zabidi <najmi.zabidi@gmail.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell-2.0.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-13 22:39+0200\n"
-"PO-Revision-Date: 2008-05-14 00:17+0100\n"
-"Last-Translator: Diego Pérez Montes <kabute@gulo.org>\n"
-"Language-Team: Galician <proxecto@trasno.net>\n"
+"PO-Revision-Date: 2009-07-03 11:54+0800\n"
+"Last-Translator: Muhammad Najmi Ahmad Zabidi <najmi.zabidi@gmail.com>\n"
+"Language-Team: Malay <translation-team-ms@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: ../gtkspell/gtkspell.c:384
 msgid "<i>(no suggestions)</i>"
-msgstr "<i>(non hai recomendacións)</i>"
+msgstr "<i>(tiada cadangan)</i>"
 
 #: ../gtkspell/gtkspell.c:398
 msgid "More..."
-msgstr "Máis..."
+msgstr "Lagi..."
 
 #. + Add to Dictionary
 #: ../gtkspell/gtkspell.c:424
 #, c-format
 msgid "Add \"%s\" to Dictionary"
-msgstr "Engadir \"%s\" ó Diccionario"
+msgstr "Tambah \"%s\" ke Kamus"
 
 #. - Ignore All
 #: ../gtkspell/gtkspell.c:435
 msgid "Ignore All"
-msgstr "Ignorar Todo"
+msgstr "Abai Semua"
 
 #: ../gtkspell/gtkspell.c:468
 msgid "Spelling Suggestions"
-msgstr "Recomendacións de Ortografía"
+msgstr "Cadangan Ejaan"

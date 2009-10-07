@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 2.0.6-pre1\n"
 "Report-Msgid-Bugs-To: nathan@silverorange.com\n"
-"POT-Creation-Date: 2005-05-27 18:37-0300\n"
+"POT-Creation-Date: 2004-06-10 19:31-0400\n"
 "PO-Revision-Date: 2004-06-11 12:33-0400\n"
 "Last-Translator: Aleksandar Jelenak <jelenak@netlinkplus.net>\n"
 "Language-Team: Serbian <gnu@prevod.org>\n"
@@ -14,25 +14,25 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtkspell/gtkspell.c:383
+#: gtkspell/gtkspell.c:381
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(без предлога)</i>"
 
-#: gtkspell/gtkspell.c:397
+#: gtkspell/gtkspell.c:395
 msgid "More..."
 msgstr "Још..."
 
 #. + Add to Dictionary
-#: gtkspell/gtkspell.c:423
+#: gtkspell/gtkspell.c:421
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Додај \"%s\" у речник"
 
 #. - Ignore All
-#: gtkspell/gtkspell.c:434
+#: gtkspell/gtkspell.c:432
 msgid "Ignore All"
 msgstr "Занемари све"
 
-#: gtkspell/gtkspell.c:467
+#: gtkspell/gtkspell.c:465
 msgid "Spelling Suggestions"
 msgstr "Предлози правописа"

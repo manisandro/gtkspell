@@ -14,6 +14,9 @@ GtkSpell objects and methods.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkSpell ##### -->
 <para>
 The opaque GtkSpell object.  It is created with gtkspell_new_attach() and

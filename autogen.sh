@@ -20,6 +20,13 @@ fi
     exit 1
 }
 
+(gtkdocize) < /dev/null > /dev/null 2>&1 || {
+  echo
+  echo "**Error**: You must have \`gtk-doc' installed."
+  echo "Download the appropriate package for your distribution."
+  DIE=1
+}
+
 (autoconf --version) < /dev/null > /dev/null 2>&1 || {
   echo
   echo "**Error**: You must have \`autoconf' installed."

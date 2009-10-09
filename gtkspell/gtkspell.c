@@ -25,6 +25,7 @@ static int broker_ref_cnt;
 
 struct _GtkSpell {
 	GtkTextView *view;
+	GtkTextBuffer *buffer;
 	GtkTextTag *tag_highlight;
 	GtkTextMark *mark_insert_start;
 	GtkTextMark *mark_insert_end;
@@ -272,12 +273,9 @@ static void
 add_to_dictionary(GtkWidget *menuitem, GtkSpell *spell) {
 	char *word;
 	GtkTextIter start, end;
-	GtkTextBuffer *buffer;
-	
-	buffer = gtk_text_view_get_buffer(spell->view);
 
-	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
-	word = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+	get_word_extents_from_mark(spell->buffer, &start, &end, spell->mark_click);
+	word = gtk_text_buffer_get_text(spell->buffer, &start, &end, FALSE);
 	
 	enchant_dict_add_to_pwl( spell->speller, word, strlen(word));
 
@@ -290,12 +288,9 @@ static void
 ignore_all(GtkWidget *menuitem, GtkSpell *spell) {
 	char *word;
 	GtkTextIter start, end;
-	GtkTextBuffer *buffer;
-	
-	buffer = gtk_text_view_get_buffer(spell->view);
 
-	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
-	word = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+	get_word_extents_from_mark(spell->buffer, &start, &end, spell->mark_click);
+	word = gtk_text_buffer_get_text(spell->buffer, &start, &end, FALSE);
 	
 	enchant_dict_add_to_session(spell->speller, word, strlen(word));
 
@@ -309,15 +304,12 @@ replace_word(GtkWidget *menuitem, GtkSpell *spell) {
 	char *oldword;
 	const char *newword;
 	GtkTextIter start, end;
-	GtkTextBuffer *buffer;
 	
 	if (!spell->speller)
 		return;
 
-	buffer = gtk_text_view_get_buffer(spell->view);
-
-	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
-	oldword = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+	get_word_extents_from_mark(spell->buffer, &start, &end, spell->mark_click);
+	oldword = gtk_text_buffer_get_text(spell->buffer, &start, &end, FALSE);
 	newword = gtk_label_get_text(GTK_LABEL(GTK_BIN(menuitem)->child));
 
 	if (debug) {
@@ -326,10 +318,10 @@ replace_word(GtkWidget *menuitem, GtkSpell *spell) {
 		g_print("\nnew word: '%s'\n", newword);
 	}
 
-	gtk_text_buffer_begin_user_action(buffer);
-	gtk_text_buffer_delete(buffer, &start, &end);
-	gtk_text_buffer_insert(buffer, &start, newword, -1);
-	gtk_text_buffer_end_user_action(buffer);
+	gtk_text_buffer_begin_user_action(spell->buffer);
+	gtk_text_buffer_delete(spell->buffer, &start, &end);
+	gtk_text_buffer_insert(spell->buffer, &start, newword, -1);
+	gtk_text_buffer_end_user_action(spell->buffer);
 
 	enchant_dict_store_replacement(spell->speller, 
 			oldword, strlen(oldword),
@@ -490,7 +482,6 @@ build_languages_menu(GtkSpell *spell) {
 static void
 populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpell *spell) {
 	GtkWidget *mi;
-	GtkTextBuffer *buffer = gtk_text_view_get_buffer(textview);
 	GtkTextIter start, end;
 	char *word;
 
@@ -506,7 +497,7 @@ populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpell *spell) {
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), mi);
 
 	/* we need to figure out if they picked a misspelled word. */
-	get_word_extents_from_mark(buffer, &start, &end, spell->mark_click);
+	get_word_extents_from_mark(spell->buffer, &start, &end, spell->mark_click);
 
 	/* if our highlight algorithm ever messes up, 
 	 * this isn't correct, either. */
@@ -514,8 +505,8 @@ populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpell *spell) {
 		return; /* word wasn't misspelled. */
 
 	/* then, on top of it, the suggestions */
-	word = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-	add_suggestion_menus(spell, buffer, word, GTK_WIDGET (menu) );
+	word = gtk_text_buffer_get_text(spell->buffer, &start, &end, FALSE);
+	add_suggestion_menus(spell, spell->buffer, word, GTK_WIDGET (menu) );
 	g_free(word);
 }
 
@@ -527,18 +518,17 @@ button_press_event(GtkTextView *view, GdkEventButton *event, GtkSpell *spell) {
 	if (event->button == 3) {
 		gint x, y;
 		GtkTextIter iter;
-		GtkTextBuffer *buffer = gtk_text_view_get_buffer(view);
 
 		/* handle deferred check if it exists */
 		if (spell->deferred_check)
-			check_deferred_range(spell, buffer, TRUE);
+			check_deferred_range(spell, spell->buffer, TRUE);
 
 		gtk_text_view_window_to_buffer_coords(view, 
 				GTK_TEXT_WINDOW_TEXT, 
 				event->x, event->y,
 				&x, &y);
 		gtk_text_view_get_iter_at_location(view, &iter, x, y);
-		gtk_text_buffer_move_mark(buffer, spell->mark_click, &iter);
+		gtk_text_buffer_move_mark(spell->buffer, spell->mark_click, &iter);
 	}
 	return FALSE; /* false: let gtk process this event, too.
 					 we don't want to eat any events. */
@@ -550,11 +540,10 @@ button_press_event(GtkTextView *view, GdkEventButton *event, GtkSpell *spell) {
 static gboolean
 popup_menu_event(GtkTextView *view, GtkSpell *spell) {
 	GtkTextIter iter;
-	GtkTextBuffer *buffer = gtk_text_view_get_buffer(view);
 
-	gtk_text_buffer_get_iter_at_mark(buffer, &iter, 
-			gtk_text_buffer_get_insert(buffer));
-	gtk_text_buffer_move_mark(buffer, spell->mark_click, &iter);
+	gtk_text_buffer_get_iter_at_mark(spell->buffer, &iter, 
+			gtk_text_buffer_get_insert(spell->buffer));
+	gtk_text_buffer_move_mark(spell->buffer, spell->mark_click, &iter);
 	return FALSE; /* false: let gtk process this event, too. */
 }
 
@@ -639,14 +628,100 @@ gtkspell_set_language(GtkSpell *spell, const gchar *lang, GError **error) {
  */
 void
 gtkspell_recheck_all(GtkSpell *spell) {
-	GtkTextBuffer *buffer;
 	GtkTextIter start, end;
 
-	buffer = gtk_text_view_get_buffer(spell->view);
+	gtk_text_buffer_get_bounds(spell->buffer, &start, &end);
 
-	gtk_text_buffer_get_bounds(buffer, &start, &end);
+	check_range(spell, spell->buffer, start, end, TRUE);
+}
 
-	check_range(spell, buffer, start, end, TRUE);
+/* changes the buffer
+ * a NULL buffer is acceptable and will only release the current one */
+static void
+gtkspell_set_buffer(GtkSpell *spell, GtkTextBuffer *buffer)
+{
+	GtkTextTagTable *tagtable;
+	GtkTextIter start, end;
+
+	if (spell->buffer) {
+		g_signal_handlers_disconnect_matched(spell->buffer,
+				G_SIGNAL_MATCH_DATA,
+				0, 0, NULL, NULL,
+				spell);
+
+		tagtable = gtk_text_buffer_get_tag_table(spell->buffer);
+
+		gtk_text_buffer_get_bounds(spell->buffer, &start, &end);
+		gtk_text_buffer_remove_tag(spell->buffer, spell->tag_highlight, &start, &end);
+		spell->tag_highlight = NULL;
+
+		gtk_text_buffer_delete_mark(spell->buffer, spell->mark_insert_start);
+		spell->mark_insert_start = NULL;
+		gtk_text_buffer_delete_mark(spell->buffer, spell->mark_insert_end);
+		spell->mark_insert_end = NULL;
+		gtk_text_buffer_delete_mark(spell->buffer, spell->mark_click);
+		spell->mark_click = NULL;
+
+		g_object_unref (spell->buffer);
+	}
+
+	spell->buffer = buffer;
+
+	if (spell->buffer) {
+		g_object_ref (spell->buffer);
+
+		g_signal_connect(G_OBJECT(spell->buffer),
+				"insert-text",
+				G_CALLBACK(insert_text_before), spell);
+		g_signal_connect_after(G_OBJECT(spell->buffer),
+				"insert-text",
+				G_CALLBACK(insert_text_after), spell);
+		g_signal_connect_after(G_OBJECT(spell->buffer),
+				"delete-range",
+				G_CALLBACK(delete_range_after), spell);
+		g_signal_connect(G_OBJECT(spell->buffer),
+				"mark-set",
+				G_CALLBACK(mark_set), spell);
+
+		tagtable = gtk_text_buffer_get_tag_table(spell->buffer);
+		spell->tag_highlight = gtk_text_tag_table_lookup(tagtable, GTKSPELL_MISSPELLED_TAG);
+
+		if (spell->tag_highlight == NULL) {
+			spell->tag_highlight = gtk_text_buffer_create_tag(spell->buffer,
+					GTKSPELL_MISSPELLED_TAG,
+#ifdef HAVE_PANGO_UNDERLINE_ERROR
+					"underline", PANGO_UNDERLINE_ERROR,
+#else
+					"foreground", "red", 
+					"underline", PANGO_UNDERLINE_SINGLE,
+#endif
+					NULL);
+		}
+
+		/* we create the mark here, but we don't use it until text is
+		 * inserted, so we don't really care where iter points.  */
+		gtk_text_buffer_get_bounds(spell->buffer, &start, &end);
+		spell->mark_insert_start = gtk_text_buffer_create_mark(spell->buffer,
+				"gtkspell-insert-start",
+				&start, TRUE);
+		spell->mark_insert_end = gtk_text_buffer_create_mark(spell->buffer,
+				"gtkspell-insert-end",
+				&start, TRUE);
+		spell->mark_click = gtk_text_buffer_create_mark(spell->buffer,
+				"gtkspell-click",
+				&start, TRUE);
+			
+		spell->deferred_check = FALSE;
+
+		/* now check the entire text buffer. */
+		gtkspell_recheck_all(spell);
+	}
+}
+
+static void
+buffer_changed (GtkTextView *view, GParamSpec *pspec, GtkSpell *spell)
+{
+	gtkspell_set_buffer(spell, gtk_text_view_get_buffer(view));
 }
 
 /**
@@ -662,10 +737,6 @@ gtkspell_recheck_all(GtkSpell *spell) {
  */
 GtkSpell*
 gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
-	GtkTextBuffer *buffer;
-	GtkTextTagTable *tagtable;
-	GtkTextIter start, end;
-
 	GtkSpell *spell;
 
 #ifdef ENABLE_NLS
@@ -711,73 +782,19 @@ gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
 			G_CALLBACK(populate_popup), spell);
 	g_signal_connect(G_OBJECT(view), "popup-menu",
 			G_CALLBACK(popup_menu_event), spell);
+	g_signal_connect(G_OBJECT(view), "notify::buffer",
+			G_CALLBACK(buffer_changed), spell);
 
-	buffer = gtk_text_view_get_buffer(view);
+	spell->buffer = NULL;
+	gtkspell_set_buffer(spell, gtk_text_view_get_buffer(view));
 
-	g_signal_connect(G_OBJECT(buffer),
-			"insert-text",
-			G_CALLBACK(insert_text_before), spell);
-	g_signal_connect_after(G_OBJECT(buffer),
-			"insert-text",
-			G_CALLBACK(insert_text_after), spell);
-	g_signal_connect_after(G_OBJECT(buffer),
-			"delete-range",
-			G_CALLBACK(delete_range_after), spell);
-	g_signal_connect(G_OBJECT(buffer),
-			"mark-set",
-			G_CALLBACK(mark_set), spell);
-
-	tagtable = gtk_text_buffer_get_tag_table(buffer);
-	spell->tag_highlight = gtk_text_tag_table_lookup(tagtable, GTKSPELL_MISSPELLED_TAG);
-
-	if (spell->tag_highlight == NULL) {
-		spell->tag_highlight = gtk_text_buffer_create_tag(buffer,
-				GTKSPELL_MISSPELLED_TAG,
-#ifdef HAVE_PANGO_UNDERLINE_ERROR
-				"underline", PANGO_UNDERLINE_ERROR,
-#else
-				"foreground", "red", 
-				"underline", PANGO_UNDERLINE_SINGLE,
-#endif
-				NULL);
-	}
-
-	/* we create the mark here, but we don't use it until text is
-	 * inserted, so we don't really care where iter points.  */
-	gtk_text_buffer_get_bounds(buffer, &start, &end);
-	spell->mark_insert_start = gtk_text_buffer_create_mark(buffer,
-			"gtkspell-insert-start",
-			&start, TRUE);
-	spell->mark_insert_end = gtk_text_buffer_create_mark(buffer,
-			"gtkspell-insert-end",
-			&start, TRUE);
-	spell->mark_click = gtk_text_buffer_create_mark(buffer,
-			"gtkspell-click",
-			&start, TRUE);
-		
-	spell->deferred_check = FALSE;
-
-	/* now check the entire text buffer. */
-	gtkspell_recheck_all(spell);
 	return spell;
 }
 
 static void
 gtkspell_free(GtkSpell *spell) {
-	GtkTextBuffer *buffer;
-	GtkTextTagTable *table;
-	GtkTextIter start, end;
 
-	buffer = gtk_text_view_get_buffer(spell->view);
-	table = gtk_text_buffer_get_tag_table(buffer);
-
-	gtk_text_buffer_get_bounds(buffer, &start, &end);
-	gtk_text_buffer_remove_tag(buffer, spell->tag_highlight, &start, &end);
-
-	gtk_text_buffer_delete_mark(buffer, spell->mark_insert_start);
-	gtk_text_buffer_delete_mark(buffer, spell->mark_insert_end);
-	gtk_text_buffer_delete_mark(buffer, spell->mark_click);
-
+	gtkspell_set_buffer(spell, NULL);
 
 	if (broker) {
 		if (spell->speller) {
@@ -790,10 +807,6 @@ gtkspell_free(GtkSpell *spell) {
 		}
 	}
 	g_signal_handlers_disconnect_matched(spell->view,
-			G_SIGNAL_MATCH_DATA,
-			0, 0, NULL, NULL,
-			spell);
-	g_signal_handlers_disconnect_matched(buffer,
 			G_SIGNAL_MATCH_DATA,
 			0, 0, NULL, NULL,
 			spell);
@@ -856,18 +869,16 @@ gtkspell_get_suggestions_menu(GtkSpell *spell, GtkTextIter *iter) {
 	if (gtk_text_iter_has_tag(&start, spell->tag_highlight)) {
 		/* word was mis-spelt */
 		gchar *badword;
-		GtkTextBuffer *buffer;
-		buffer = gtk_text_view_get_buffer(spell->view);
 		/* in case a fix is requested, move the attention-point */
-		gtk_text_buffer_move_mark(buffer, spell->mark_click, iter);
+		gtk_text_buffer_move_mark(spell->buffer, spell->mark_click, iter);
 		if (!gtk_text_iter_starts_word(&start))
 			gtk_text_iter_backward_word_start(&start);
 		end = start;
 		if (gtk_text_iter_inside_word(&end))
 			gtk_text_iter_forward_word_end(&end);
-		badword = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+		badword = gtk_text_buffer_get_text (spell->buffer, &start, &end, FALSE);
 
-		submenu = build_suggestion_menu (spell, buffer, badword);
+		submenu = build_suggestion_menu (spell, spell->buffer, badword);
 		gtk_widget_show (submenu);
 
 		g_free (badword);

@@ -1,7 +1,7 @@
 version 2.0.15+cvs (cvs):
-	* Additional translations (see po/ChangeLog).
-	* Fix Bug #2431005 In some cases is default language for
-	  spelling is set to EN (Blondak)
+	* Additional and updated translations (see po/ChangeLog).
+	* Fix Bug #2431005 Language codes that contain "C" (e.g. "cs_CZ")
+	  defaulted to "en" (Blondak)
 	* Fix Bug #2715972 Remove an extra comma at the end of the GtkSpellError
 	  enum definition.
 	* Fix Bug #2526949 Sort languages list submenu.
@@ -10,6 +10,8 @@ version 2.0.15+cvs (cvs):
 	* Fix Bug #2642198 Enchant Broker should be a singleton.
 	  This will cause significantly lower memory usage when using multiple
 	  GtkSpell instances.
+	* Fix Bug #2875116 Support changing of the GtkTextBuffer in the attached
+	  GtkTextView. (Colomban Wendling)
 
 version 2.0.15 (2008-12-01):
 	* Additional translations (see po/ChangeLog).

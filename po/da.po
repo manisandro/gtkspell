@@ -1,39 +1,48 @@
 # Danish translation of gtkspell.
-# Copyright (C) 2008 gtkspell.
+# Copyright (C) 2009 gtkspell & Joe Hansen.
 # This file is distributed under the same license as the gtkspell package.
-# Joe Hansen <joedalton2@yahoo.dk>, 2008.
+# Joe Hansen <joedalton2@yahoo.dk>, 2008, 2009.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkspell-2.0.12\n"
+"Project-Id-Version: gtkspell-2.0.16-pre1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-13 22:39+0200\n"
-"PO-Revision-Date: 2008-08-25 00:00+0000\n"
+"POT-Creation-Date: 2009-10-07 17:55-0400\n"
+"PO-Revision-Date: 2009-10-08 00:00+0000\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../gtkspell/gtkspell.c:384
+#: ../gtkspell/gtkspell.c:364
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(ingen forslag)</i>"
 
-#: ../gtkspell/gtkspell.c:398
+#: ../gtkspell/gtkspell.c:376
 msgid "More..."
 msgstr "Flere..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:424
+#: ../gtkspell/gtkspell.c:396
 #, c-format
 msgid "Add \"%s\" to Dictionary"
-msgstr "Tilføj \"%s\" til ordbogen"
+msgstr "Tilføj »%s« til ordbogen"
 
 #. - Ignore All
-#: ../gtkspell/gtkspell.c:435
+#: ../gtkspell/gtkspell.c:407
 msgid "Ignore All"
 msgstr "Ignorer alle"
 
-#: ../gtkspell/gtkspell.c:468
-msgid "Spelling Suggestions"
-msgstr "Staveforslag"
+#. on top: language selection
+#: ../gtkspell/gtkspell.c:503
+msgid "Languages"
+msgstr "Sprog"
+
+#: ../gtkspell/gtkspell.c:595
+#, c-format
+msgid "enchant error for language: %s"
+msgstr "fortrylle fejl for sprog: %s"
+
+#~ msgid "Spelling Suggestions"
+#~ msgstr "Staveforslag"

@@ -39,10 +39,12 @@ msgstr "Ignorer alle"
 msgid "Languages"
 msgstr "Sprog"
 
+# http://www.abisource.com/projects/enchant/
+# program, men burde det så ikke være med stort.
 #: ../gtkspell/gtkspell.c:595
 #, c-format
 msgid "enchant error for language: %s"
-msgstr "fortrylle fejl for sprog: %s"
+msgstr "Enchantfejl for sprog: %s"
 
 #~ msgid "Spelling Suggestions"
 #~ msgstr "Staveforslag"

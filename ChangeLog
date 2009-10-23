@@ -1,4 +1,4 @@
-version 2.0.15+cvs (cvs):
+version 2.0.16 (2009-10-22):
 	* Additional and updated translations (see po/ChangeLog).
 	* Fix Bug #2431005 Language codes that contain "C" (e.g. "cs_CZ")
 	  defaulted to "en" (Blondak)

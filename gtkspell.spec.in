@@ -7,7 +7,7 @@ Source0: http://gtkspell.sf.net/download/gtkspell-%{version}.tar.gz
 URL: http://gtkspell.sf.net/ 
 BuildRoot: %{_tmppath}/%{name}-root
 Requires: /sbin/ldconfig
-Summary: GTK2 Spell Checker Interface Library.
+Summary: GTK3 Spell Checker Interface Library.
 %description
 GtkSpell provides MSWord/MacOSX-style highlighting of misspelled words
 in a GtkTextView widget. Right-clicking a misspelled word pops up a
@@ -51,7 +51,7 @@ rm -rf %{buildroot}
 %{_libdir}/*.la
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/*
-%{_includedir}/gtkspell-2.0
+%{_includedir}/gtkspell-3.0
 
 %changelog
 * Sat Oct 26 2002 Alex Converse 

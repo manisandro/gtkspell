@@ -11,7 +11,7 @@
 #include "../config.h"
 #include "gtkspell.h"
 
-#define _(String) dgettext (PACKAGE, String)
+#define _(String) dgettext (GETTEXT_PACKAGE, String)
 
 #define GTKSPELL_MISSPELLED_TAG "gtkspell-misspelled"
 

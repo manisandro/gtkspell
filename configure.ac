@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([gtkspell],[2.0.16+dev],[gtkspell-devel@lists.sourceforge.net])
+AC_INIT([gtkspell],[3.0.0+dev],[gtkspell-devel@lists.sourceforge.net])
 dnl N.B. After 0.40, please change to `0.40+dev' instead of `0.41dev'.
 dnl Rationale: (i) placate simple version comparison software such as
 dnl `dpkg --compare-versions'.  (ii) We don't always know what the next
@@ -15,7 +15,7 @@ AC_CONFIG_HEADERS([config.h])
 SPELLER_LIB=-lenchant
       
 AC_SUBST(SPELLER_LIB)
-GTKSPELL_PACKAGES=gtk+-2.0
+GTKSPELL_PACKAGES=gtk+-3.0
 AC_SUBST(GTKSPELL_PACKAGES)
 PKG_CHECK_MODULES(GTKSPELL, $GTKSPELL_PACKAGES enchant >= 0.4.0 )
 AC_SUBST(GTKSPELL_CFLAGS)
@@ -76,7 +76,7 @@ AC_C_CONST
 # gettext 
 ALL_LINGUAS="af be cs da de el eo es eu fi fr ga gl hu hy id it ja ky lt lv mn ms nb nl pl pt pt_BR rm ro ru rw sk sl sq sr sv th tr uk vi wa zh_CN zh_HK zh_TW"
 AM_GLIB_GNU_GETTEXT
-GETTEXT_PACKAGE=$PACKAGE
+GETTEXT_PACKAGE=gtkspell3
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
 IT_PROG_INTLTOOL([0.35.0])
@@ -89,7 +89,7 @@ AM_PROG_LIBTOOL
 
 dnl AM_MAINTAINER_MODE
 
-AC_CONFIG_FILES(Makefile gtkspell/Makefile examples/Makefile gtkspell-2.0.pc gtkspell.spec docs/Makefile po/Makefile.in)
+AC_CONFIG_FILES(Makefile gtkspell/Makefile examples/Makefile gtkspell-3.0.pc gtkspell.spec docs/Makefile po/Makefile.in)
 
 GTK_DOC_CHECK(1.0)
 

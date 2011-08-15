@@ -1,4 +1,5 @@
-version 2.0.16+cvs (????-??-??):
+version 3.0.0+dev (????-??-??):
+	* New major version to support GTK+ 3
 
 version 2.0.16 (2009-10-22):
 	* Additional and updated translations (see po/ChangeLog).

@@ -74,7 +74,7 @@ AC_PROG_LIBTOOL
 AC_C_CONST
 
 # gettext 
-ALL_LINGUAS="af be cs da de el eo es eu fi fr ga gl hu hy id it ja ky lt lv mn ms nb nl pl pt pt_BR rm ro ru rw sk sl sq sr sv th tr uk vi wa zh_CN zh_HK zh_TW"
+ALL_LINGUAS="af ast be cs da de el eo es eu fi fr ga gl hu hy id is it ja ky lt lv mn ms nb nl pl pt pt_BR rm ro ru rw sk sl sq sr sv th tr uk vi wa zh_CN zh_HK zh_TW"
 AM_GLIB_GNU_GETTEXT
 GETTEXT_PACKAGE=gtkspell3
 AC_SUBST(GETTEXT_PACKAGE)

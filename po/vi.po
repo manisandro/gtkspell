@@ -1,14 +1,14 @@
 # Vietnamese Translation for GTK Spell.
-# Copyright © 2009 Free Software Foundation, Inc.
+# Copyright © 2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtkspell package.
-# Clytie Siddall <clytie@riverland.net.au>, 2005-2009.
+# Clytie Siddall <clytie@riverland.net.au>, 2005-2010.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkspell 2.0.16-pre1\n"
+"Project-Id-Version: gtkspell 2.0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-07 17:55-0400\n"
-"PO-Revision-Date: 2009-10-08 18:18+1030\n"
+"POT-Creation-Date: 2009-10-22 22:57-0400\n"
+"PO-Revision-Date: 2010-03-06 22:40+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -17,31 +17,31 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: LocFactoryEditor 1.8\n"
 
-#: ../gtkspell/gtkspell.c:364
+#: ../gtkspell/gtkspell.c:356
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(không có góp ý nào)</i>"
 
-#: ../gtkspell/gtkspell.c:376
+#: ../gtkspell/gtkspell.c:368
 msgid "More..."
 msgstr "Tiếp..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:396
+#: ../gtkspell/gtkspell.c:388
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Thêm « %s » vào Từ điển"
 
 #. - Ignore All
-#: ../gtkspell/gtkspell.c:407
+#: ../gtkspell/gtkspell.c:399
 msgid "Ignore All"
 msgstr "Lờ tất cả"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:503
+#: ../gtkspell/gtkspell.c:494
 msgid "Languages"
 msgstr "Ngôn ngữ"
 
-#: ../gtkspell/gtkspell.c:595
+#: ../gtkspell/gtkspell.c:584
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "gặp lỗi enchant đối với ngôn ngữ : %s"

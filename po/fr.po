@@ -1,39 +1,51 @@
-# Messages fran�ais pour GNU concernant gtkspell.
-# Copyright � 2004 Free Software Foundation, Inc.
+# Messages français pour GNU concernant gtkspell.
+# Copyright (C) 2011 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gtkspell package.
 # Michel Robitaille <robitail@IRO.UMontreal.CA>, traducteur depuis/since 1996.
-#
+# Frédéric Marchal <fmarchal@perso.be>, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: GNU gtkspell 2.0.6-pre1\n"
-"Report-Msgid-Bugs-To: nathan@silverorange.com\n"
-"POT-Creation-Date: 2004-06-10 19:31-0400\n"
-"PO-Revision-Date: 2004-06-17 08:00-0500\n"
-"Last-Translator: Michel Robitaille <robitail@IRO.UMontreal.CA>\n"
+"Project-Id-Version: GNU gtkspell 2.0.16\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-10-22 22:57-0400\n"
+"PO-Revision-Date: 2011-06-25 11:28+0200\n"
+"Last-Translator: Frédéric Marchal <fmarchal@perso.be>\n"
 "Language-Team: French <traduc@traduc.org>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 1.2\n"
 
-#: gtkspell/gtkspell.c:381
+#: ../gtkspell/gtkspell.c:356
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(aucune suggestion)</i>"
 
-#: gtkspell/gtkspell.c:395
+#: ../gtkspell/gtkspell.c:368
 msgid "More..."
 msgstr "Plus encore..."
 
 #. + Add to Dictionary
-#: gtkspell/gtkspell.c:421
+#: ../gtkspell/gtkspell.c:388
 #, c-format
 msgid "Add \"%s\" to Dictionary"
-msgstr "Ajouter \"%s\" au Dictionnaire"
+msgstr "Ajouter « %s » au Dictionnaire"
 
 #. - Ignore All
-#: gtkspell/gtkspell.c:432
+#: ../gtkspell/gtkspell.c:399
 msgid "Ignore All"
 msgstr "Tout ignorer"
 
-#: gtkspell/gtkspell.c:465
-msgid "Spelling Suggestions"
-msgstr "Suggestions orthographiques"
+#. on top: language selection
+#: ../gtkspell/gtkspell.c:494
+msgid "Languages"
+msgstr "Langages"
+
+#: ../gtkspell/gtkspell.c:584
+#, c-format
+msgid "enchant error for language: %s"
+msgstr "erreur de enchant pour le langage : %s"
+
+#~ msgid "Spelling Suggestions"
+#~ msgstr "Suggestions orthographiques"

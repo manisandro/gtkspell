@@ -310,7 +310,7 @@ replace_word(GtkWidget *menuitem, GtkSpell *spell) {
 
 	get_word_extents_from_mark(spell->buffer, &start, &end, spell->mark_click);
 	oldword = gtk_text_buffer_get_text(spell->buffer, &start, &end, FALSE);
-	newword = gtk_label_get_text(GTK_LABEL(GTK_BIN(menuitem)->child));
+	newword = gtk_label_get_text(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))));
 
 	if (debug) {
 		g_print("old word: '%s'\n", oldword);

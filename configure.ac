@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([gtkspell],[2.0.16+cvs],[gtkspell-devel@lists.sourceforge.net])
-dnl N.B. After 0.40, please change to `0.40+cvs' instead of `0.41cvs'.
+AC_INIT([gtkspell],[2.0.16+dev],[gtkspell-devel@lists.sourceforge.net])
+dnl N.B. After 0.40, please change to `0.40+dev' instead of `0.41dev'.
 dnl Rationale: (i) placate simple version comparison software such as
 dnl `dpkg --compare-versions'.  (ii) We don't always know what the next
 dnl version is going to be called until about the time we release it
@@ -31,7 +31,6 @@ PKG_CHECK_MODULES(PANGO, [pango >= 1.3.5],
 #   [AC_DEFINE(FIXED_PANGO, 1, [Define to 1 if pango >= 1.8.0.])],
 #   [AC_MSG_WARN([Enabling word-breaking workarounds since pango < 1.8.0])])
 
-# gtk-doc check:
 # gtk-doc check:
 # from http://cvs.gnome.org/lxr/source/gtk-doc/examples/configure.in
 AC_ARG_WITH(html-dir, AC_HELP_STRING([--with-html-dir=PATH],[path to installed docs]))

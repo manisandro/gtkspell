@@ -143,10 +143,10 @@ do
       fi
       echo "Running aclocal $aclocalinclude ..."
       aclocal $aclocalinclude
-      if grep "^AM_CONFIG_HEADER" configure.ac >/dev/null; then
+      #if grep "^AM_CONFIG_HEADER" configure.ac >/dev/null; then
 	echo "Running autoheader..."
 	autoheader
-      fi
+      #fi
       echo "Running automake --gnu $am_opt ..."
       automake --add-missing --gnu $am_opt
       echo "Running autoconf ..."

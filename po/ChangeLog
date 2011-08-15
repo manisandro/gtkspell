@@ -1,5 +1,20 @@
-version 2.0.16+cvs:
+version 2.0.16+dev:
+	* Asturian translation added (Marquinos)
+	* Basque translation updated (Mikel Olasagasti Uranga)
+	* Belarusian translation updated (Ihar Hrachyshka)
+	* Brazilian Portuguese translation updated (Renan Mathias Fernandes)
+	* Chinese (traditional) translation updated (Aron Xu)
+	* French translation updated (Frédéric Marchal)
+	* Galician translation updated (Leandro Regueiro)
+	* Hungarian translation updated (Gabor Kelemen)
+	* Icelandic translation added (Sveinn í Felli)
+	* Japanese translation updated (Daichi Kawahata, Takeshi Hamasaki)
+	* Latvian translation updated (Rihards Prieditis)
 	* Polish translation updated (Tomasz Dominikowski)
+	* Russian translation updated (Yuri Kozlov)
+	* Serbian translation updated(Aleksandar Jelenak)
+	* Slovenian translation updated (Klemen Košir)
+	* Vietnamese translation updated (Clytie Siddall)
 
 version 2.0.16:
 	* Afrikaans translation added (Dwayne Bailey)
@@ -43,7 +58,7 @@ version 2.0.12:
 	* Turkish translation added (Eren Türkay)
 
 version 2.0.11:
-	* Japanese transaltion added (Daichi Kawahata)
+	* Japanese translation added (Daichi Kawahata)
 	* Kinyarwanda translation added (Steve Murphy, et al)
 	* Russian translation added (Basil Shubin)
 	* Chinese (traditional) translation added (Abel Cheung)

@@ -36,19 +36,6 @@ gboolean  gtkspell_set_language(GtkSpell *spell,
 
 void      gtkspell_recheck_all(GtkSpell *spell);
 
-
-/*** old API-- deprecated. ***/
-#ifndef GTKSPELL_DISABLE_DEPRECATED
-#define GTKSPELL_ERROR_PSPELL GTKSPELL_ERROR_BACKEND
-
-int gtkspell_init(void);
-/* no-op. */
-
-void gtkspell_attach(GtkTextView *view);
-/* gtkspell_new_attach(view, NULL, NULL); */
-
-#endif /* GTKSPELL_DISABLE_DEPRECATED */
-
 G_END_DECLS
 
 #endif /* GTKSPELL_H */

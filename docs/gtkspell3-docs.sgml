@@ -1,26 +1,37 @@
 <?xml version="1.0"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
-<!ENTITY gtkspell-gtkspell SYSTEM "xml/gtkspell.xml">
-<!ENTITY gtkspell-tutorial SYSTEM "tutorial.sgml">
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+  <!ENTITY version SYSTEM "version.xml">
 ]>
-<!-- vim: set ts=8 sw=2 : -->
 <book id="index">
   <bookinfo>
-    <title>GtkSpell Manual</title>
-    <author><firstname>Evan</firstname><surname>Martin</surname></author>
+    <title>GtkSpell Reference Manual</title>
+    <releaseinfo>
+      for GtkSpell &version;
+      <!--The latest version of this documentation can be found on-line at
+      <ulink role="online-location" url="http://[SERVER]/gtkspell/index.html">http://[SERVER]/gtkspell/</ulink>.-->
+    </releaseinfo>
   </bookinfo>
 
-  <part id="tutorial">
-    <title>Tutorial</title>
-    <partintro><para>GtkSpell is pretty simple to use.  This tutorial
-    walks through the basic steps to incorporate GtkSpell into an application.
-    </para></partintro>
-    &gtkspell-tutorial;
-  </part>
-
-  <part id="reference">
+  <xi:include href="tutorial.sgml"/>
+  <chapter>
     <title>Function Reference</title>
-    &gtkspell-gtkspell;
-  </part>
+        <xi:include href="xml/gtkspell.xml"/>
+  </chapter>
+  <chapter id="object-tree">
+    <title>Object Hierarchy</title>
+     <xi:include href="xml/tree_index.sgml"/>
+  </chapter>
+  <index id="api-index-full">
+    <title>API Index</title>
+    <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="deprecated-api-index" role="deprecated">
+    <title>Index of deprecated API</title>
+    <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
+  </index>
+
+  <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
 </book>

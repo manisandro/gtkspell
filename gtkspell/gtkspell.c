@@ -24,6 +24,14 @@ static const int quiet = 0;
 static EnchantBroker *broker = NULL;
 static int broker_ref_cnt;
 
+enum
+{
+  LANGUAGE_CHANGED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 struct _GtkSpellChecker
 {
 	GInitiallyUnowned parent_instance;
@@ -42,6 +50,7 @@ struct _GtkSpellChecker
 struct _GtkSpellCheckerClass
 {
   GInitiallyUnownedClass parent_class;
+  void (*language_changed) (GtkSpellChecker *spell, const gchar *new_lang);
 };
 
 G_DEFINE_TYPE (GtkSpellChecker, gtk_spell_checker, G_TYPE_OBJECT);
@@ -434,6 +443,7 @@ language_change_callback(GtkCheckMenuItem *mi, GtkSpellChecker* spell) {
 		gchar *name;
 		g_object_get(G_OBJECT(mi), "name", &name, NULL);
 		gtk_spell_checker_set_language(spell, name, &error);
+		g_signal_emit (spell, signals[LANGUAGE_CHANGED], 0, spell->lang);
 		g_free(name);
 	}
 }
@@ -693,6 +703,25 @@ gtk_spell_checker_class_init (GtkSpellCheckerClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   object_class->dispose = gtk_spell_checker_dispose;
   object_class->finalize = gtk_spell_checker_finalize;
+
+  /**
+   * GtkSpellChecker::language-changed:
+   * @spell: the #GtkSpellChecker object which received the signal.
+   * @lang: the new language which was selected.
+   *
+   * The ::language-changed signal is emitted when the user selects
+   * a new spelling language from the context menu.
+   *
+   */
+  signals[LANGUAGE_CHANGED] = g_signal_new ("language-changed",
+                         G_OBJECT_CLASS_TYPE (object_class),
+                         G_SIGNAL_RUN_LAST,
+                         G_STRUCT_OFFSET (GtkSpellCheckerClass, language_changed),
+                         NULL, NULL,
+                         g_cclosure_marshal_VOID__STRING,
+                         G_TYPE_NONE,
+                         1,
+                         G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void

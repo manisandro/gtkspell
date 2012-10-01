@@ -856,6 +856,23 @@ gtk_spell_checker_get_from_text_view (GtkTextView *view) {
 }
 
 /**
+ * gtk_spell_checker_get_language:
+ * @spell: a #GtkSpellChecker
+ *
+ * Fetches the current language.
+ *
+ * Returns: the current language. This string is
+ * owned by the spell object and must not be modified or freed.
+ **/
+const gchar*
+gtk_spell_checker_get_language (GtkSpellChecker *spell)
+{
+  g_return_val_if_fail (GTK_SPELL_IS_CHECKER (spell), NULL);
+
+  return spell->lang;
+}
+
+/**
  * gtk_spell_checker_set_language:
  * @spell: The #GtkSpellChecker object.
  * @lang: (allow-none): The language to use, as a locale specifier (i.e. "en", or "en_US").

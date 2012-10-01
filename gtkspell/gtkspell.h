@@ -60,6 +60,7 @@ GtkWidget       *gtk_spell_checker_get_suggestions_menu (GtkSpellChecker *spell,
 gboolean         gtk_spell_checker_set_language         (GtkSpellChecker *spell,
                                                          const gchar   *lang,
                                                          GError       **error);
+const gchar     *gtk_spell_checker_get_language         (GtkSpellChecker *spell);
 void             gtk_spell_checker_recheck_all          (GtkSpellChecker *spell);
 
 G_END_DECLS

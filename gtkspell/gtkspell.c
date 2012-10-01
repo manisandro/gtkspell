@@ -851,6 +851,9 @@ gtk_spell_checker_new ()
  *
  * Attach #GtkSpellChecker object to @view.
  *
+ * Note: Please read the tutorial section of the documentation to make sure
+ * you don't leak references!
+ *
  * Returns: TRUE on success, FALSE on failure.
  */
 gboolean
@@ -897,6 +900,10 @@ gtk_spell_checker_attach (GtkSpellChecker *spell, GtkTextView *view)
  * gtk_spell_checker_get_from_text_view () to retrieve a #GtkSpellChecker from
  * a #GtkTextView. If the #GtkSpellChecker is not attached to any #GtkTextView,
  * the function silently exits.
+ *
+ * Note: if the #GtkSpellChecker is owned by the #GtkTextView, you must
+ * take a reference to it to prevent it from being automatically destroyed.
+ * Please read the tutorial section of the documentation!
  */
 void
 gtk_spell_checker_detach (GtkSpellChecker *spell)

@@ -1,10 +1,23 @@
-SUBDIRS=gtkspell examples docs po
+## Process this file with automake to produce Makefile.in
 
-pkgconfigdir=$(libdir)/pkgconfig
-pkgconfig_DATA=gtkspell-3.0.pc
-DISTCLEANFILES=gtkspell-3.0.pc
+SUBDIRS = gtkspell examples po docs
 
-dist-hook:
-	$(MAKE) -C "$(srcdir)/po" "$(GETTEXT_PACKAGE).pot"
-	cp "$(srcdir)/po/$(GETTEXT_PACKAGE).pot" "$(distdir)/po/"
+ACLOCAL_AMFLAGS = -I m4
 
+INTLTOOL_FILES = intltool-extract.in \
+	intltool-merge.in \
+	intltool-update.in
+
+EXTRA_DIST = $(gtkspelldoc_DATA) $(INTLTOOL_FILES)
+
+DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
+	
+DISTCLEANFILES = intltool-extract \
+	intltool-merge \
+	intltool-update \
+	po/.intltool-merge-cache
+
+
+# Remove doc directory on uninstall
+uninstall-local:
+	-rm -r $(gtkspelldocdir)

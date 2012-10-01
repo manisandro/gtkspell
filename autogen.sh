@@ -20,13 +20,6 @@ fi
     exit 1
 }
 
-(gtkdocize) < /dev/null > /dev/null 2>&1 || {
-  echo
-  echo "**Error**: You must have \`gtk-doc' installed."
-  echo "Download the appropriate package for your distribution."
-  DIE=1
-}
-
 (autoconf --version) < /dev/null > /dev/null 2>&1 || {
   echo
   echo "**Error**: You must have \`autoconf' installed."
@@ -55,7 +48,7 @@ fi
   }
 }
 
-(grep "^AM_PROG_LIBTOOL" $srcdir/configure.ac >/dev/null) && {
+(grep "^LT_INIT" $srcdir/configure.ac >/dev/null) && {
   (libtool --version) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`libtool' installed."
@@ -118,7 +111,8 @@ do
     ( cd $dr
 
       aclocalinclude="$ACLOCAL_FLAGS"
-
+      echo "Creating folder m4"
+      mkdir $srcdir/m4
       if grep "^AM_GLIB_GNU_GETTEXT" configure.ac >/dev/null; then
 	echo "Creating $dr/aclocal.m4 ..."
 	test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
@@ -135,31 +129,36 @@ do
         echo "Running xml-i18n-toolize..."
 	xml-i18n-toolize --copy --force --automake
       fi
-      if grep "^AM_PROG_LIBTOOL" configure.ac >/dev/null; then
+      if grep "^LT_INIT" configure.ac >/dev/null; then
 	if test -z "$NO_LIBTOOLIZE" ; then 
 	  echo "Running libtoolize..."
 	  libtoolize --force --copy
 	fi
       fi
+      GTKDOCIZE=`which gtkdocize`
+      if test -z $GTKDOCIZE; then
+	echo "gtkdocize not found, skipping"
+      else
+	echo "Running gtkdocize..."
+	gtkdocize || exit $?
+      fi
       echo "Running aclocal $aclocalinclude ..."
       aclocal $aclocalinclude
-      #if grep "^AM_CONFIG_HEADER" configure.ac >/dev/null; then
+      if grep "^A[CM]_CONFIG_HEADER" configure.ac >/dev/null; then
 	echo "Running autoheader..."
 	autoheader
-      #fi
+      fi
       echo "Running automake --gnu $am_opt ..."
-      automake --add-missing --gnu $am_opt
+      automake --add-missing --copy --gnu $am_opt
       echo "Running autoconf ..."
       autoconf
     )
   fi
 done
 
-conf_flags="--enable-maintainer-mode"
-
 if test x$NOCONFIGURE = x; then
-  echo Running $srcdir/configure $conf_flags "$@" ...
-  $srcdir/configure $conf_flags "$@" \
+  echo Running $srcdir/configure "$@" ...
+  $srcdir/configure "$@" \
   && echo Now type \`make\' to compile. || exit 1
 else
   echo Skipping configure process.

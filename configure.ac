@@ -1,97 +1,82 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.57)
-AC_INIT([gtkspell],[3.0.0+dev],[gtkspell-devel@lists.sourceforge.net])
-dnl N.B. After 0.40, please change to `0.40+dev' instead of `0.41dev'.
-dnl Rationale: (i) placate simple version comparison software such as
-dnl `dpkg --compare-versions'.  (ii) We don't always know what the next
-dnl version is going to be called until about the time we release it
-dnl (whereas we always know what the previous version was called).
-dnl (extracted from inkscape/configure.ac)
+m4_define(gtkspell_version_minor, 0)
+m4_define(gtkspell_version_micro, 0)
+
+AC_PREREQ(2.62)
+AC_INIT(gtkspell3, 3.gtkspell_version_minor.gtkspell_version_micro)
+AC_CONFIG_MACRO_DIR(m4)
 AC_CONFIG_SRCDIR(gtkspell/gtkspell.c)
-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AC_CONFIG_HEADERS([config.h])
 
-SPELLER_LIB=-lenchant
-      
-AC_SUBST(SPELLER_LIB)
-GTKSPELL_PACKAGES=gtk+-3.0
-AC_SUBST(GTKSPELL_PACKAGES)
-PKG_CHECK_MODULES(GTKSPELL, $GTKSPELL_PACKAGES enchant >= 0.4.0 )
-AC_SUBST(GTKSPELL_CFLAGS)
-AC_SUBST(GTKSPELL_LIBS)
+AM_INIT_AUTOMAKE([-Wall])
 
-# check Pango version so we can use PANGO_UNDERLINE_ERROR when available:
-PKG_CHECK_MODULES(PANGO, [pango >= 1.3.5],
-   [AC_DEFINE(HAVE_PANGO_UNDERLINE_ERROR, 1, [Define to 1 if PANGO_UNDERLINE_ERROR is available.])],
-   [AC_MSG_WARN([Disabling new error underlining since pango < 1.3.5])])
+AM_SILENT_RULES([yes])
 
-# check Pango version to see if word breaking bug is fixed:
-#PKG_CHECK_MODULES(PANGO, [pango >= 1.8.0],
-#   [AC_DEFINE(FIXED_PANGO, 1, [Define to 1 if pango >= 1.8.0.])],
-#   [AC_MSG_WARN([Enabling word-breaking workarounds since pango < 1.8.0])])
-
-# gtk-doc check:
-# from http://cvs.gnome.org/lxr/source/gtk-doc/examples/configure.in
-AC_ARG_WITH(html-dir, AC_HELP_STRING([--with-html-dir=PATH],[path to installed docs]))
-
-if test "x$with_html_dir" = "x" ; then
-  HTML_DIR='${datadir}/gtk-doc/html'
-else
-  HTML_DIR=$with_html_dir
-fi
-
-AC_SUBST(HTML_DIR)
-
-gtk_doc_min_version=1.0
-AC_MSG_CHECKING([gtk-doc version >= $gtk_doc_min_version])
-if pkg-config --atleast-version=$gtk_doc_min_version gtk-doc; then
-  AC_MSG_RESULT(yes)
-  GTKDOC=true
-else
-  AC_MSG_RESULT(no)
-  GTKDOC=false
-fi
-
-dnl Let people disable the gtk-doc stuff.
-AC_ARG_ENABLE(gtk-doc, AC_HELP_STRING([--enable-gtk-doc],[Use gtk-doc to build documentation [[default=auto]]]), enable_gtk_doc="$enableval", enable_gtk_doc=auto)
-
-if test x$enable_gtk_doc = xauto ; then
-  if test x$GTKDOC = xtrue ; then
-    enable_gtk_doc=yes
-  else
-    enable_gtk_doc=no 
-  fi
-fi
-
-AM_CONDITIONAL(ENABLE_GTK_DOC, test x$enable_gtk_doc = xyes)
-
-# end gtk-doc check.
+m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 
 AC_PROG_CC
-AC_PROG_LIBTOOL
 
-AC_C_CONST
+GTK_SPELL_VERSION_MINOR=gtkspell_version_minor
+GTK_SPELL_VERSION_MICRO=gtkspell_version_micro
 
-# gettext 
-ALL_LINGUAS="af ast be cs da de el eo es eu fi fr ga gl hu hy id is it ja ky lt lv mn ms nb nl pl pt pt_BR rm ro ru rw sk sl sq sr sv th tr uk vi wa zh_CN zh_HK zh_TW"
-AM_GLIB_GNU_GETTEXT
-GETTEXT_PACKAGE=gtkspell3
-AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
+dnl *********************** Enable Compat for GtkSpell2 ***********************
+AC_ARG_ENABLE([gtk2],
+     [  --enable-gtk2    Enable GTK+2 build],
+     [case "${enableval}" in
+       yes) gtk2=true ;;
+       no)  gtk2=false ;;
+       *) AC_MSG_ERROR([bad value ${enableval} for --enable-gtk2]) ;;
+     esac],[gtk2=false])
+AM_CONDITIONAL([ENABLE_GTK2], [test x$gtk2 = xtrue])
+
+dnl ************************** Gobject Introspection **************************
+dnl See https://live.gnome.org/GObjectIntrospection/AutotoolsIntegration
+GOBJECT_INTROSPECTION_CHECK([1.30.0])
+
+dnl *************************** Internationalization **************************
 IT_PROG_INTLTOOL([0.35.0])
+GETTEXT_PACKAGE=$PACKAGE_NAME
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [GETTEXT package name])
+AM_GLIB_GNU_GETTEXT
 
+dnl ************************** Libtool initialization *************************
+LT_INIT
 
+dnl ********************************* Modules *********************************
+PKG_CHECK_MODULES(GTK_SPELL, [glib-2.0 gtk+-3.0 gobject-introspection-1.0 enchant ])
 
-AM_PROG_LIBTOOL
+if test x$gtk2 = xtrue; then
+	PKG_CHECK_MODULES(GTK_SPELL2, [glib-2.0 gtk+-2.0 gobject-introspection-1.0 enchant ])
+	SPEC_ENABLE_GTK2=1
+fi
 
+dnl ********************************* GTK-Doc *********************************
+dnl See http://developer.gnome.org/gtk-doc-manual/unstable/settingup_autoconf.html.en
+m4_ifdef([GTK_DOC_CHECK], [
+GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
+SPEC_ENABLE_GTK_DOC=1
+],[
+AM_CONDITIONAL([ENABLE_GTK_DOC], false)
+])
 
+AC_SUBST(GTK_SPELL_VERSION_MINOR)
+AC_SUBST(GTK_SPELL_VERSION_MICRO)
+AC_SUBST(SPEC_ENABLE_GTK_DOC)
+AC_SUBST(SPEC_ENABLE_GTK2)
+AC_SUBST(GTK_SPELL_CFLAGS)
+AC_SUBST(GTK_SPELL_LIBS)
+AC_SUBST(GTK_SPELL2_CFLAGS)
+AC_SUBST(GTK_SPELL2_LIBS)
 
-dnl AM_MAINTAINER_MODE
-
-AC_CONFIG_FILES(Makefile gtkspell/Makefile examples/Makefile gtkspell-3.0.pc gtkspell.spec docs/Makefile po/Makefile.in)
-
-GTK_DOC_CHECK(1.0)
-
-AC_OUTPUT
-
+AC_OUTPUT([
+Makefile
+gtkspell3.spec
+gtkspell/gtkspell3-2.0.pc
+gtkspell/gtkspell3-3.0.pc
+gtkspell/Makefile
+examples/Makefile
+docs/Makefile
+docs/version.xml
+po/Makefile.in])

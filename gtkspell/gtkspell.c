@@ -606,52 +606,6 @@ set_language_internal(GtkSpellChecker *spell, const gchar *lang, GError **error)
 	return TRUE;
 }
 
-/**
- * gtk_spell_checker_set_language:
- * @spell: The #GtkSpellChecker object.
- * @lang: (allow-none): The language to use, as a locale specifier (i.e. "en", or "en_US").
- * If #NULL, attempt to use the default system locale (LANG).
- * @error: (out) (allow-none): Return location for error.
- *
- * Set the language on @spell to @lang, possibily returning an error in
- * @error.
- *
- * Returns: FALSE if there was an error.
- */
-gboolean
-gtk_spell_checker_set_language (GtkSpellChecker *spell, const gchar *lang, GError **error) {
-	gboolean ret;
-
-	g_return_val_if_fail (GTK_SPELL_IS_CHECKER (spell), FALSE);
-
-	if (error)
-	g_return_val_if_fail(*error == NULL, FALSE);
-
-	ret = set_language_internal (spell, lang, error);
-	if (ret)
-		gtk_spell_checker_recheck_all(spell);
-
-	return ret;
-}
-
-/**
- * gtk_spell_checker_recheck_all:
- * @spell: The #GtkSpellChecker object.
- *
- * Recheck the spelling in the entire buffer.
- */
-void
-gtk_spell_checker_recheck_all (GtkSpellChecker *spell) {
-	GtkTextIter start, end;
-
-	g_return_if_fail (GTK_SPELL_IS_CHECKER (spell));
-
-	if (spell->buffer) {
-		gtk_text_buffer_get_bounds (spell->buffer, &start, &end);
-		check_range (spell, spell->buffer, start, end, TRUE);
-	}
-}
-
 /* changes the buffer
  * a NULL buffer is acceptable and will only release the current one */
 static void
@@ -769,6 +723,37 @@ gtk_spell_checker_init (GtkSpellChecker *self)
   set_language_internal (self, NULL, NULL);
 }
 
+static void
+gtk_spell_checker_dispose (GObject *object)
+{
+  GtkSpellChecker *spell = GTK_SPELL_CHECKER (object);
+  gtk_spell_checker_detach (spell);
+
+  G_INITIALLY_UNOWNED_CLASS (gtk_spell_checker_parent_class)->dispose (object);
+}
+
+static void
+gtk_spell_checker_finalize (GObject *object)
+{
+  GtkSpellChecker *spell = GTK_SPELL_CHECKER (object);
+
+  if (broker)
+    {
+      if (spell->speller)
+        enchant_broker_free_dict (broker, spell->speller);
+      broker_ref_cnt--;
+      if (broker_ref_cnt == 0)
+        {
+          enchant_broker_free (broker);
+          broker = NULL;
+        }
+    }
+
+  g_free (spell->lang);
+
+  G_INITIALLY_UNOWNED_CLASS (gtk_spell_checker_parent_class)->finalize (object);
+}
+
 /**
  * gtk_spell_checker_new:
  *
@@ -827,52 +812,6 @@ gtk_spell_checker_attach (GtkSpellChecker *spell, GtkTextView *view)
   return TRUE;
 }
 
-static void
-gtk_spell_checker_dispose (GObject *object)
-{
-  GtkSpellChecker *spell = GTK_SPELL_CHECKER (object);
-  gtk_spell_checker_detach (spell);
-
-  G_INITIALLY_UNOWNED_CLASS (gtk_spell_checker_parent_class)->dispose (object);
-}
-
-static void
-gtk_spell_checker_finalize (GObject *object)
-{
-  GtkSpellChecker *spell = GTK_SPELL_CHECKER (object);
-
-  if (broker)
-    {
-      if (spell->speller)
-        enchant_broker_free_dict (broker, spell->speller);
-      broker_ref_cnt--;
-      if (broker_ref_cnt == 0)
-        {
-          enchant_broker_free (broker);
-          broker = NULL;
-        }
-    }
-
-  g_free (spell->lang);
-
-  G_INITIALLY_UNOWNED_CLASS (gtk_spell_checker_parent_class)->finalize (object);
-}
-
-/**
- * gtk_spell_checker_get_from_text_view:
- * @view: A #GtkTextView.
- *
- * Retrieves the #GtkSpellChecker object attached to a text view.
- *
- * Returns: (transfer none): the #GtkSpellChecker object, or %NULL if there is no #GtkSpellChecker
- * attached to @view.
- */
-GtkSpellChecker*
-gtk_spell_checker_get_from_text_view (GtkTextView *view) {
-	g_return_val_if_fail (GTK_IS_TEXT_VIEW (view), NULL);
-	return g_object_get_data(G_OBJECT(view), GTKSPELL_OBJECT_KEY);
-}
-
 /**
  * gtk_spell_checker_detach:
  * @spell: A #GtkSpellChecker.
@@ -899,6 +838,67 @@ gtk_spell_checker_detach (GtkSpellChecker *spell)
   set_buffer (spell, NULL);
   spell->deferred_check = FALSE;
   g_object_unref (spell);
+}
+
+/**
+ * gtk_spell_checker_get_from_text_view:
+ * @view: A #GtkTextView.
+ *
+ * Retrieves the #GtkSpellChecker object attached to a text view.
+ *
+ * Returns: (transfer none): the #GtkSpellChecker object, or %NULL if there is no #GtkSpellChecker
+ * attached to @view.
+ */
+GtkSpellChecker*
+gtk_spell_checker_get_from_text_view (GtkTextView *view) {
+	g_return_val_if_fail (GTK_IS_TEXT_VIEW (view), NULL);
+	return g_object_get_data(G_OBJECT(view), GTKSPELL_OBJECT_KEY);
+}
+
+/**
+ * gtk_spell_checker_set_language:
+ * @spell: The #GtkSpellChecker object.
+ * @lang: (allow-none): The language to use, as a locale specifier (i.e. "en", or "en_US").
+ * If #NULL, attempt to use the default system locale (LANG).
+ * @error: (out) (allow-none): Return location for error.
+ *
+ * Set the language on @spell to @lang, possibily returning an error in
+ * @error.
+ *
+ * Returns: FALSE if there was an error.
+ */
+gboolean
+gtk_spell_checker_set_language (GtkSpellChecker *spell, const gchar *lang, GError **error) {
+	gboolean ret;
+
+	g_return_val_if_fail (GTK_SPELL_IS_CHECKER (spell), FALSE);
+
+	if (error)
+	g_return_val_if_fail(*error == NULL, FALSE);
+
+	ret = set_language_internal (spell, lang, error);
+	if (ret)
+		gtk_spell_checker_recheck_all(spell);
+
+	return ret;
+}
+
+/**
+ * gtk_spell_checker_recheck_all:
+ * @spell: The #GtkSpellChecker object.
+ *
+ * Recheck the spelling in the entire buffer.
+ */
+void
+gtk_spell_checker_recheck_all (GtkSpellChecker *spell) {
+	GtkTextIter start, end;
+
+	g_return_if_fail (GTK_SPELL_IS_CHECKER (spell));
+
+	if (spell->buffer) {
+		gtk_text_buffer_get_bounds (spell->buffer, &start, &end);
+		check_range (spell, spell->buffer, start, end, TRUE);
+	}
 }
 
 /**

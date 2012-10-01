@@ -46,7 +46,8 @@ struct _GtkSpellCheckerClass
 
 G_DEFINE_TYPE (GtkSpellChecker, gtk_spell_checker, G_TYPE_OBJECT);
 
-static void gtk_spell_checker_free (GObject *object);
+static void gtk_spell_checker_dispose (GObject *object);
+static void gtk_spell_checker_finalize (GObject *object);
 
 #define GTKSPELL_OBJECT_KEY "gtkspell"
 
@@ -736,7 +737,8 @@ static void
 gtk_spell_checker_class_init (GtkSpellCheckerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  object_class->finalize = gtk_spell_checker_free;
+  object_class->dispose = gtk_spell_checker_dispose;
+  object_class->finalize = gtk_spell_checker_finalize;
 }
 
 static void
@@ -826,13 +828,18 @@ gtk_spell_checker_attach (GtkSpellChecker *spell, GtkTextView *view)
 }
 
 static void
-gtk_spell_checker_free (GObject *object)
+gtk_spell_checker_dispose (GObject *object)
 {
-  GtkSpellChecker *spell;
-  spell = GTK_SPELL_CHECKER (object);
+  GtkSpellChecker *spell = GTK_SPELL_CHECKER (object);
+  gtk_spell_checker_detach (spell);
 
-  if (spell->view)
-    gtk_spell_checker_detach (spell);
+  G_INITIALLY_UNOWNED_CLASS (gtk_spell_checker_parent_class)->dispose (object);
+}
+
+static void
+gtk_spell_checker_finalize (GObject *object)
+{
+  GtkSpellChecker *spell = GTK_SPELL_CHECKER (object);
 
   if (broker)
     {

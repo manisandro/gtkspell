@@ -1,5 +1,6 @@
 /* gtkspell - a spell-checking addon for GTK's TextView widget
- * Copyright (c) 2002 Evan Martin.
+ * Copyright (c) 2002 Evan Martin
+ * Copyright (c) 2012 Sandro Mani
  */
 
 /* vim: set ts=4 sw=4 wm=5 : */
@@ -23,7 +24,10 @@ static const int quiet = 0;
 static EnchantBroker *broker = NULL;
 static int broker_ref_cnt;
 
-struct _GtkSpell {
+struct _GtkSpellChecker
+{
+	GInitiallyUnowned parent_instance;
+	/* instance members */
 	GtkTextView *view;
 	GtkTextBuffer *buffer;
 	GtkTextTag *tag_highlight;
@@ -35,12 +39,19 @@ struct _GtkSpell {
 	gchar *lang;
 };
 
-static void gtkspell_free(GtkSpell *spell);
+struct _GtkSpellCheckerClass
+{
+  GInitiallyUnownedClass parent_class;
+};
+
+G_DEFINE_TYPE (GtkSpellChecker, gtk_spell_checker, G_TYPE_OBJECT);
+
+static void gtk_spell_checker_free (GObject *object);
 
 #define GTKSPELL_OBJECT_KEY "gtkspell"
 
 GQuark
-gtkspell_error_quark(void) {
+gtk_spell_error_quark(void) {
 	static GQuark q = 0;
 	if (q == 0)
 		q = g_quark_from_static_string("gtkspell-error-quark");
@@ -97,7 +108,7 @@ gtkspell_text_iter_backward_word_start(GtkTextIter *i) {
 #define gtk_text_iter_forward_word_end gtkspell_text_iter_forward_word_end
 
 static void
-check_word(GtkSpell *spell, GtkTextBuffer *buffer,
+check_word(GtkSpellChecker *spell, GtkTextBuffer *buffer,
            GtkTextIter *start, GtkTextIter *end) {
 	char *text;
 	if (!spell->speller)
@@ -119,7 +130,7 @@ print_iter(char *name, GtkTextIter *iter) {
 }
 
 static void
-check_range(GtkSpell *spell, GtkTextBuffer *buffer,
+check_range(GtkSpellChecker *spell, GtkTextBuffer *buffer,
             GtkTextIter start, GtkTextIter end, gboolean force_all) {
 	/* we need to "split" on word boundaries.
 	 * luckily, pango knows what "words" are 
@@ -202,7 +213,7 @@ check_range(GtkSpell *spell, GtkTextBuffer *buffer,
 }
 
 static void
-check_deferred_range(GtkSpell *spell, GtkTextBuffer *buffer, gboolean force_all) {
+check_deferred_range(GtkSpellChecker *spell, GtkTextBuffer *buffer, gboolean force_all) {
 	GtkTextIter start, end;
 	gtk_text_buffer_get_iter_at_mark(buffer, &start, spell->mark_insert_start);
 	gtk_text_buffer_get_iter_at_mark(buffer, &end, spell->mark_insert_end);
@@ -218,13 +229,13 @@ check_deferred_range(GtkSpell *spell, GtkTextBuffer *buffer, gboolean force_all)
 
 static void
 insert_text_before(GtkTextBuffer *buffer, GtkTextIter *iter,
-                   gchar *text, gint len, GtkSpell *spell) {
+                   gchar *text, gint len, GtkSpellChecker *spell) {
 	gtk_text_buffer_move_mark(buffer, spell->mark_insert_start, iter);
 }
 
 static void
 insert_text_after(GtkTextBuffer *buffer, GtkTextIter *iter,
-                  gchar *text, gint len, GtkSpell *spell) {
+                  gchar *text, gint len, GtkSpellChecker *spell) {
 	GtkTextIter start;
 
 	if (debug) g_print("insert\n");
@@ -245,14 +256,14 @@ insert_text_after(GtkTextBuffer *buffer, GtkTextIter *iter,
 
 static void
 delete_range_after(GtkTextBuffer *buffer,
-                   GtkTextIter *start, GtkTextIter *end, GtkSpell *spell) {
+                   GtkTextIter *start, GtkTextIter *end, GtkSpellChecker *spell) {
 	if (debug) g_print("delete\n");
 	check_range(spell, buffer, *start, *end, FALSE);
 }
 
 static void
 mark_set(GtkTextBuffer *buffer, GtkTextIter *iter, 
-		 GtkTextMark *mark, GtkSpell *spell) {
+		 GtkTextMark *mark, GtkSpellChecker *spell) {
 	/* if the cursor has moved and there is a deferred check so handle it now */
 	if ((mark == gtk_text_buffer_get_insert(buffer)) && spell->deferred_check)
 		check_deferred_range(spell, buffer, FALSE);
@@ -270,7 +281,7 @@ get_word_extents_from_mark(GtkTextBuffer *buffer,
 }
 
 static void
-add_to_dictionary(GtkWidget *menuitem, GtkSpell *spell) {
+add_to_dictionary(GtkWidget *menuitem, GtkSpellChecker *spell) {
 	char *word;
 	GtkTextIter start, end;
 
@@ -279,13 +290,13 @@ add_to_dictionary(GtkWidget *menuitem, GtkSpell *spell) {
 	
 	enchant_dict_add_to_pwl( spell->speller, word, strlen(word));
 
-	gtkspell_recheck_all(spell);
+	gtk_spell_checker_recheck_all(spell);
 
 	g_free(word);
 }
 
 static void
-ignore_all(GtkWidget *menuitem, GtkSpell *spell) {
+ignore_all(GtkWidget *menuitem, GtkSpellChecker *spell) {
 	char *word;
 	GtkTextIter start, end;
 
@@ -294,13 +305,13 @@ ignore_all(GtkWidget *menuitem, GtkSpell *spell) {
 	
 	enchant_dict_add_to_session(spell->speller, word, strlen(word));
 
-	gtkspell_recheck_all(spell);
+	gtk_spell_checker_recheck_all(spell);
 
 	g_free(word);
 }
 
 static void
-replace_word(GtkWidget *menuitem, GtkSpell *spell) {
+replace_word(GtkWidget *menuitem, GtkSpellChecker *spell) {
 	char *oldword;
 	const char *newword;
 	GtkTextIter start, end;
@@ -332,7 +343,7 @@ replace_word(GtkWidget *menuitem, GtkSpell *spell) {
 
 /* This function populates suggestions at the top of the passed menu */
 static void
-add_suggestion_menus(GtkSpell *spell, GtkTextBuffer *buffer,
+add_suggestion_menus(GtkSpellChecker *spell, GtkTextBuffer *buffer,
                       const char *word, GtkWidget *topmenu) {
 	GtkWidget *menu;
 	GtkWidget *mi;
@@ -406,7 +417,7 @@ add_suggestion_menus(GtkSpell *spell, GtkTextBuffer *buffer,
 }
 
 static GtkWidget*
-build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
+build_suggestion_menu(GtkSpellChecker *spell, GtkTextBuffer *buffer,
                       const char *word) {
 	GtkWidget *topmenu;
 	topmenu = gtk_menu_new();
@@ -416,12 +427,12 @@ build_suggestion_menu(GtkSpell *spell, GtkTextBuffer *buffer,
 }
 
 static void
-language_change_callback(GtkCheckMenuItem *mi, GtkSpell* spell) {
+language_change_callback(GtkCheckMenuItem *mi, GtkSpellChecker* spell) {
 	if (gtk_check_menu_item_get_active(mi)) {
 		GError* error = NULL;
 		gchar *name;
 		g_object_get(G_OBJECT(mi), "name", &name, NULL);
-		gtkspell_set_language(spell, name, &error);
+		gtk_spell_checker_set_language(spell, name, &error);
 		g_free(name);
 	}
 }
@@ -443,7 +454,7 @@ dict_describe_cb(const char * const lang_tag,
 }
 
 static GtkWidget*
-build_languages_menu(GtkSpell *spell) {
+build_languages_menu(GtkSpellChecker *spell) {
 	GtkWidget *active_item = NULL, *menu = gtk_menu_new();
 	GList *langs;
 	GSList *menu_group = NULL;
@@ -480,7 +491,7 @@ build_languages_menu(GtkSpell *spell) {
 }
 
 static void
-populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpell *spell) {
+populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpellChecker *spell) {
 	GtkWidget *mi;
 	GtkTextIter start, end;
 	char *word;
@@ -514,7 +525,7 @@ populate_popup(GtkTextView *textview, GtkMenu *menu, GtkSpell *spell) {
  * here, we do NOT  move the cursor to the location of the clicked-upon word
  * since that prevents the use of edit functions on the context menu. */
 static gboolean
-button_press_event(GtkTextView *view, GdkEventButton *event, GtkSpell *spell) {
+button_press_event(GtkTextView *view, GdkEventButton *event, GtkSpellChecker *spell) {
 	if (event->button == 3) {
 		gint x, y;
 		GtkTextIter iter;
@@ -538,7 +549,7 @@ button_press_event(GtkTextView *view, GdkEventButton *event, GtkSpell *spell) {
  * (Menu Key or <shift>+F10 by default).  In this case we want to set
  * spell->mark_click to the cursor position. */
 static gboolean
-popup_menu_event(GtkTextView *view, GtkSpell *spell) {
+popup_menu_event(GtkTextView *view, GtkSpellChecker *spell) {
 	GtkTextIter iter;
 
 	gtk_text_buffer_get_iter_at_mark(spell->buffer, &iter, 
@@ -548,20 +559,20 @@ popup_menu_event(GtkTextView *view, GtkSpell *spell) {
 }
 
 static void
-_set_lang_from_dict(const char * const lang_tag,
+set_lang_from_dict(const char * const lang_tag,
 		    const char * const provider_name,
 		    const char * const provider_desc,
 		    const char * const provider_dll_file,
 		    void * user_data)
 {
-	GtkSpell *spell = user_data;
+	GtkSpellChecker *spell = user_data;
 
 	g_free(spell->lang);
 	spell->lang = g_strdup(lang_tag);
 }
 
 static gboolean
-gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **error) {
+set_language_internal(GtkSpellChecker *spell, const gchar *lang, GError **error) {
 	EnchantDict *dict;
 
 	if (lang == NULL) {
@@ -580,7 +591,7 @@ gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **erro
 	dict = enchant_broker_request_dict(broker, lang);
 
 	if (!dict) {
-		g_set_error(error, GTKSPELL_ERROR, GTKSPELL_ERROR_BACKEND,
+		g_set_error(error, GTK_SPELL_ERROR, GTK_SPELL_ERROR_BACKEND,
 			_("enchant error for language: %s"), lang);
 		return FALSE;
 	}
@@ -589,17 +600,17 @@ gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **erro
 		enchant_broker_free_dict(broker, spell->speller);
 	spell->speller = dict;
 
-	enchant_dict_describe(dict, _set_lang_from_dict, spell);
+	enchant_dict_describe(dict, set_lang_from_dict, spell);
 
 	return TRUE;
 }
 
 /**
- * gtkspell_set_language:
- * @spell:  The #GtkSpell object.
- * @lang: The language to use, in a form enchant understands (it appears to
- * be a locale specifier?).
- * @error: Return location for error.
+ * gtk_spell_checker_set_language:
+ * @spell: The #GtkSpellChecker object.
+ * @lang: (allow-none): The language to use, as a locale specifier (i.e. "en", or "en_US").
+ * If #NULL, attempt to use the default system locale (LANG).
+ * @error: (out) (allow-none): Return location for error.
  *
  * Set the language on @spell to @lang, possibily returning an error in
  * @error.
@@ -607,40 +618,44 @@ gtkspell_set_language_internal(GtkSpell *spell, const gchar *lang, GError **erro
  * Returns: FALSE if there was an error.
  */
 gboolean
-gtkspell_set_language(GtkSpell *spell, const gchar *lang, GError **error) {
+gtk_spell_checker_set_language (GtkSpellChecker *spell, const gchar *lang, GError **error) {
 	gboolean ret;
 
-	if (error)
-		g_return_val_if_fail(*error == NULL, FALSE);
+	g_return_val_if_fail (GTK_SPELL_IS_CHECKER (spell), FALSE);
 
-	ret = gtkspell_set_language_internal(spell, lang, error);
+	if (error)
+	g_return_val_if_fail(*error == NULL, FALSE);
+
+	ret = set_language_internal (spell, lang, error);
 	if (ret)
-		gtkspell_recheck_all(spell);
+		gtk_spell_checker_recheck_all(spell);
 
 	return ret;
 }
 
 /**
- * gtkspell_recheck_all:
- * @spell:  The #GtkSpell object.
+ * gtk_spell_checker_recheck_all:
+ * @spell: The #GtkSpellChecker object.
  *
  * Recheck the spelling in the entire buffer.
  */
 void
-gtkspell_recheck_all(GtkSpell *spell) {
+gtk_spell_checker_recheck_all (GtkSpellChecker *spell) {
 	GtkTextIter start, end;
 
-	gtk_text_buffer_get_bounds(spell->buffer, &start, &end);
+	g_return_if_fail (GTK_SPELL_IS_CHECKER (spell));
 
-	check_range(spell, spell->buffer, start, end, TRUE);
+	if (spell->buffer) {
+		gtk_text_buffer_get_bounds (spell->buffer, &start, &end);
+		check_range (spell, spell->buffer, start, end, TRUE);
+	}
 }
 
 /* changes the buffer
  * a NULL buffer is acceptable and will only release the current one */
 static void
-gtkspell_set_buffer(GtkSpell *spell, GtkTextBuffer *buffer)
+set_buffer(GtkSpellChecker *spell, GtkTextBuffer *buffer)
 {
-	GtkTextTagTable *tagtable;
 	GtkTextIter start, end;
 
 	if (spell->buffer) {
@@ -648,8 +663,6 @@ gtkspell_set_buffer(GtkSpell *spell, GtkTextBuffer *buffer)
 				G_SIGNAL_MATCH_DATA,
 				0, 0, NULL, NULL,
 				spell);
-
-		tagtable = gtk_text_buffer_get_tag_table(spell->buffer);
 
 		gtk_text_buffer_get_bounds(spell->buffer, &start, &end);
 		gtk_text_buffer_remove_tag(spell->buffer, spell->tag_highlight, &start, &end);
@@ -683,18 +696,13 @@ gtkspell_set_buffer(GtkSpell *spell, GtkTextBuffer *buffer)
 				"mark-set",
 				G_CALLBACK(mark_set), spell);
 
-		tagtable = gtk_text_buffer_get_tag_table(spell->buffer);
+		GtkTextTagTable *tagtable = gtk_text_buffer_get_tag_table(spell->buffer);
 		spell->tag_highlight = gtk_text_tag_table_lookup(tagtable, GTKSPELL_MISSPELLED_TAG);
 
 		if (spell->tag_highlight == NULL) {
 			spell->tag_highlight = gtk_text_buffer_create_tag(spell->buffer,
 					GTKSPELL_MISSPELLED_TAG,
-#ifdef HAVE_PANGO_UNDERLINE_ERROR
 					"underline", PANGO_UNDERLINE_ERROR,
-#else
-					"foreground", "red", 
-					"underline", PANGO_UNDERLINE_SINGLE,
-#endif
 					NULL);
 		}
 
@@ -714,155 +722,195 @@ gtkspell_set_buffer(GtkSpell *spell, GtkTextBuffer *buffer)
 		spell->deferred_check = FALSE;
 
 		/* now check the entire text buffer. */
-		gtkspell_recheck_all(spell);
+		gtk_spell_checker_recheck_all(spell);
 	}
 }
 
 static void
-buffer_changed (GtkTextView *view, GParamSpec *pspec, GtkSpell *spell)
+buffer_changed (GtkTextView *view, GParamSpec *pspec, GtkSpellChecker *spell)
 {
-	gtkspell_set_buffer(spell, gtk_text_view_get_buffer(view));
+	set_buffer(spell, gtk_text_view_get_buffer(view));
 }
 
-/**
- * gtkspell_new_attach:
- * @view: The #GtkTextView to attach to.
- * @lang: The language to use, in a form pspell understands (it appears to
- * be a locale specifier?).
- * @error: Return location for error.
- *
- * Create a new #GtkSpell object attached to @view with language @lang.
- *
- * Returns: a new #GtkSpell object, or %NULL on error.
- */
-GtkSpell*
-gtkspell_new_attach(GtkTextView *view, const gchar *lang, GError **error) {
-	GtkSpell *spell;
+static void
+gtk_spell_checker_class_init (GtkSpellCheckerClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  object_class->finalize = gtk_spell_checker_free;
+}
 
+static void
+gtk_spell_checker_init (GtkSpellChecker *self)
+{
+  self->view = NULL;
+  self->buffer = NULL;
+  self->tag_highlight = NULL;
+  self->mark_insert_start = NULL;
+  self->mark_insert_end = NULL;
+  self->mark_click = NULL;
+  self->deferred_check = FALSE;
+  self->speller = NULL;
+  self->lang = NULL;
+  
 #ifdef ENABLE_NLS
-	bindtextdomain(PACKAGE, LOCALEDIR);
-	bind_textdomain_codeset(PACKAGE, "UTF-8");
+  bindtextdomain (PACKAGE_NAME, PACKAGE_LOCALE_DIR);
+  bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
 #endif
 
-	if (error)
-		g_return_val_if_fail(*error == NULL, NULL);
+  if (!broker)
+    {
+      broker = enchant_broker_init ();
+      broker_ref_cnt = 0;
+    }
+  broker_ref_cnt++;
 
-	spell = g_object_get_data(G_OBJECT(view), GTKSPELL_OBJECT_KEY);
-	g_assert(spell == NULL);
-
-	/* We don't need to worry about thread safety.
-	 * Stuff shouldn't be attaching to a GtkTextView from anything other
-	 * than the mainloop thread */
-	if (!broker) {
-		broker = enchant_broker_init();
-		broker_ref_cnt = 0;
-	}
-	broker_ref_cnt++;
-
-
-	/* attach to the widget */
-	spell = g_new0(GtkSpell, 1);
-	spell->view = view;
-	if (!gtkspell_set_language_internal(spell, lang, error)) {
-		broker_ref_cnt--;
-		if (broker_ref_cnt == 0) {
-			enchant_broker_free(broker);
-			broker = NULL;
-		}
-		g_free(spell);
-		return NULL;
-	}
-	g_object_set_data(G_OBJECT(view), GTKSPELL_OBJECT_KEY, spell);
-
-	g_signal_connect_swapped(G_OBJECT(view), "destroy",
-			G_CALLBACK(gtkspell_free), spell);
-	g_signal_connect(G_OBJECT(view), "button-press-event",
-			G_CALLBACK(button_press_event), spell);
-	g_signal_connect(G_OBJECT(view), "populate-popup",
-			G_CALLBACK(populate_popup), spell);
-	g_signal_connect(G_OBJECT(view), "popup-menu",
-			G_CALLBACK(popup_menu_event), spell);
-	g_signal_connect(G_OBJECT(view), "notify::buffer",
-			G_CALLBACK(buffer_changed), spell);
-
-	spell->buffer = NULL;
-	gtkspell_set_buffer(spell, gtk_text_view_get_buffer(view));
-
-	return spell;
-}
-
-static void
-gtkspell_free(GtkSpell *spell) {
-
-	gtkspell_set_buffer(spell, NULL);
-
-	if (broker) {
-		if (spell->speller) {
-			enchant_broker_free_dict(broker, spell->speller);
-		}
-		broker_ref_cnt--;
-		if (broker_ref_cnt == 0) {
-			enchant_broker_free(broker);
-			broker = NULL;
-		}
-	}
-	g_signal_handlers_disconnect_matched(spell->view,
-			G_SIGNAL_MATCH_DATA,
-			0, 0, NULL, NULL,
-			spell);
-	g_free(spell->lang);
-	g_free(spell);
+  set_language_internal (self, NULL, NULL);
 }
 
 /**
- * gtkspell_get_from_text_view:
+ * gtk_spell_checker_new:
+ *
+ * Create a new #GtkSpellChecker object.
+ *
+ * Returns: a new #GtkSpellChecker object.
+ */
+GtkSpellChecker*
+gtk_spell_checker_new ()
+{
+  return g_object_new (GTK_SPELL_TYPE_CHECKER, NULL);
+}
+
+/**
+ * gtk_spell_checker_attach:
+ * @spell: A #GtkSpellChecker.
+ * @view: The #GtkTextView to attach to.
+ *
+ * Attach #GtkSpellChecker object to @view.
+ *
+ * Returns: TRUE on success, FALSE on failure.
+ */
+gboolean
+gtk_spell_checker_attach (GtkSpellChecker *spell, GtkTextView *view)
+{
+  g_return_val_if_fail (GTK_SPELL_IS_CHECKER (spell), FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (view), FALSE);
+  g_return_val_if_fail (spell->buffer == NULL, FALSE);
+  g_return_val_if_fail (spell->speller != NULL, FALSE);
+  
+  /* ensure no existing instance is attached */
+  GtkSpellChecker *attached;
+  attached = g_object_get_data (G_OBJECT (view), GTKSPELL_OBJECT_KEY);
+  g_return_val_if_fail (attached == NULL, FALSE);
+
+  /* attach to the widget */
+  spell->view = view;
+  g_object_ref (view);
+  g_object_ref_sink (spell);
+
+  g_object_set_data (G_OBJECT (view), GTKSPELL_OBJECT_KEY, spell);
+
+  g_signal_connect_swapped (view, "destroy", G_CALLBACK (gtk_spell_checker_detach),
+                            G_OBJECT (spell));
+  g_signal_connect (view, "button-press-event",
+                    G_CALLBACK (button_press_event), spell);
+  g_signal_connect (view, "populate-popup",
+                    G_CALLBACK (populate_popup), spell);
+  g_signal_connect (view, "popup-menu",
+                    G_CALLBACK (popup_menu_event), spell);
+  g_signal_connect (view, "notify::buffer",
+                    G_CALLBACK (buffer_changed), spell);
+
+  set_buffer (spell, gtk_text_view_get_buffer (view));
+
+  return TRUE;
+}
+
+static void
+gtk_spell_checker_free (GObject *object)
+{
+  GtkSpellChecker *spell;
+  spell = GTK_SPELL_CHECKER (object);
+
+  if (spell->view)
+    gtk_spell_checker_detach (spell);
+
+  if (broker)
+    {
+      if (spell->speller)
+        enchant_broker_free_dict (broker, spell->speller);
+      broker_ref_cnt--;
+      if (broker_ref_cnt == 0)
+        {
+          enchant_broker_free (broker);
+          broker = NULL;
+        }
+    }
+
+  g_free (spell->lang);
+
+  G_INITIALLY_UNOWNED_CLASS (gtk_spell_checker_parent_class)->finalize (object);
+}
+
+/**
+ * gtk_spell_checker_get_from_text_view:
  * @view: A #GtkTextView.
  *
- * Retrieves the #GtkSpell object attached to a text view.
+ * Retrieves the #GtkSpellChecker object attached to a text view.
  *
- * Returns: the #GtkSpell object, or %NULL if there is no #GtkSpell
+ * Returns: (transfer none): the #GtkSpellChecker object, or %NULL if there is no #GtkSpellChecker
  * attached to @view.
  */
-GtkSpell*
-gtkspell_get_from_text_view(GtkTextView *view) {
+GtkSpellChecker*
+gtk_spell_checker_get_from_text_view (GtkTextView *view) {
+	g_return_val_if_fail (GTK_IS_TEXT_VIEW (view), NULL);
 	return g_object_get_data(G_OBJECT(view), GTKSPELL_OBJECT_KEY);
 }
 
 /**
- * gtkspell_detach:
- * @spell: A #GtkSpell.
+ * gtk_spell_checker_detach:
+ * @spell: A #GtkSpellChecker.
  *
- * Detaches this #GtkSpell from its text view.  Use
- * gtkspell_get_from_text_view() to retrieve a GtkSpell from a
- * #GtkTextView.
+ * Detaches this #GtkSpellChecker from its #GtkTextView.  Use
+ * gtk_spell_checker_get_from_text_view() to retrieve a #GtkSpellChecker from a
+ * #GtkTextView. If the #GtkSpellChecker is not attached to any #GtkTextView,
+ * the function silently exits.
  */
 void
-gtkspell_detach(GtkSpell *spell) {
-	g_return_if_fail(spell != NULL);
+gtk_spell_checker_detach (GtkSpellChecker *spell)
+{
+  g_return_if_fail (GTK_SPELL_IS_CHECKER (spell));
+  if (spell->view == NULL)
+    return;
 
-	g_object_set_data(G_OBJECT(spell->view), GTKSPELL_OBJECT_KEY, NULL);
-	gtkspell_free(spell);
+  g_signal_handlers_disconnect_matched (spell->view, G_SIGNAL_MATCH_DATA,
+        0, 0, NULL, NULL, spell);
+
+  g_object_set_data (G_OBJECT (spell->view), GTKSPELL_OBJECT_KEY, NULL);
+
+  g_object_unref (spell->view);
+  spell->view = NULL;
+  set_buffer (spell, NULL);
+  spell->deferred_check = FALSE;
+  g_object_unref (spell);
 }
 
 /**
- * gtkspell_get_suggestions_menu:
+ * gtk_spell_checker_get_suggestions_menu:
+ * @spell: A #GtkSpellChecker.
  * @iter: Textiter of position in buffer to be corrected if necessary.
  *
  * Retrieves a submenu of replacement spellings, or NULL if the word at @iter is
  * not misspelt.
  *
- * Returns: the #GtkMenu widget, or %NULL if there is no need for a menu
+ * Returns: (transfer full): the #GtkMenu widget, or %NULL if there is no need for a menu
  */
 GtkWidget*
-gtkspell_get_suggestions_menu(GtkSpell *spell, GtkTextIter *iter) {
+gtk_spell_checker_get_suggestions_menu (GtkSpellChecker *spell, GtkTextIter *iter) {
 	GtkWidget *submenu = NULL;
 	GtkTextIter start, end;
 
-	g_return_val_if_fail(spell != NULL, NULL);
-
-	/* avoid an empty submenu when enchant is not working properly */
-	if (!spell->speller)
-		return NULL;
+	g_return_val_if_fail (GTK_SPELL_IS_CHECKER (spell), NULL);
+	g_return_val_if_fail (spell->speller != NULL, NULL);
 
 	start = *iter;
 	/* use the same lazy test, with same risk, as does the default menu arrangement */

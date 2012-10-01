@@ -1,41 +1,67 @@
 /* gtkspell - a spell-checking addon for GTK's TextView widget
- * Copyright (c) 2002 Evan Martin.
+ * Copyright (c) 2002 Evan Martin
+ * Copyright (c) 2012 Sandro Mani
  */
 
 /* vim: set ts=4 sw=4 wm=5 : */
 
-#ifndef GTKSPELL_H
-#define GTKSPELL_H
+#ifndef GTK_SPELL_H
+#define GTK_SPELL_H
+
+#include <glib-object.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define GTKSPELL_ERROR gtkspell_error_quark()
+/**
+* GTK_SPELL_ERROR:
+*
+* Error domain used for gtkspell operations. Indicates that the error code
+* will be in the #GtkSpellError enumeration.
+*/
+#define GTK_SPELL_ERROR gtk_spell_error_quark()
 
+/**
+* GtkSpellError:
+* @GTK_SPELL_ERROR_BACKEND: Error code for backend errors
+*
+* Error codes used for GtkSpell errors.
+*
+**/
 typedef enum {
-	GTKSPELL_ERROR_BACKEND
+  GTK_SPELL_ERROR_BACKEND
 } GtkSpellError;
 
-GQuark gtkspell_error_quark(void);
+GQuark gtk_spell_error_quark(void);
 
-typedef struct _GtkSpell GtkSpell;
+#define GTK_SPELL_TYPE_CHECKER            (gtk_spell_checker_get_type ())
+#define GTK_SPELL_CHECKER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_SPELL_TYPE_CHECKER, GtkSpellChecker))
+#define GTK_SPELL_IS_CHECKER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_SPELL_TYPE_CHECKER))
+#define GTK_SPELL_CHECKER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_SPELL_TYPE_CHECKER, GtkSpellCheckerClass))
+#define GTK_SPELL_IS_CHECKER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_SPELL_TYPE_CHECKER))
+#define GTK_SPELL_CHECKER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_SPELL_TYPE_CHECKER, GtkSpellCheckerClass))
 
-/* the idea is to have a GtkSpell object that is analagous to the
- * GtkTextBuffer-- it lives as an attribute of the GtkTextView but
- * it can be referred to directly. */
+/**
+ * GtkSpellChecker:
+ *
+ * The #GtkSpellChecker struct contains only private fields.
+ */
+typedef struct _GtkSpellChecker        GtkSpellChecker;
+typedef struct _GtkSpellCheckerClass   GtkSpellCheckerClass;
 
-GtkSpell* gtkspell_new_attach(GtkTextView *view,
-                                     const gchar *lang, GError **error);
-GtkSpell* gtkspell_get_from_text_view(GtkTextView *view);
-void      gtkspell_detach(GtkSpell *spell);
-/* enable an application to create its own context-menu with a
- * spell-correction sub-menu */
-GtkWidget* gtkspell_get_suggestions_menu(GtkSpell *spell, GtkTextIter *iter);
-
-gboolean  gtkspell_set_language(GtkSpell *spell,
-                                       const gchar *lang, GError **error);
-
-void      gtkspell_recheck_all(GtkSpell *spell);
+GType            gtk_spell_checker_get_type             (void) G_GNUC_CONST;
+GtkSpellChecker *gtk_spell_checker_new                  ();
+gboolean         gtk_spell_checker_attach               (GtkSpellChecker *spell,
+                                                         GtkTextView   *view);
+GtkSpellChecker *gtk_spell_checker_get_from_text_view   (GtkTextView   *view);
+void             gtk_spell_checker_detach               (GtkSpellChecker *spell);
+GtkWidget       *gtk_spell_checker_get_suggestions_menu (GtkSpellChecker *spell,
+                                                         GtkTextIter   *iter);
+gboolean         gtk_spell_checker_set_language         (GtkSpellChecker *spell,
+                                                         const gchar   *lang,
+                                                         GError       **error);
+void             gtk_spell_checker_recheck_all          (GtkSpellChecker *spell);
 
 G_END_DECLS
 
-#endif /* GTKSPELL_H */
+#endif /* GTK_SPELL_H */

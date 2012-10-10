@@ -45,10 +45,10 @@ dnl ************************** Libtool initialization *************************
 LT_INIT
 
 dnl ********************************* Modules *********************************
-PKG_CHECK_MODULES(GTK_SPELL, [glib-2.0 gtk+-3.0 gobject-introspection-1.0 enchant ])
+PKG_CHECK_MODULES(GTK_SPELL, [glib-2.0 gtk+-3.0 enchant ])
 
 if test x$gtk2 = xtrue; then
-	PKG_CHECK_MODULES(GTK_SPELL2, [glib-2.0 gtk+-2.0 gobject-introspection-1.0 enchant ])
+	PKG_CHECK_MODULES(GTK_SPELL2, [glib-2.0 gtk+-2.0 enchant ])
 	SPEC_ENABLE_GTK2=1
 fi
 

@@ -63,12 +63,24 @@ main (int argc, char* argv[])
                                        GTK_SHADOW_IN);
   gtk_container_add (GTK_CONTAINER (scroll), view);
 
+#if GTK_MAJOR_VERSION == 2
+  hbox = gtk_hbox_new (FALSE, 5);
+#elif GTK_MAJOR_VERSION == 3
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+#else
+  #error Unsupported GTK version
+#endif
   attached = gtk_toggle_button_new_with_label ("Attached");
   g_signal_connect (attached, "toggled", G_CALLBACK (attach_cb), NULL);
   gtk_box_pack_start (GTK_BOX (hbox), attached, FALSE, FALSE, 0);
 
+#if GTK_MAJOR_VERSION == 2
+  box = gtk_vbox_new (FALSE, 5);
+#elif GTK_MAJOR_VERSION == 3
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+#else
+  #error Unsupported GTK version
+#endif
   gtk_box_pack_start (GTK_BOX (box), scroll, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
   gtk_widget_show_all (box);

@@ -78,8 +78,16 @@ expand_content_files=
 # signals and properties.
 # e.g. GTKDOC_CFLAGS=-I$(top_srcdir) -I$(top_builddir) $(GTK_DEBUG_FLAGS)
 # e.g. GTKDOC_LIBS=$(top_builddir)/gtk/$(gtktargetlib)
-GTKDOC_CFLAGS=-I$(top_srcdir) @GTK_SPELL_CFLAGS@
-GTKDOC_LIBS=@GTK_SPELL_LIBS@ $(top_builddir)/gtkspell/libgtkspell3-3.la
+## We use the gtk3 variant if available, otherwise the gtk2 variant ##
+if ENABLE_GTK3
+GTKDOC_CFLAGS=-I$(top_srcdir) @GTK_SPELL3_CFLAGS@
+GTKDOC_LIBS=@GTK_SPELL3_LIBS@ $(top_builddir)/gtkspell/libgtkspell3-3.la
+else
+if ENABLE_GTK2
+GTKDOC_CFLAGS=-I$(top_srcdir) @GTK_SPELL2_CFLAGS@
+GTKDOC_LIBS=@GTK_SPELL2_LIBS@ $(top_builddir)/gtkspell/libgtkspell3-2.la
+endif
+endif
 
 # This includes the standard gtk-doc make rules, copied by gtkdocize.
 include $(top_srcdir)/gtk-doc.make

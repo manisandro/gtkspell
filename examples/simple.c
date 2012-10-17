@@ -33,8 +33,13 @@ main (int argc, char* argv[])
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scroll),
                                        GTK_SHADOW_IN);
   gtk_container_add (GTK_CONTAINER (scroll), view);
-
+#if GTK_MAJOR_VERSION == 2
+  box = gtk_vbox_new (FALSE, 5);
+#elif GTK_MAJOR_VERSION == 3
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+#else
+  #error Unsupported GTK version
+#endif
   if (errortext)
     {
       gtk_box_pack_start (GTK_BOX (box), gtk_label_new (errortext),

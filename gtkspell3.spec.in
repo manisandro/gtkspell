@@ -1,4 +1,5 @@
 %global enable_gtk2 @SPEC_ENABLE_GTK2@
+%global enable_gtk3 @SPEC_ENABLE_GTK3@
 %global enable_gtkdoc @SPEC_ENABLE_GTK_DOC@
 
 Name: gtkspell3
@@ -11,12 +12,12 @@ URL: http://gtkspell.sourceforge.net/
 Source: %{name}-%{version}.tar.xz
 
 BuildRequires: enchant-devel
-BuildRequires: gtk3-devel
 BuildRequires: gobject-introspection-devel
 BuildRequires: intltool
 BuildRequires: libtool
 %{?enable_gtkdoc:BuildRequires: gtk-doc}
 %{?enable_gtk2:BuildRequires: gtk2-devel}
+%{?enable_gtk3:BuildRequires: gtk3-devel}
 
 %package common
 Group: System Environment/Libraries
@@ -24,14 +25,6 @@ Summary: Common files for GtkSpell
 
 %description common
 Common files for GtkSpell
-
-%package gtk3
-Requires: %{name}-common = %{version}-%{release}
-Group: System Environment/Libraries
-Summary: GtkSpell for GTK+3
-
-%description gtk3
-GtkSpell library for use with GTK+3
 
 %description
 GtkSpell provides word-processor-style highlighting and replacement of 
@@ -48,6 +41,16 @@ Requires: pkgconfig
 The gtkspell3-devel package provides header and documentation files for developing
 applications which use GtkSpell.
 
+
+%if 0%{enable_gtk3} == 1
+%package gtk3
+Requires: %{name}-common = %{version}-%{release}
+Group: System Environment/Libraries
+Summary: GtkSpell for GTK+3
+
+%description gtk3
+GtkSpell library for use with GTK+3
+
 %package gtk3-devel
 Group: Development/Libraries
 Summary: Development files for GtkSpell for GTK+3
@@ -59,6 +62,8 @@ Requires: pkgconfig
 %description gtk3-devel
 The gtkspell3-gtk3-devel package provides the library files for developing GTK+3
 applications which use GtkSpell.
+%endif
+
 
 %if 0%{enable_gtk2} == 1
 %package gtk2
@@ -88,7 +93,8 @@ applications which use GtkSpell.
 %build
 %configure --disable-static \
 	%{?enable_gtkdoc:--enable-gtk-doc} \
-	%{?enable_gtk2:--enable-gtk2}
+	%{?enable_gtk2:--enable-gtk2=yes}%{!?enable_gtk2:--enable-gtk2=no} \
+	%{?enable_gtk3:--enable-gtk3=yes}%{!?enable_gtk3:--enable-gtk3=no}
 
 make %{?_smp_mflags}
 
@@ -111,6 +117,7 @@ find $RPM_BUILD_ROOT -name "*.la" -exec rm {} \;
 %{?enable_gtkdoc:%{_datadir}/gtk-doc/html/gtkspell3}
 %{_includedir}/gtkspell-3.0
 
+%if 0%{enable_gtk3} == 1
 %files gtk3
 %{_libdir}/libgtkspell3-3.so.0*
 %{_libdir}/girepository-1.0/GtkSpell-3.0.typelib
@@ -120,6 +127,7 @@ find $RPM_BUILD_ROOT -name "*.la" -exec rm {} \;
 %{_libdir}/libgtkspell3-3.so
 %{_libdir}/pkgconfig/gtkspell3-3.0.pc
 %{_datadir}/gir-1.0/GtkSpell-3.0.gir
+%endif
 
 %if 0%{enable_gtk2} == 1
 %files gtk2

@@ -16,19 +16,30 @@ AM_SILENT_RULES([yes])
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 
 AC_PROG_CC
+AM_PROG_CC_C_O
 
 GTK_SPELL_VERSION_MINOR=gtkspell_version_minor
 GTK_SPELL_VERSION_MICRO=gtkspell_version_micro
 
-dnl *********************** Enable Compat for GtkSpell2 ***********************
+dnl ************************ Enable Gtk2 GtkSpell build ***********************
 AC_ARG_ENABLE([gtk2],
-     [  --enable-gtk2    Enable GTK+2 build],
+     AS_HELP_STRING([--enable-gtk2], [enable gtk2 build (default is no)]),
      [case "${enableval}" in
        yes) gtk2=true ;;
        no)  gtk2=false ;;
        *) AC_MSG_ERROR([bad value ${enableval} for --enable-gtk2]) ;;
      esac],[gtk2=false])
 AM_CONDITIONAL([ENABLE_GTK2], [test x$gtk2 = xtrue])
+
+dnl ************************ Enable Gtk3 GtkSpell build ***********************
+AC_ARG_ENABLE([gtk3],
+     AS_HELP_STRING([--enable-gtk3], [enable gtk3 build (default is yes)]),
+     [case "${enableval}" in
+       yes) gtk3=true ;;
+       no)  gtk3=false ;;
+       *) AC_MSG_ERROR([bad value ${enableval} for --enable-gtk3]) ;;
+     esac],[gtk3=true])
+AM_CONDITIONAL([ENABLE_GTK3], [test x$gtk3 = xtrue])
 
 dnl ************************** Gobject Introspection **************************
 dnl See https://live.gnome.org/GObjectIntrospection/AutotoolsIntegration
@@ -45,7 +56,10 @@ dnl ************************** Libtool initialization *************************
 LT_INIT
 
 dnl ********************************* Modules *********************************
-PKG_CHECK_MODULES(GTK_SPELL, [glib-2.0 gtk+-3.0 enchant ])
+if test x$gtk3 = xtrue; then
+	PKG_CHECK_MODULES(GTK_SPELL3, [glib-2.0 gtk+-3.0 enchant ])
+	SPEC_ENABLE_GTK3=1
+fi
 
 if test x$gtk2 = xtrue; then
 	PKG_CHECK_MODULES(GTK_SPELL2, [glib-2.0 gtk+-2.0 enchant ])
@@ -65,10 +79,11 @@ AC_SUBST(GTK_SPELL_VERSION_MINOR)
 AC_SUBST(GTK_SPELL_VERSION_MICRO)
 AC_SUBST(SPEC_ENABLE_GTK_DOC)
 AC_SUBST(SPEC_ENABLE_GTK2)
-AC_SUBST(GTK_SPELL_CFLAGS)
-AC_SUBST(GTK_SPELL_LIBS)
+AC_SUBST(SPEC_ENABLE_GTK3)
 AC_SUBST(GTK_SPELL2_CFLAGS)
 AC_SUBST(GTK_SPELL2_LIBS)
+AC_SUBST(GTK_SPELL3_CFLAGS)
+AC_SUBST(GTK_SPELL3_LIBS)
 
 AC_OUTPUT([
 Makefile

@@ -18,40 +18,67 @@ BuildRequires: libtool
 %{?enable_gtkdoc:BuildRequires: gtk-doc}
 %{?enable_gtk2:BuildRequires: gtk2-devel}
 
+%package common
+Group: System Environment/Libraries
+Summary: Common files for GtkSpell
+
+%description common
+Common files for GtkSpell
+
+%package gtk3
+Requires: %{name}-common = %{version}-%{release}
+Group: System Environment/Libraries
+Summary: GtkSpell for GTK+3
+
+%description gtk3
+GtkSpell library for use with GTK+3
+
 %description
 GtkSpell provides word-processor-style highlighting and replacement of 
 misspelled words in a GtkTextView widget as you type. Right-clicking a
 misspelled word pops up a menu of suggested replacements.
 
-%package devel
+%package devel-common
 Group: Development/Libraries
 Summary: Development files for GtkSpell
-Requires: %{name} = %{version}-%{release}
 Requires: gtk3-devel
 Requires: pkgconfig
 
-%description devel
-The gtkspell-devel package provides header files for developing GTK+3
+%description devel-common
+The gtkspell3-devel package provides header and documentation files for developing
+applications which use GtkSpell.
+
+%package gtk3-devel
+Group: Development/Libraries
+Summary: Development files for GtkSpell for GTK+3
+Requires: %{name}-devel-common = %{version}-%{release}
+Requires: %{name}-gtk3 = %{version}-%{release}
+Requires: gtk2-devel
+Requires: pkgconfig
+
+%description gtk3-devel
+The gtkspell3-gtk3-devel package provides the library files for developing GTK+3
 applications which use GtkSpell.
 
 %if 0%{enable_gtk2} == 1
 %package gtk2
+Requires: %{name}-common = %{version}-%{release}
 Group: System Environment/Libraries
 Summary: GtkSpell for GTK+2
 
 %description gtk2
-GtkSpell compiled for use with GTK+2
+GtkSpell library for use with GTK+2
 
 %package gtk2-devel
 Group: Development/Libraries
 Summary: Development files for GtkSpell for GTK+2
-Requires: %{name}-devel = %{version}-%{release}
+Requires: %{name}-devel-common = %{version}-%{release}
 Requires: %{name}-gtk2 = %{version}-%{release}
 Requires: gtk2-devel
 Requires: pkgconfig
 
 %description gtk2-devel
-The gtkspell-gtk2-devel package provides header files for developing GTK+2
+The gtkspell3-gtk2-devel package provides the library files for developing GTK+2
 applications which use GtkSpell.
 %endif
 
@@ -75,16 +102,21 @@ find $RPM_BUILD_ROOT -name "*.la" -exec rm {} \;
 
 %postun -p /sbin/ldconfig
 
-%files -f %{name}.lang
+%files common -f %{name}.lang
 %defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING README
-%{_libdir}/libgtkspell3-3.so.0*
-%{_libdir}/girepository-1.0/GtkSpell-3.0.typelib
 
-%files devel
+%files devel-common
 %defattr(-,root,root,-)
 %{?enable_gtkdoc:%{_datadir}/gtk-doc/html/gtkspell3}
 %{_includedir}/gtkspell-3.0
+
+%files gtk3
+%{_libdir}/libgtkspell3-3.so.0*
+%{_libdir}/girepository-1.0/GtkSpell-3.0.typelib
+
+%files gtk3-devel
+%defattr(-,root,root,-)
 %{_libdir}/libgtkspell3-3.so
 %{_libdir}/pkgconfig/gtkspell3-3.0.pc
 %{_datadir}/gir-1.0/GtkSpell-3.0.gir

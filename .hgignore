@@ -3,8 +3,10 @@ syntax: glob
 Makefile
 Makefile.in
 Makefile.in.in
+ar-lib
 aclocal.m4
 autom4te.cache
+compile
 config.guess
 config.h
 config.h.in
@@ -12,13 +14,18 @@ config.log
 config.status
 config.sub
 configure
+docs/version.xml
+docs/.libs/
 depcomp
 gtkspell-3.0.pc
 gtkspell.spec
 gtk-doc.make
 install-sh
+gtkspell3.spec
+intltool-*.in
 libtool
 ltmain.sh
+m4/
 missing
 mkinstalldirs
 stamp*
@@ -27,13 +34,14 @@ po/*.gmo
 po/*.pot
 examples/.deps
 examples/.libs
-examples/advanced
-examples/simple
+examples/advanced-gtk*
+examples/simple-gtk*
 gtkspell/.deps
 gtkspell/.libs
-gtkspell/deprecated.lo
-gtkspell/gtkspell.lo
-gtkspell/libgtkspell-3.la
+gtkspell/gtkspell3-*.0.pc
+gtkspell/libgtkspell3*.la
+gtkspell/libgtkspell3*la-gtkspell.lo
+gtkspell3-3.*.*/
 docs/tmpl/gtkspell3-unused.sgml
 docs/gtkspell3-decl-list.txt
 docs/gtkspell3-decl.txt
@@ -49,4 +57,5 @@ docs/gtkspell3.signals
 docs/html
 docs/*.stamp
 docs/xml
+
 

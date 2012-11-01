@@ -10,7 +10,7 @@ INTLTOOL_FILES = intltool-extract.in \
 
 EXTRA_DIST = $(gtkspelldoc_DATA) $(INTLTOOL_FILES)
 
-DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
+DISTCHECK_CONFIGURE_FLAGS = --enable-introspection --enable-gtk-doc
 	
 DISTCLEANFILES = intltool-extract \
 	intltool-merge \

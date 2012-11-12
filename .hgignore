@@ -38,8 +38,8 @@ examples/advanced-gtk*
 examples/simple-gtk*
 gtkspell/.deps
 gtkspell/.libs
-gtkspell/GtkSpell-3.0.gir
-gtkspell/GtkSpell-3.0.typelib
+gtkspell/GtkSpell-*.0.gir
+gtkspell/GtkSpell-*.0.typelib
 gtkspell/gtkspell3-*.0.pc
 gtkspell/libgtkspell3*.la
 gtkspell/libgtkspell3*la-gtkspell.lo

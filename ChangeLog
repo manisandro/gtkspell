@@ -1,11 +1,12 @@
-version 3.0.0 (2012-10-28):
-	* New major version to support GTK+ 3
-    * Create a proper GtkSpellChecker GObject
-    * Add introspection support
-    * This version is not API/ABI compatible with gtkspell-2.x, and is not
-      meant to replace gtkspell-2.x for GTK+ 2. However, a GTK+ 2 compatible
-      version can be compiled from gtkspell3-3.x by passing --enable-gtk2 to
-      configure if desired.
+version 3.0.0 (2012-11-12):
+	* New major version not API or ABI compatible with gtkspell 2.x
+	  The tutorial and examples have been updated with lots of details.
+	* Add GTK+ 3 Support (required by default)
+	 * A GTK+ 2 compatible version can be built using --enable-gtk2
+	* Update to be GObject based
+	* Add introspection support
+	* Add "language-changed" signal
+	* Add gtk_spell_checker_get_language function
 
 version 2.0.16 (2009-10-22):
 	* Additional and updated translations (see po/ChangeLog).

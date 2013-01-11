@@ -72,6 +72,7 @@ typedef struct _GtkSpellCheckerPrivate GtkSpellCheckerPrivate;
 struct _GtkSpellChecker
 {
   GInitiallyUnowned parent_instance;
+
   /*< private >*/
   GtkSpellCheckerPrivate *priv;
 };
@@ -81,6 +82,7 @@ struct _GtkSpellCheckerClass
 {
   GInitiallyUnownedClass parent_class;
 
+  /*< public >*/
   void (*language_changed) (GtkSpellChecker *spell, const gchar *new_lang);
 };
 

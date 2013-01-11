@@ -61,7 +61,22 @@ GQuark gtk_spell_error_quark(void);
  * The #GtkSpellChecker struct contains only private fields.
  */
 typedef struct _GtkSpellChecker        GtkSpellChecker;
+typedef struct _GtkSpellCheckerPrivate GtkSpellCheckerPrivate;
+struct _GtkSpellChecker
+{
+  GInitiallyUnowned parent_instance;
+  /*< private >*/
+  GtkSpellCheckerPrivate *priv;
+};
+
 typedef struct _GtkSpellCheckerClass   GtkSpellCheckerClass;
+struct _GtkSpellCheckerClass
+{
+  GInitiallyUnownedClass parent_class;
+
+  void (*language_changed) (GtkSpellChecker *spell, const gchar *new_lang);
+};
+
 
 GType            gtk_spell_checker_get_type             (void) G_GNUC_CONST;
 GtkSpellChecker *gtk_spell_checker_new                  ();

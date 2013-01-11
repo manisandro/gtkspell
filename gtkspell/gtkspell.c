@@ -48,10 +48,10 @@ enum
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-struct _GtkSpellChecker
+#define GTK_SPELL_CHECKER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_SPELL_TYPE_CHECKER, GtkSpellCheckerPrivate))
+
+struct _GtkSpellCheckerPrivate
 {
-  GInitiallyUnowned parent_instance;
-  /* instance members */
   GtkTextView *view;
   GtkTextBuffer *buffer;
   GtkTextTag *tag_highlight;
@@ -61,13 +61,6 @@ struct _GtkSpellChecker
   gboolean deferred_check;
   EnchantDict *speller;
   gchar *lang;
-};
-
-struct _GtkSpellCheckerClass
-{
-  GInitiallyUnownedClass parent_class;
-
-  void (*language_changed) (GtkSpellChecker *spell, const gchar *new_lang);
 };
 
 G_DEFINE_TYPE (GtkSpellChecker, gtk_spell_checker, G_TYPE_OBJECT);
@@ -121,12 +114,12 @@ static void
 check_word (GtkSpellChecker *spell, GtkTextIter *start, GtkTextIter *end)
 {
   char *text;
-  text = gtk_text_buffer_get_text (spell->buffer, start, end, FALSE);
+  text = gtk_text_buffer_get_text (spell->priv->buffer, start, end, FALSE);
   if (debug)
     g_print ("checking: %s\n", text);
   if (g_unichar_isdigit (*text) == FALSE && /* don't check numbers */
-      enchant_dict_check (spell->speller, text, strlen (text)) != 0)
-    gtk_text_buffer_apply_tag (spell->buffer, spell->tag_highlight, start, end);
+      enchant_dict_check (spell->priv->speller, text, strlen (text)) != 0)
+    gtk_text_buffer_apply_tag (spell->priv->buffer, spell->priv->tag_highlight, start, end);
   g_free (text);
 }
 
@@ -143,7 +136,7 @@ static void
 check_range (GtkSpellChecker *spell, GtkTextIter start,
              GtkTextIter end, gboolean force_all)
 {
-  g_return_if_fail (spell->speller != NULL); /* for check_word */
+  g_return_if_fail (spell->priv->speller != NULL); /* for check_word */
 
   /* we need to "split" on word boundaries.
    * luckily, pango knows what "words" are
@@ -178,15 +171,15 @@ check_range (GtkSpellChecker *spell, GtkTextIter start,
             gtk_text_iter_backward_word_start (&start);
         }
     }
-  gtk_text_buffer_get_iter_at_mark (spell->buffer, &cursor,
-                                    gtk_text_buffer_get_insert (spell->buffer));
+  gtk_text_buffer_get_iter_at_mark (spell->priv->buffer, &cursor,
+                                    gtk_text_buffer_get_insert (spell->priv->buffer));
 
   precursor = cursor;
   gtk_text_iter_backward_char (&precursor);
-  highlight = gtk_text_iter_has_tag (&cursor, spell->tag_highlight) ||
-      gtk_text_iter_has_tag (&precursor, spell->tag_highlight);
+  highlight = gtk_text_iter_has_tag (&cursor, spell->priv->tag_highlight) ||
+      gtk_text_iter_has_tag (&precursor, spell->priv->tag_highlight);
 
-  gtk_text_buffer_remove_tag (spell->buffer, spell->tag_highlight, &start, &end);
+  gtk_text_buffer_remove_tag (spell->priv->buffer, spell->priv->tag_highlight, &start, &end);
 
   /* Fix a corner case when replacement occurs at beginning of buffer:
    * An iter at offset 0 seems to always be inside a word,
@@ -223,12 +216,12 @@ check_range (GtkSpellChecker *spell, GtkTextIter start,
           if (highlight)
             check_word (spell, &wstart, &wend);
           else
-            spell->deferred_check = TRUE;
+            spell->priv->deferred_check = TRUE;
         }
       else
         {
           check_word (spell, &wstart, &wend);
-          spell->deferred_check = FALSE;
+          spell->priv->deferred_check = FALSE;
         }
 
       /* now move wend to the beginning of the next word, */
@@ -247,8 +240,8 @@ static void
 check_deferred_range (GtkSpellChecker *spell, gboolean force_all)
 {
   GtkTextIter start, end;
-  gtk_text_buffer_get_iter_at_mark (spell->buffer, &start, spell->mark_insert_start);
-  gtk_text_buffer_get_iter_at_mark (spell->buffer, &end, spell->mark_insert_end);
+  gtk_text_buffer_get_iter_at_mark (spell->priv->buffer, &start, spell->priv->mark_insert_start);
+  gtk_text_buffer_get_iter_at_mark (spell->priv->buffer, &end, spell->priv->mark_insert_end);
   check_range (spell, start, end, force_all);
 }
 
@@ -263,16 +256,16 @@ static void
 insert_text_before (GtkTextBuffer *buffer, GtkTextIter *iter,
                     gchar *text, gint len, GtkSpellChecker *spell)
 {
-  g_return_if_fail (buffer == spell->buffer);
+  g_return_if_fail (buffer == spell->priv->buffer);
 
-  gtk_text_buffer_move_mark (buffer, spell->mark_insert_start, iter);
+  gtk_text_buffer_move_mark (buffer, spell->priv->mark_insert_start, iter);
 }
 
 static void
 insert_text_after (GtkTextBuffer *buffer, GtkTextIter *iter,
                    gchar *text, gint len, GtkSpellChecker *spell)
 {
-  g_return_if_fail (buffer == spell->buffer);
+  g_return_if_fail (buffer == spell->priv->buffer);
 
   GtkTextIter start;
 
@@ -280,10 +273,10 @@ insert_text_after (GtkTextBuffer *buffer, GtkTextIter *iter,
     g_print ("insert\n");
 
   /* we need to check a range of text. */
-  gtk_text_buffer_get_iter_at_mark (buffer, &start, spell->mark_insert_start);
+  gtk_text_buffer_get_iter_at_mark (buffer, &start, spell->priv->mark_insert_start);
   check_range (spell, start, *iter, FALSE);
 
-  gtk_text_buffer_move_mark (buffer, spell->mark_insert_end, iter);
+  gtk_text_buffer_move_mark (buffer, spell->priv->mark_insert_end, iter);
 }
 
 /* deleting is more simple:  we're given the range of deleted text.
@@ -297,7 +290,7 @@ static void
 delete_range_after (GtkTextBuffer *buffer, GtkTextIter *start,
                     GtkTextIter *end, GtkSpellChecker *spell)
 {
-  g_return_if_fail (buffer == spell->buffer);
+  g_return_if_fail (buffer == spell->priv->buffer);
 
   if (debug)
     g_print ("delete\n");
@@ -308,10 +301,10 @@ static void
 mark_set (GtkTextBuffer *buffer, GtkTextIter *iter,
           GtkTextMark *mark, GtkSpellChecker *spell)
 {
-  g_return_if_fail (buffer == spell->buffer);
+  g_return_if_fail (buffer == spell->priv->buffer);
 
   /* if the cursor has moved and there is a deferred check so handle it now */
-  if ((mark == gtk_text_buffer_get_insert (buffer)) && spell->deferred_check)
+  if ((mark == gtk_text_buffer_get_insert (buffer)) && spell->priv->deferred_check)
     check_deferred_range (spell, FALSE);
 }
 
@@ -333,10 +326,10 @@ add_to_dictionary (GtkWidget *menuitem, GtkSpellChecker *spell)
   char *word;
   GtkTextIter start, end;
 
-  get_word_extents_from_mark (spell->buffer, &start, &end, spell->mark_click);
-  word = gtk_text_buffer_get_text (spell->buffer, &start, &end, FALSE);
+  get_word_extents_from_mark (spell->priv->buffer, &start, &end, spell->priv->mark_click);
+  word = gtk_text_buffer_get_text (spell->priv->buffer, &start, &end, FALSE);
 
-  enchant_dict_add_to_pwl (spell->speller, word, strlen (word));
+  enchant_dict_add_to_pwl (spell->priv->speller, word, strlen (word));
 
   gtk_spell_checker_recheck_all (spell);
 
@@ -349,10 +342,10 @@ ignore_all (GtkWidget *menuitem, GtkSpellChecker *spell)
   char *word;
   GtkTextIter start, end;
 
-  get_word_extents_from_mark (spell->buffer, &start, &end, spell->mark_click);
-  word = gtk_text_buffer_get_text (spell->buffer, &start, &end, FALSE);
+  get_word_extents_from_mark (spell->priv->buffer, &start, &end, spell->priv->mark_click);
+  word = gtk_text_buffer_get_text (spell->priv->buffer, &start, &end, FALSE);
 
-  enchant_dict_add_to_session (spell->speller, word, strlen (word));
+  enchant_dict_add_to_session (spell->priv->speller, word, strlen (word));
 
   gtk_spell_checker_recheck_all (spell);
 
@@ -366,8 +359,8 @@ replace_word (GtkWidget *menuitem, GtkSpellChecker *spell)
   const char *newword;
   GtkTextIter start, end;
 
-  get_word_extents_from_mark (spell->buffer, &start, &end, spell->mark_click);
-  oldword = gtk_text_buffer_get_text (spell->buffer, &start, &end, FALSE);
+  get_word_extents_from_mark (spell->priv->buffer, &start, &end, spell->priv->mark_click);
+  oldword = gtk_text_buffer_get_text (spell->priv->buffer, &start, &end, FALSE);
   newword = gtk_label_get_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (menuitem))));
 
   if (debug)
@@ -378,12 +371,12 @@ replace_word (GtkWidget *menuitem, GtkSpellChecker *spell)
       g_print ("\nnew word: '%s'\n", newword);
     }
 
-  gtk_text_buffer_begin_user_action (spell->buffer);
-  gtk_text_buffer_delete (spell->buffer, &start, &end);
-  gtk_text_buffer_insert (spell->buffer, &start, newword, -1);
-  gtk_text_buffer_end_user_action (spell->buffer);
+  gtk_text_buffer_begin_user_action (spell->priv->buffer);
+  gtk_text_buffer_delete (spell->priv->buffer, &start, &end);
+  gtk_text_buffer_insert (spell->priv->buffer, &start, newword, -1);
+  gtk_text_buffer_end_user_action (spell->priv->buffer);
 
-  enchant_dict_store_replacement (spell->speller,
+  enchant_dict_store_replacement (spell->priv->speller,
                                   oldword, strlen (oldword),
                                   newword, strlen (newword));
 
@@ -394,7 +387,7 @@ replace_word (GtkWidget *menuitem, GtkSpellChecker *spell)
 static void
 add_suggestion_menus (GtkSpellChecker *spell, const char *word, GtkWidget *topmenu)
 {
-  g_return_if_fail (spell->speller != NULL);
+  g_return_if_fail (spell->priv->speller != NULL);
 
   GtkWidget *menu;
   GtkWidget *mi;
@@ -406,7 +399,7 @@ add_suggestion_menus (GtkSpellChecker *spell, const char *word, GtkWidget *topme
 
   gint menu_position = 0;
 
-  suggestions = enchant_dict_suggest (spell->speller, word,
+  suggestions = enchant_dict_suggest (spell->priv->speller, word,
                                       strlen (word), &n_suggs);
 
   if (suggestions == NULL || !n_suggs)
@@ -448,7 +441,7 @@ add_suggestion_menus (GtkSpellChecker *spell, const char *word, GtkWidget *topme
     }
 
   if (suggestions)
-    enchant_dict_free_string_list (spell->speller, suggestions);
+    enchant_dict_free_string_list (spell->priv->speller, suggestions);
 
   /* + Add to Dictionary */
   label = g_strdup_printf (_("Add \"%s\" to Dictionary"), word);
@@ -488,7 +481,7 @@ language_change_callback (GtkCheckMenuItem *mi, GtkSpellChecker* spell)
       gchar *name;
       g_object_get (G_OBJECT (mi), "name", &name, NULL);
       gtk_spell_checker_set_language (spell, name, &error);
-      g_signal_emit (spell, signals[LANGUAGE_CHANGED], 0, spell->lang);
+      g_signal_emit (spell, signals[LANGUAGE_CHANGED], 0, spell->priv->lang);
       g_free (name);
     }
 }
@@ -530,7 +523,7 @@ build_languages_menu (GtkSpellChecker *spell)
       menu_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (mi));
 
       g_object_set (G_OBJECT (mi), "name", lang_tag, NULL);
-      if (strcmp (spell->lang, lang_tag) == 0)
+      if (strcmp (spell->priv->lang, lang_tag) == 0)
         active_item = mi;
       else
         g_signal_connect (mi, "activate",
@@ -551,7 +544,7 @@ build_languages_menu (GtkSpellChecker *spell)
 static void
 populate_popup (GtkTextView *textview, GtkMenu *menu, GtkSpellChecker *spell)
 {
-  g_return_if_fail (spell->view == textview);
+  g_return_if_fail (spell->priv->view == textview);
 
   GtkWidget *mi;
   GtkTextIter start, end;
@@ -569,15 +562,15 @@ populate_popup (GtkTextView *textview, GtkMenu *menu, GtkSpellChecker *spell)
   gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), mi);
 
   /* we need to figure out if they picked a misspelled word. */
-  get_word_extents_from_mark (spell->buffer, &start, &end, spell->mark_click);
+  get_word_extents_from_mark (spell->priv->buffer, &start, &end, spell->priv->mark_click);
 
   /* if our highlight algorithm ever messes up,
    * this isn't correct, either. */
-  if (!gtk_text_iter_has_tag (&start, spell->tag_highlight))
+  if (!gtk_text_iter_has_tag (&start, spell->priv->tag_highlight))
     return; /* word wasn't misspelled. */
 
   /* then, on top of it, the suggestions */
-  word = gtk_text_buffer_get_text (spell->buffer, &start, &end, FALSE);
+  word = gtk_text_buffer_get_text (spell->priv->buffer, &start, &end, FALSE);
   add_suggestion_menus (spell, word, GTK_WIDGET (menu));
   g_free (word);
 }
@@ -588,8 +581,8 @@ populate_popup (GtkTextView *textview, GtkMenu *menu, GtkSpellChecker *spell)
 static gboolean
 button_press_event (GtkTextView *view, GdkEventButton *event, GtkSpellChecker *spell)
 {
-  g_return_val_if_fail (spell->view == view, FALSE);
-  g_return_val_if_fail (spell->buffer == gtk_text_view_get_buffer (view), FALSE);
+  g_return_val_if_fail (spell->priv->view == view, FALSE);
+  g_return_val_if_fail (spell->priv->buffer == gtk_text_view_get_buffer (view), FALSE);
 
   if (event->button == 3)
     {
@@ -597,13 +590,13 @@ button_press_event (GtkTextView *view, GdkEventButton *event, GtkSpellChecker *s
       GtkTextIter iter;
 
       /* handle deferred check if it exists */
-      if (spell->deferred_check)
+      if (spell->priv->deferred_check)
         check_deferred_range (spell, TRUE);
 
       gtk_text_view_window_to_buffer_coords (view, GTK_TEXT_WINDOW_TEXT,
                                              event->x, event->y, &x, &y);
       gtk_text_view_get_iter_at_location (view, &iter, x, y);
-      gtk_text_buffer_move_mark (spell->buffer, spell->mark_click, &iter);
+      gtk_text_buffer_move_mark (spell->priv->buffer, spell->priv->mark_click, &iter);
     }
   return FALSE; /* false: let gtk process this event, too.
                  * we don't want to eat any events. */
@@ -611,17 +604,17 @@ button_press_event (GtkTextView *view, GdkEventButton *event, GtkSpellChecker *s
 
 /* This event occurs when the popup menu is requested through a key-binding
  * (Menu Key or <shift>+F10 by default).  In this case we want to set
- * spell->mark_click to the cursor position. */
+ * spell->priv->mark_click to the cursor position. */
 static gboolean
 popup_menu_event (GtkTextView *view, GtkSpellChecker *spell)
 {
-  g_return_val_if_fail (spell->view == view, FALSE);
+  g_return_val_if_fail (spell->priv->view == view, FALSE);
 
   GtkTextIter iter;
 
-  gtk_text_buffer_get_iter_at_mark (spell->buffer, &iter,
-                                   gtk_text_buffer_get_insert (spell->buffer));
-  gtk_text_buffer_move_mark (spell->buffer, spell->mark_click, &iter);
+  gtk_text_buffer_get_iter_at_mark (spell->priv->buffer, &iter,
+                                   gtk_text_buffer_get_insert (spell->priv->buffer));
+  gtk_text_buffer_move_mark (spell->priv->buffer, spell->priv->mark_click, &iter);
   return FALSE; /* false: let gtk process this event, too. */
 }
 
@@ -634,8 +627,8 @@ set_lang_from_dict (const char * const lang_tag,
 {
   GtkSpellChecker *spell = user_data;
 
-  g_free (spell->lang);
-  spell->lang = g_strdup (lang_tag);
+  g_free (spell->priv->lang);
+  spell->priv->lang = g_strdup (lang_tag);
 }
 
 static gboolean
@@ -667,9 +660,9 @@ set_language_internal (GtkSpellChecker *spell, const gchar *lang, GError **error
       return FALSE;
     }
 
-  if (spell->speller)
-    enchant_broker_free_dict (broker, spell->speller);
-  spell->speller = dict;
+  if (spell->priv->speller)
+    enchant_broker_free_dict (broker, spell->priv->speller);
+  spell->priv->speller = dict;
 
   enchant_dict_describe (dict, set_lang_from_dict, spell);
 
@@ -683,63 +676,63 @@ set_buffer (GtkSpellChecker *spell, GtkTextBuffer *buffer)
 {
   GtkTextIter start, end;
 
-  if (spell->buffer)
+  if (spell->priv->buffer)
     {
-      g_signal_handlers_disconnect_matched (spell->buffer, G_SIGNAL_MATCH_DATA,
+      g_signal_handlers_disconnect_matched (spell->priv->buffer, G_SIGNAL_MATCH_DATA,
                                             0, 0, NULL, NULL, spell);
 
-      gtk_text_buffer_get_bounds (spell->buffer, &start, &end);
-      gtk_text_buffer_remove_tag (spell->buffer, spell->tag_highlight,
+      gtk_text_buffer_get_bounds (spell->priv->buffer, &start, &end);
+      gtk_text_buffer_remove_tag (spell->priv->buffer, spell->priv->tag_highlight,
                                   &start, &end);
-      spell->tag_highlight = NULL;
+      spell->priv->tag_highlight = NULL;
 
-      gtk_text_buffer_delete_mark (spell->buffer, spell->mark_insert_start);
-      spell->mark_insert_start = NULL;
-      gtk_text_buffer_delete_mark (spell->buffer, spell->mark_insert_end);
-      spell->mark_insert_end = NULL;
-      gtk_text_buffer_delete_mark (spell->buffer, spell->mark_click);
-      spell->mark_click = NULL;
+      gtk_text_buffer_delete_mark (spell->priv->buffer, spell->priv->mark_insert_start);
+      spell->priv->mark_insert_start = NULL;
+      gtk_text_buffer_delete_mark (spell->priv->buffer, spell->priv->mark_insert_end);
+      spell->priv->mark_insert_end = NULL;
+      gtk_text_buffer_delete_mark (spell->priv->buffer, spell->priv->mark_click);
+      spell->priv->mark_click = NULL;
 
-      g_object_unref (spell->buffer);
+      g_object_unref (spell->priv->buffer);
     }
 
-  spell->buffer = buffer;
+  spell->priv->buffer = buffer;
 
-  if (spell->buffer)
+  if (spell->priv->buffer)
     {
-      g_object_ref (spell->buffer);
+      g_object_ref (spell->priv->buffer);
 
-      g_signal_connect (spell->buffer, "insert-text",
+      g_signal_connect (spell->priv->buffer, "insert-text",
                         G_CALLBACK (insert_text_before), spell);
-      g_signal_connect_after (spell->buffer, "insert-text",
+      g_signal_connect_after (spell->priv->buffer, "insert-text",
                         G_CALLBACK (insert_text_after), spell);
-      g_signal_connect_after (spell->buffer, "delete-range",
+      g_signal_connect_after (spell->priv->buffer, "delete-range",
                         G_CALLBACK (delete_range_after), spell);
-      g_signal_connect (spell->buffer, "mark-set",
+      g_signal_connect (spell->priv->buffer, "mark-set",
                         G_CALLBACK (mark_set), spell);
 
-      GtkTextTagTable *tagtable = gtk_text_buffer_get_tag_table (spell->buffer);
-      spell->tag_highlight = gtk_text_tag_table_lookup (tagtable,
+      GtkTextTagTable *tagtable = gtk_text_buffer_get_tag_table (spell->priv->buffer);
+      spell->priv->tag_highlight = gtk_text_tag_table_lookup (tagtable,
                                                      GTK_SPELL_MISSPELLED_TAG);
 
-      if (spell->tag_highlight == NULL)
+      if (spell->priv->tag_highlight == NULL)
         {
-          spell->tag_highlight = gtk_text_buffer_create_tag (spell->buffer,
+          spell->priv->tag_highlight = gtk_text_buffer_create_tag (spell->priv->buffer,
                                          GTK_SPELL_MISSPELLED_TAG, "underline",
                                          PANGO_UNDERLINE_ERROR, NULL);
         }
 
       /* we create the mark here, but we don't use it until text is
        * inserted, so we don't really care where iter points.  */
-      gtk_text_buffer_get_bounds (spell->buffer, &start, &end);
-      spell->mark_insert_start = gtk_text_buffer_create_mark (spell->buffer,
+      gtk_text_buffer_get_bounds (spell->priv->buffer, &start, &end);
+      spell->priv->mark_insert_start = gtk_text_buffer_create_mark (spell->priv->buffer,
                                         "gtkspell-insert-start", &start, TRUE);
-      spell->mark_insert_end = gtk_text_buffer_create_mark (spell->buffer,
+      spell->priv->mark_insert_end = gtk_text_buffer_create_mark (spell->priv->buffer,
                                           "gtkspell-insert-end", &start, TRUE);
-      spell->mark_click = gtk_text_buffer_create_mark (spell->buffer,
+      spell->priv->mark_click = gtk_text_buffer_create_mark (spell->priv->buffer,
                                                "gtkspell-click", &start, TRUE);
 
-      spell->deferred_check = FALSE;
+      spell->priv->deferred_check = FALSE;
 
       /* now check the entire text buffer. */
       gtk_spell_checker_recheck_all (spell);
@@ -749,7 +742,7 @@ set_buffer (GtkSpellChecker *spell, GtkTextBuffer *buffer)
 static void
 buffer_changed (GtkTextView *view, GParamSpec *pspec, GtkSpellChecker *spell)
 {
-  g_return_if_fail (spell->view == view);
+  g_return_if_fail (spell->priv->view == view);
 
   GtkTextBuffer *buf = gtk_text_view_get_buffer (view);
   if (!buf)
@@ -761,6 +754,7 @@ buffer_changed (GtkTextView *view, GParamSpec *pspec, GtkSpellChecker *spell)
 static void
 gtk_spell_checker_class_init (GtkSpellCheckerClass *klass)
 {
+  g_type_class_add_private (klass, sizeof (GtkSpellCheckerPrivate));
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   object_class->dispose = gtk_spell_checker_dispose;
   object_class->finalize = gtk_spell_checker_finalize;
@@ -788,15 +782,16 @@ gtk_spell_checker_class_init (GtkSpellCheckerClass *klass)
 static void
 gtk_spell_checker_init (GtkSpellChecker *self)
 {
-  self->view = NULL;
-  self->buffer = NULL;
-  self->tag_highlight = NULL;
-  self->mark_insert_start = NULL;
-  self->mark_insert_end = NULL;
-  self->mark_click = NULL;
-  self->deferred_check = FALSE;
-  self->speller = NULL;
-  self->lang = NULL;
+  self->priv = GTK_SPELL_CHECKER_GET_PRIVATE (self);
+  self->priv->view = NULL;
+  self->priv->buffer = NULL;
+  self->priv->tag_highlight = NULL;
+  self->priv->mark_insert_start = NULL;
+  self->priv->mark_insert_end = NULL;
+  self->priv->mark_click = NULL;
+  self->priv->deferred_check = FALSE;
+  self->priv->speller = NULL;
+  self->priv->lang = NULL;
 
 #ifdef ENABLE_NLS
   bindtextdomain (PACKAGE_NAME, PACKAGE_LOCALE_DIR);
@@ -830,8 +825,8 @@ gtk_spell_checker_finalize (GObject *object)
 
   if (broker)
     {
-      if (spell->speller)
-        enchant_broker_free_dict (broker, spell->speller);
+      if (spell->priv->speller)
+        enchant_broker_free_dict (broker, spell->priv->speller);
       broker_ref_cnt--;
       if (broker_ref_cnt == 0)
         {
@@ -840,7 +835,7 @@ gtk_spell_checker_finalize (GObject *object)
         }
     }
 
-  g_free (spell->lang);
+  g_free (spell->priv->lang);
 
   G_INITIALLY_UNOWNED_CLASS (gtk_spell_checker_parent_class)->finalize (object);
 }
@@ -876,7 +871,7 @@ gtk_spell_checker_attach (GtkSpellChecker *spell, GtkTextView *view)
   g_return_val_if_fail (GTK_SPELL_IS_CHECKER (spell), FALSE);
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (view), FALSE);
   g_return_val_if_fail (gtk_text_view_get_buffer (view), FALSE);
-  g_return_val_if_fail (spell->view == NULL, FALSE);
+  g_return_val_if_fail (spell->priv->view == NULL, FALSE);
 
   /* ensure no existing instance is attached */
   GtkSpellChecker *attached;
@@ -884,7 +879,7 @@ gtk_spell_checker_attach (GtkSpellChecker *spell, GtkTextView *view)
   g_return_val_if_fail (attached == NULL, FALSE);
 
   /* attach to the widget */
-  spell->view = view;
+  spell->priv->view = view;
   g_object_ref (view);
   g_object_ref_sink (spell);
 
@@ -923,17 +918,17 @@ void
 gtk_spell_checker_detach (GtkSpellChecker *spell)
 {
   g_return_if_fail (GTK_SPELL_IS_CHECKER (spell));
-  g_return_if_fail (spell->view != NULL);
+  g_return_if_fail (spell->priv->view != NULL);
 
-  g_signal_handlers_disconnect_matched (spell->view, G_SIGNAL_MATCH_DATA,
+  g_signal_handlers_disconnect_matched (spell->priv->view, G_SIGNAL_MATCH_DATA,
         0, 0, NULL, NULL, spell);
 
-  g_object_set_data (G_OBJECT (spell->view), GTK_SPELL_OBJECT_KEY, NULL);
+  g_object_set_data (G_OBJECT (spell->priv->view), GTK_SPELL_OBJECT_KEY, NULL);
 
-  g_object_unref (spell->view);
-  spell->view = NULL;
+  g_object_unref (spell->priv->view);
+  spell->priv->view = NULL;
   set_buffer (spell, NULL);
-  spell->deferred_check = FALSE;
+  spell->priv->deferred_check = FALSE;
   g_object_unref (spell);
 }
 
@@ -967,7 +962,7 @@ gtk_spell_checker_get_language (GtkSpellChecker *spell)
 {
   g_return_val_if_fail (GTK_SPELL_IS_CHECKER (spell), NULL);
 
-  return spell->lang;
+  return spell->priv->lang;
 }
 
 /**
@@ -1010,9 +1005,9 @@ gtk_spell_checker_recheck_all (GtkSpellChecker *spell)
 
   GtkTextIter start, end;
 
-  if (spell->buffer)
+  if (spell->priv->buffer)
     {
-      gtk_text_buffer_get_bounds (spell->buffer, &start, &end);
+      gtk_text_buffer_get_bounds (spell->priv->buffer, &start, &end);
       check_range (spell, start, end, TRUE);
     }
 }
@@ -1038,18 +1033,18 @@ gtk_spell_checker_get_suggestions_menu (GtkSpellChecker *spell, GtkTextIter *ite
 
   start = *iter;
   /* use the same lazy test, with same risk, as does the default menu arrangement */
-  if (gtk_text_iter_has_tag (&start, spell->tag_highlight))
+  if (gtk_text_iter_has_tag (&start, spell->priv->tag_highlight))
     {
       /* word was mis-spelt */
       gchar *badword;
       /* in case a fix is requested, move the attention-point */
-      gtk_text_buffer_move_mark (spell->buffer, spell->mark_click, iter);
+      gtk_text_buffer_move_mark (spell->priv->buffer, spell->priv->mark_click, iter);
       if (!gtk_text_iter_starts_word (&start))
         gtk_text_iter_backward_word_start (&start);
       end = start;
       if (gtk_text_iter_inside_word (&end))
         gtk_text_iter_forward_word_end (&end);
-      badword = gtk_text_buffer_get_text (spell->buffer, &start, &end, FALSE);
+      badword = gtk_text_buffer_get_text (spell->priv->buffer, &start, &end, FALSE);
 
       submenu = build_suggestion_menu (spell, badword);
       gtk_widget_show (submenu);

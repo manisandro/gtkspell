@@ -918,7 +918,8 @@ void
 gtk_spell_checker_detach (GtkSpellChecker *spell)
 {
   g_return_if_fail (GTK_SPELL_IS_CHECKER (spell));
-  g_return_if_fail (spell->priv->view != NULL);
+  if (spell->priv->view == NULL)
+    return;
 
   g_signal_handlers_disconnect_matched (spell->priv->view, G_SIGNAL_MATCH_DATA,
         0, 0, NULL, NULL, spell);

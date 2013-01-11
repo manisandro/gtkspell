@@ -33,7 +33,8 @@ G_BEGIN_DECLS
 * Error domain used for gtkspell operations. Indicates that the error code
 * will be in the #GtkSpellError enumeration.
 */
-#define GTK_SPELL_ERROR gtk_spell_error_quark()
+#define GTK_SPELL_ERROR (gtk_spell_error_quark())
+GQuark gtk_spell_error_quark(void);
 
 /**
 * GtkSpellError:
@@ -46,7 +47,13 @@ typedef enum {
   GTK_SPELL_ERROR_BACKEND
 } GtkSpellError;
 
-GQuark gtk_spell_error_quark(void);
+/**
+ * GTK_SPELL_TYPE_ERROR:
+ *
+ * The GTK_SPELL_ERROR type.
+ */
+#define GTK_SPELL_TYPE_ERROR (gtk_spell_error_get_type ())
+GType gtk_spell_error_get_type (void) G_GNUC_CONST;
 
 #define GTK_SPELL_TYPE_CHECKER            (gtk_spell_checker_get_type ())
 #define GTK_SPELL_CHECKER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_SPELL_TYPE_CHECKER, GtkSpellChecker))

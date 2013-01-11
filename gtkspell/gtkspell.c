@@ -1062,3 +1062,19 @@ gtk_spell_error_quark (void)
     q = g_quark_from_static_string ("gtkspell-error-quark");
   return q;
 }
+
+GType
+gtk_spell_error_get_type (void)
+{
+  static GType etype = 0;
+
+  if (G_UNLIKELY(etype == 0)) {
+    static const GEnumValue values[] = {
+      { GTK_SPELL_ERROR_BACKEND, "GTK_SPELL_ERROR_BACKEND", "backend" },
+      { 0, NULL, NULL }
+    };
+    etype = g_enum_register_static (g_intern_static_string ("GtkSpellError"), values);
+  }
+  return etype;
+}
+

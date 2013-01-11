@@ -12,6 +12,7 @@ libgtkspell3_3_la_include_HEADERS = gtkspell.h
 
 libgtkspell3_3_la_SOURCES = gtkspell.c gtkspell.h
 libgtkspell3_3_la_LIBADD = @GTK_SPELL3_LIBS@
+libgtkspell3_3_la_LDFLAGS = -version-info $(GTK_SPELL_SO_VERSION)
 
 pkgconfig_DATA += gtkspell3-3.0.pc
 endif
@@ -24,6 +25,7 @@ libgtkspell3_2_la_include_HEADERS = gtkspell.h
 
 libgtkspell3_2_la_SOURCES = gtkspell.c gtkspell.h
 libgtkspell3_2_la_LIBADD = @GTK_SPELL2_LIBS@
+libgtkspell3_2_la_LDFLAGS = -version-info $(GTK_SPELL_SO_VERSION)
 
 pkgconfig_DATA += gtkspell3-2.0.pc
 endif

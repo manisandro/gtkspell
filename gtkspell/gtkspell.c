@@ -63,7 +63,7 @@ struct _GtkSpellCheckerPrivate
   gchar *lang;
 };
 
-G_DEFINE_TYPE (GtkSpellChecker, gtk_spell_checker, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkSpellChecker, gtk_spell_checker, G_TYPE_INITIALLY_UNOWNED);
 
 static gboolean
 gtk_spell_text_iter_forward_word_end (GtkTextIter *i)

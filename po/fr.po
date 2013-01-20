@@ -1,13 +1,15 @@
-# Messages français pour GNU concernant gtkspell.
-# Copyright (C) 2011 Free Software Foundation, Inc.
-# This file is distributed under the same license as the gtkspell package.
+# French translations of gtkspell3
+# Copyright (C) 2013 the gtkspell3 copyright holder
+# This file is distributed under the same license as the gtkspell3 package.
 # Michel Robitaille <robitail@IRO.UMontreal.CA>, traducteur depuis/since 1996.
 # Frédéric Marchal <fmarchal@perso.be>, 2011.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: GNU gtkspell 2.0.16\n"
+"Project-Id-Version: gtkspell3 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-22 22:57-0400\n"
+"POT-Creation-Date: 2013-01-20 17:07+0100\n"
 "PO-Revision-Date: 2011-06-25 11:28+0200\n"
 "Last-Translator: Frédéric Marchal <fmarchal@perso.be>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -18,34 +20,31 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 1.2\n"
 
-#: ../gtkspell/gtkspell.c:356
+#: ../gtkspell/gtkspell.c:410
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(aucune suggestion)</i>"
 
-#: ../gtkspell/gtkspell.c:368
+#: ../gtkspell/gtkspell.c:426
 msgid "More..."
 msgstr "Plus encore..."
 
-#. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:388
+#: ../gtkspell/gtkspell.c:447
 #, c-format
 msgid "Add \"%s\" to Dictionary"
-msgstr "Ajouter « %s » au Dictionnaire"
+msgstr "Ajouter «%s» au Dictionnaire"
 
-#. - Ignore All
-#: ../gtkspell/gtkspell.c:399
+#: ../gtkspell/gtkspell.c:457
 msgid "Ignore All"
 msgstr "Tout ignorer"
 
-#. on top: language selection
-#: ../gtkspell/gtkspell.c:494
+#: ../gtkspell/gtkspell.c:559
 msgid "Languages"
 msgstr "Langages"
 
-#: ../gtkspell/gtkspell.c:584
+#: ../gtkspell/gtkspell.c:659
 #, c-format
 msgid "enchant error for language: %s"
-msgstr "erreur de enchant pour le langage : %s"
+msgstr "erreur de enchant pour le langage: %s"
 
 #~ msgid "Spelling Suggestions"
 #~ msgstr "Suggestions orthographiques"

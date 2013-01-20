@@ -1,6 +1,7 @@
 # please keep this list sorted alphabetically
 #
 af
+ak
 ast
 be
 cs
@@ -10,7 +11,9 @@ el
 eo
 es
 eu
+ff
 fi
+fo
 fr
 ga
 gl
@@ -23,12 +26,14 @@ is
 it
 ja
 ky
+lg
 lt
 lv
 mn
 ms
 nb
 nl
+nso
 pl
 pt
 pt_BR
@@ -38,8 +43,10 @@ ru
 rw
 sk
 sl
+son
 sq
 sr
+st
 sv
 th
 tr
@@ -49,3 +56,4 @@ wa
 zh_CN
 zh_HK
 zh_TW
+zu

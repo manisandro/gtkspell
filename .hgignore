@@ -36,11 +36,15 @@ examples/.deps
 examples/.libs
 examples/advanced-gtk*
 examples/simple-gtk*
+examples/*-vala.c
+examples/*vala.stamp
 gtkspell/.deps
 gtkspell/.libs
 gtkspell/GtkSpell-*.0.gir
 gtkspell/GtkSpell-*.0.typelib
 gtkspell/gtkspell3-*.0.pc
+gtkspell/gtkspell3-*.0.deps
+gtkspell/gtkspell3-*.0.vapi
 gtkspell/libgtkspell3*.la
 gtkspell/libgtkspell3*la-gtkspell.lo
 gtkspell3-3.*.*/

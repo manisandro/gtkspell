@@ -43,6 +43,7 @@ GtkSpell_3_0_gir_INCLUDES = GObject-2.0 GLib-2.0 Gtk-3.0
 GtkSpell_3_0_gir_CFLAGS = --warn-all @GTK_SPELL_CFLAGS@
 GtkSpell_3_0_gir_LIBS = libgtkspell3-3.la
 GtkSpell_3_0_gir_FILES = $(libgtkspell3_3_la_SOURCES)
+GtkSpell_3_0_gir_SCANNERFLAGS = --c-include gtkspell/gtkspell.h
 INTROSPECTION_GIRS += GtkSpell-3.0.gir
 endif
 
@@ -52,6 +53,7 @@ GtkSpell_2_0_gir_INCLUDES = GObject-2.0 GLib-2.0 Gtk-2.0
 GtkSpell_2_0_gir_CFLAGS = --warn-all @GTK_SPELL2_CFLAGS@
 GtkSpell_2_0_gir_LIBS = libgtkspell3-2.la
 GtkSpell_2_0_gir_FILES = $(libgtkspell3_2_la_SOURCES)
+GtkSpell_2_0_gir_SCANNERFLAGS = --c-include gtkspell/gtkspell.h
 INTROSPECTION_GIRS += GtkSpell-2.0.gir
 endif
 
@@ -62,4 +64,41 @@ typelibdir = $(libdir)/girepository-1.0
 typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
 CLEANFILES = $(gir_DATA) $(typelib_DATA)
+
+if ENABLE_VAPIGEN
+include $(VAPIGEN_MAKEFILE)
+
+VAPIGEN_VAPIS =
+
+if ENABLE_GTK3
+gtkspell3-3.0.vapi: GtkSpell-3.0.gir gtkspell3-3.0.deps
+gtkspell3_3_0_vapi_DEPS = gtk+-3.0
+gtkspell3_3_0_vapi_FILES = GtkSpell-3.0.gir
+
+gtkspell3-3.0.deps:
+	$(AM_V_GEN) for pkg in $(gtkspell3_3_0_vapi_DEPS); do \
+		echo $$pkg >> $@; \
+	done
+
+VAPIGEN_VAPIS += gtkspell3-3.0.vapi
+endif
+
+if ENABLE_GTK2
+gtkspell3-2.0.vapi: GtkSpell-2.0.gir gtkspell3-2.0.deps
+gtkspell3_2_0_vapi_DEPS = gtk+-2.0
+gtkspell3_2_0_vapi_FILES = GtkSpell-2.0.gir
+
+gtkspell3-2.0.deps:
+	$(AM_V_GEN) for pkg in $(gtkspell3_2_0_vapi_DEPS); do \
+		echo $$pkg >> $@; \
+	done
+
+VAPIGEN_VAPIS += gtkspell3-2.0.vapi
+endif
+
+vapidir = $(datadir)/vala/vapi
+vapi_DATA = $(VAPIGEN_VAPIS) $(VAPIGEN_VAPIS:.vapi=.deps)
+
+CLEANFILES += $(vapi_DATA)
+endif
 endif

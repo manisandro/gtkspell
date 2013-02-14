@@ -47,6 +47,18 @@ dnl ************************** Gobject Introspection **************************
 dnl See https://live.gnome.org/GObjectIntrospection/AutotoolsIntegration
 GOBJECT_INTROSPECTION_CHECK([1.30.0])
 
+
+dnl ****************************** Vala bindings ******************************
+dnl See https://live.gnome.org/Vala/UpstreamGuide
+AM_PROG_VALAC
+
+VAPIGEN_CHECK([0.18])
+
+if test "$enable_vala" != "no"; then
+	AC_PATH_PROG([VALAC], [valac], [])
+fi
+AM_CONDITIONAL(HAVE_VALAC, test "x$VALAC" != "x")
+
 dnl *************************** Internationalization **************************
 IT_PROG_INTLTOOL([0.35.0])
 GETTEXT_PACKAGE=$PACKAGE_NAME

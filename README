@@ -5,22 +5,22 @@
 
 Introduction
 ------------
-GtkSpell is a library whihc provides MSWord/MacOSX-style highlighting of
+GtkSpell is a library which provides MSWord/MacOSX-style highlighting of
 misspelled words in a GtkTextView widget. Right-clicking a misspelled word pops
 up a menu of suggested replacements.
 
 GtkSpell depends on
  * GTK+3
  * Enchant
- * Gobject Introspection
+ * GObject Introspection
  * GTK-Doc (optional)
  * GTK+2 (optional)
 
 For more information, see http://sourceforge.net/projects/gtkspell/ .
 
 
-Use
----
+Use of the C API
+----------------
 The easiest way to learn is to look at the provided example programs.
 It's pretty simple.
 
@@ -62,6 +62,10 @@ but it shouldn't be necessary.
 An API reference can be found in the documentation. It the documentation was
 not installed, gtkspell.h serves as an API reference.
 
+Available bindings
+------------------
+The package also includes python-bindings via GObject typelibs as well as vala
+bindings, if they were compiled.
 
 Original Author
 ---------------
@@ -81,6 +85,6 @@ Thanks
 ------
 Ari Pollak <ari@debian.org> - Debian packages.
 Alex <hansolo@rochester.rr.com> - Redhat packages.
-
+Evan Nemerson - Vala bindings.
 
 vim: tw=72

@@ -171,4 +171,36 @@ AC_SUBST(MYPROGRAM_LIBS)
 
 </sect1>
 
+
+<sect1 id="tutorial-bindings">
+<title>Bindings for other languages</title>
+The package also optionally offers bindings for the following languages
+<itemizedlist>
+  <listitem>
+    <para>
+      <guilabel>Python</guilabel> &mdash; via GObject-introspection typelibs.
+      To use them, it is sufficient to import the corresponding module as follows
+      <programlisting><![CDATA[
+      from gi.repository import GtkSpell
+      ]]></programlisting>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <guilabel>Vala</guilabel> &mdash; via GObject-introspection generated VAPIs.
+      To compile a GTK+3 Vala application which uses GtkSpell, you need to add
+      <literal>--pkg gtkspell3-3.0</literal> to the <literal>valac</literal>
+      compiler flags, i.e.
+      <programlisting><![CDATA[
+      valac myprog.vala --pkg gtkspell3-3.0 --pkg gtk+-3.0
+      ]]></programlisting>
+      For GTK+2 applications, you would write
+      <programlisting><![CDATA[
+      valac myprog.vala --pkg gtkspell3-2.0 --pkg gtk+-2.0
+      ]]></programlisting>
+    </para>
+  </listitem>
+</itemizedlist>
+</sect1>
+
 </chapter>

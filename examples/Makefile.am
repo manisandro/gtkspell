@@ -28,6 +28,10 @@ simple_gtk3_vala_VALAFLAGS = --vapidir $(top_builddir)/gtkspell --pkg gtkspell3-
 simple_gtk3_vala_CPPFLAGS = @GTK_SPELL3_CFLAGS@ -I$(top_srcdir)
 simple_gtk3_vala_LDADD = @GTK_SPELL3_LIBS@ $(top_builddir)/gtkspell/libgtkspell3-3.la
 simple_gtk3_vala_SOURCES = simple-vala.vala
+dist-hook:
+	cd $(distdir) && \
+	rm -f $(simple_gtk3_vala_SOURCES:.vala=.c) \
+	rm -f simple_gtk3_vala_vala.stamp
 endif
 endif
 endif

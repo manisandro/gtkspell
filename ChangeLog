@@ -1,3 +1,7 @@
+version 3.0.2 (2013-03-05):
+	* Added vala bindings (thanks to Evan Nemerson)
+	* Added some documentation on language bindings
+
 version 3.0.1 (2013-02-07):
 	* Actually declare GtkSpellChecker as a G_TYPE_INITIALLY_UNOWNED
 	* Really silently exit if detach is called when not attached

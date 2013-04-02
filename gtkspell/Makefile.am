@@ -40,7 +40,7 @@ INTROSPECTION_GIRS =
 if ENABLE_GTK3
 GtkSpell-3.0.gir: libgtkspell3-3.la
 GtkSpell_3_0_gir_INCLUDES = GObject-2.0 GLib-2.0 Gtk-3.0
-GtkSpell_3_0_gir_CFLAGS = --warn-all @GTK_SPELL_CFLAGS@
+GtkSpell_3_0_gir_CFLAGS = --warn-all @GTK_SPELL3_CFLAGS@
 GtkSpell_3_0_gir_LIBS = libgtkspell3-3.la
 GtkSpell_3_0_gir_FILES = $(libgtkspell3_3_la_SOURCES)
 GtkSpell_3_0_gir_SCANNERFLAGS = --c-include gtkspell/gtkspell.h

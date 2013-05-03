@@ -90,6 +90,20 @@ SPEC_ENABLE_GTK_DOC=1
 AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 ])
 
+dnl ****************************** Detect Win32 *******************************
+AC_MSG_CHECKING([for some Win32 platform])
+case "$host" in
+  *-*-mingw*|*-*-cygwin*)
+    platform_win32=yes
+    ;;
+  *)
+    platform_win32=no
+    ;;
+esac
+AC_MSG_RESULT([$platform_win32])
+AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
+
+
 AC_SUBST(GTK_SPELL_VERSION_MINOR)
 AC_SUBST(GTK_SPELL_VERSION_MICRO)
 AC_SUBST(SPEC_ENABLE_GTK_DOC)

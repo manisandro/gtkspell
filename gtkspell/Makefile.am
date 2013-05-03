@@ -4,6 +4,10 @@ lib_LTLIBRARIES =
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA =
 
+if PLATFORM_WIN32
+no_undefined = -no-undefined
+endif
+
 if ENABLE_GTK3
 lib_LTLIBRARIES += libgtkspell3-3.la
 libgtkspell3_3_la_CPPFLAGS = -DPACKAGE_LOCALE_DIR=\""$(localedir)"\" @GTK_SPELL3_CFLAGS@
@@ -12,7 +16,7 @@ libgtkspell3_3_la_include_HEADERS = gtkspell.h
 
 libgtkspell3_3_la_SOURCES = gtkspell.c gtkspell.h
 libgtkspell3_3_la_LIBADD = @GTK_SPELL3_LIBS@
-libgtkspell3_3_la_LDFLAGS = -version-info $(GTK_SPELL_SO_VERSION)
+libgtkspell3_3_la_LDFLAGS = -version-info $(GTK_SPELL_SO_VERSION) $(no_undefined)
 
 pkgconfig_DATA += gtkspell3-3.0.pc
 endif
@@ -25,7 +29,7 @@ libgtkspell3_2_la_include_HEADERS = gtkspell.h
 
 libgtkspell3_2_la_SOURCES = gtkspell.c gtkspell.h
 libgtkspell3_2_la_LIBADD = @GTK_SPELL2_LIBS@
-libgtkspell3_2_la_LDFLAGS = -version-info $(GTK_SPELL_SO_VERSION)
+libgtkspell3_2_la_LDFLAGS = -version-info $(GTK_SPELL_SO_VERSION) $(no_undefined)
 
 pkgconfig_DATA += gtkspell3-2.0.pc
 endif

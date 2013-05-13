@@ -80,12 +80,12 @@ expand_content_files=
 # e.g. GTKDOC_LIBS=$(top_builddir)/gtk/$(gtktargetlib)
 ## We use the gtk3 variant if available, otherwise the gtk2 variant ##
 if ENABLE_GTK3
-GTKDOC_CFLAGS=-I$(top_srcdir) @GTK_SPELL3_CFLAGS@
-GTKDOC_LIBS=@GTK_SPELL3_LIBS@ $(top_builddir)/gtkspell/libgtkspell3-3.la
+GTKDOC_CFLAGS=-I$(top_srcdir) $(GTK_SPELL3_CFLAGS)
+GTKDOC_LIBS=$(GTK_SPELL3_LIBS) $(top_builddir)/gtkspell/libgtkspell3-3.la
 else
 if ENABLE_GTK2
-GTKDOC_CFLAGS=-I$(top_srcdir) @GTK_SPELL2_CFLAGS@
-GTKDOC_LIBS=@GTK_SPELL2_LIBS@ $(top_builddir)/gtkspell/libgtkspell3-2.la
+GTKDOC_CFLAGS=-I$(top_srcdir) $(GTK_SPELL2_CFLAGS)
+GTKDOC_LIBS=$(GTK_SPELL2_LIBS) $(top_builddir)/gtkspell/libgtkspell3-2.la
 endif
 endif
 

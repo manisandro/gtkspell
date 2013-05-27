@@ -88,7 +88,7 @@ struct _GtkSpellCheckerClass
 
 
 GType            gtk_spell_checker_get_type             (void) G_GNUC_CONST;
-GtkSpellChecker *gtk_spell_checker_new                  ();
+GtkSpellChecker *gtk_spell_checker_new                  (void);
 gboolean         gtk_spell_checker_attach               (GtkSpellChecker *spell,
                                                          GtkTextView   *view);
 GtkSpellChecker *gtk_spell_checker_get_from_text_view   (GtkTextView   *view);

@@ -848,7 +848,7 @@ gtk_spell_checker_finalize (GObject *object)
  * Returns: a new #GtkSpellChecker object.
  */
 GtkSpellChecker*
-gtk_spell_checker_new ()
+gtk_spell_checker_new (void)
 {
   return g_object_new (GTK_SPELL_TYPE_CHECKER, NULL);
 }

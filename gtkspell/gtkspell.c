@@ -967,6 +967,37 @@ gtk_spell_checker_get_language (GtkSpellChecker *spell)
 }
 
 /**
+ * gtk_spell_checker_get_language_list:
+ *
+ * Requests the list of available languages from the enchant broker.
+ *
+ * Returns: (transfer full) (element-type utf8): a #GList of the available languages.
+ * Use g_list_free to free the list after use.
+ */
+GList*
+gtk_spell_checker_get_language_list (void)
+{
+  struct _languages_cb_struct languages_cb_struct;
+
+  if (!broker)
+    {
+      broker = enchant_broker_init();
+      broker_ref_cnt = 0;
+    }
+
+  languages_cb_struct.langs = NULL;
+  enchant_broker_list_dicts(broker, dict_describe_cb, &languages_cb_struct);
+
+  if (broker_ref_cnt == 0)
+    {
+      enchant_broker_free (broker);
+      broker = NULL;
+    }
+
+  return languages_cb_struct.langs;
+}
+
+/**
  * gtk_spell_checker_set_language:
  * @spell: The #GtkSpellChecker object.
  * @lang: (allow-none): The language to use, as a locale specifier (i.e. "en", or "en_US").

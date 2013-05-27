@@ -15,7 +15,8 @@ AM_SILENT_RULES([yes])
 
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 
-AC_SUBST([GTK_SPELL_SO_VERSION], [0:0:0])
+dnl See http://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
+AC_SUBST([GTK_SPELL_SO_VERSION], [1:0:1])
 
 AC_PROG_CC
 AM_PROG_CC_C_O

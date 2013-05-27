@@ -44,20 +44,20 @@ INTROSPECTION_GIRS =
 if ENABLE_GTK3
 GtkSpell-3.0.gir: libgtkspell3-3.la
 GtkSpell_3_0_gir_INCLUDES = GObject-2.0 GLib-2.0 Gtk-3.0
-GtkSpell_3_0_gir_CFLAGS = --warn-all $(GTK_SPELL3_CFLAGS)
+GtkSpell_3_0_gir_CFLAGS = $(GTK_SPELL3_CFLAGS)
 GtkSpell_3_0_gir_LIBS = libgtkspell3-3.la
 GtkSpell_3_0_gir_FILES = $(libgtkspell3_3_la_SOURCES)
-GtkSpell_3_0_gir_SCANNERFLAGS = --c-include gtkspell/gtkspell.h
+GtkSpell_3_0_gir_SCANNERFLAGS = --warn-all --c-include gtkspell/gtkspell.h
 INTROSPECTION_GIRS += GtkSpell-3.0.gir
 endif
 
 if ENABLE_GTK2
 GtkSpell-2.0.gir: libgtkspell3-2.la
 GtkSpell_2_0_gir_INCLUDES = GObject-2.0 GLib-2.0 Gtk-2.0
-GtkSpell_2_0_gir_CFLAGS = --warn-all $(GTK_SPELL2_CFLAGS)
+GtkSpell_2_0_gir_CFLAGS = $(GTK_SPELL2_CFLAGS)
 GtkSpell_2_0_gir_LIBS = libgtkspell3-2.la
 GtkSpell_2_0_gir_FILES = $(libgtkspell3_2_la_SOURCES)
-GtkSpell_2_0_gir_SCANNERFLAGS = --c-include gtkspell/gtkspell.h
+GtkSpell_2_0_gir_SCANNERFLAGS = --warn-all --c-include gtkspell/gtkspell.h
 INTROSPECTION_GIRS += GtkSpell-2.0.gir
 endif
 

@@ -2,6 +2,7 @@
 # Copyright (C) 2013 the gtkspell3 copyright holder
 # This file is distributed under the same license as the gtkspell3 package.
 # Eren Türkay <turkay.eren@gmail.com>, 2008.
+# Volkan Gezer <vlkngzr@gmail.com>, 2013.
 #
 #, fuzzy
 msgid ""
@@ -43,7 +44,7 @@ msgstr "Diller"
 #: ../gtkspell/gtkspell.c:659
 #, fuzzy, c-format
 msgid "enchant error for language: %s"
-msgstr "enchant dil için hata: %s"
+msgstr "dil için mest hatası: %s"
 
 #~ msgid "Spelling Suggestions"
 #~ msgstr "Yazım Önerileri"

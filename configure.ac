@@ -105,17 +105,21 @@ AC_MSG_RESULT([$platform_win32])
 AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
 
 dnl ******************************** iso-codes ********************************
-AC_MSG_CHECKING([for iso-codes package])
-have_iso_codes=no
-if $PKG_CONFIG --exists iso-codes; then
-	have_iso_codes=yes
-	AC_DEFINE_UNQUOTED([ISO_CODES_PREFIX],
-	                   ["`$PKG_CONFIG --variable=prefix iso-codes`"],
-		               [ISO codes prefix])
-	AC_DEFINE([HAVE_ISO_CODES], [1], [iso-codes available])
+AC_ARG_ENABLE([iso-codes],
+     AS_HELP_STRING([--enable-iso-codes], [enable iso-codes support (default is yes)]),
+     [case "${enableval}" in
+       yes) iso_codes=yes ;;
+       no)  iso_codes=no ;;
+       *) AC_MSG_ERROR([bad value ${enableval} for --enable-iso_codes]) ;;
+     esac],[iso_codes=yes])
+AM_CONDITIONAL([HAVE_ISO_CODES], [test x$iso_codes = xyes])
+
+if test x$iso_codes = xyes; then
+    iso_codes_prefix=`$PKG_CONFIG --variable=prefix iso-codes 2>/dev/null || /usr`
+    AC_MSG_NOTICE([iso-codes prefix: $iso_codes_prefix])
+    AC_DEFINE_UNQUOTED([ISO_CODES_PREFIX], ["$iso_codes_prefix"], [ISO codes prefix])
+    AC_DEFINE([HAVE_ISO_CODES], [1], [iso-codes available])
 fi
-AC_MSG_RESULT([$have_iso_codes])
-AM_CONDITIONAL(HAVE_ISO_CODES, test "$have_iso_codes" = "yes")
 
 dnl ********************************* Summary *********************************
 echo
@@ -125,7 +129,7 @@ echo "  - GTK+2 support:         $gtk2"
 echo "  - GTK+3 support:         $gtk3"
 echo "  - GObject introspection: $enable_introspection"
 echo "  - Vala bindings:         $enable_vala"
-echo "  - Iso-codes support:     $have_iso_codes"
+echo "  - iso-codes support:     $iso_codes"
 echo "  - Documentation:         $enable_gtk_doc"
 echo
 

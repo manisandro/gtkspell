@@ -26,6 +26,10 @@
 #include <libintl.h>
 #include <string.h>
 
+#ifdef G_OS_WIN32
+#include "gtkspell-win32.h"
+#endif
+
 #define ISO_639_DOMAIN	"iso_639"
 #define ISO_3166_DOMAIN	"iso_3166"
 #define ISOCODESLOCALEDIR ISO_CODES_PREFIX "/share/locale"

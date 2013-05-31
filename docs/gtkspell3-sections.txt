@@ -33,4 +33,9 @@ GtkSpellCheckerPrivate
 codetable_free
 codetable_init
 codetable_lookup
+ISOCODESLOCALEDIR
+ISO_CODES_PREFIX
+PACKAGE_LOCALE_DIR
+get_win32_localedir
+get_win32_prefix
 </SECTION> 

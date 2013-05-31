@@ -30,6 +30,10 @@
 #include "gtkspell-codetable.h"
 #endif
 
+#ifdef G_OS_WIN32
+#include "gtkspell-win32.h"
+#endif
+
 #define _(String) dgettext (GETTEXT_PACKAGE, String)
 
 #define GTK_SPELL_MISSPELLED_TAG "gtkspell-misspelled"

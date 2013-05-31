@@ -1071,6 +1071,8 @@ gtk_spell_checker_get_language (GtkSpellChecker *spell)
  *
  * Returns: (transfer full) (element-type utf8): a #GList of the available languages.
  * Use g_list_free to free the list after use.
+ *
+ * Since: 3.0.3
  */
 GList*
 gtk_spell_checker_get_language_list (void)
@@ -1106,6 +1108,8 @@ gtk_spell_checker_get_language_list (void)
  *
  * Returns: (transfer full): The translated language specifier. Use g_free to
  * free the returned string after use.
+ *
+ * Since: 3.0.3
  */
 gchar*
 gtk_spell_checker_decode_language_code (const gchar *lang)

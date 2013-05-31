@@ -1096,6 +1096,35 @@ gtk_spell_checker_get_language_list (void)
 }
 
 /**
+ * gtk_spell_checker_decode_language_code:
+ * @lang: The language locale specifier (i.e. "en", or "en_US").
+ *
+ * Translates the language code to a human readable format
+ * (i.e. "en_US" -> "English (United States)").
+ * Note: If the iso-codes package is not available, the unchanged code is
+ * returned.
+ *
+ * Returns: (transfer full): The translated language specifier. Use g_free to
+ * free the returned string after use.
+ */
+gchar*
+gtk_spell_checker_decode_language_code (const gchar *lang)
+{
+#ifdef HAVE_ISO_CODES
+  const gchar *lang_name;
+  const gchar *country_name;
+  if (codetable_ref_cnt == 0)
+    codetable_init ();
+  codetable_lookup (lang, &lang_name, &country_name);
+  if (codetable_ref_cnt == 0)
+    codetable_free ();
+  return g_strdup_printf ("%s (%s)", lang_name, country_name);
+#else
+  return g_strdup (lang);
+#endif
+}
+
+/**
  * gtk_spell_checker_set_language:
  * @spell: The #GtkSpellChecker object.
  * @lang: (allow-none): The language to use, as a locale specifier (i.e. "en", or "en_US").

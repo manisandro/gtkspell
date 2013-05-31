@@ -12,10 +12,13 @@ Summary: On-the-fly spell checking for GtkTextView widgets
 URL: http://gtkspell.sourceforge.net/
 Source: %{name}-%{version}.tar.xz
 
+Requires: iso-codes
+
 BuildRequires: enchant-devel
 BuildRequires: gobject-introspection-devel
 BuildRequires: intltool
 BuildRequires: libtool
+BuildRequires: iso-codes-devel
 %{?enable_gtk2:BuildRequires: gtk2-devel}
 %{?enable_gtk3:BuildRequires: gtk3-devel}
 %{?enable_vala:BuildRequires: vala-devel vala-tools}

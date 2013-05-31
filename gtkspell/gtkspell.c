@@ -26,6 +26,10 @@
 #include <locale.h>
 #include <enchant.h>
 
+#ifdef HAVE_ISO_CODES
+#include "gtkspell-codetable.h"
+#endif
+
 #define _(String) dgettext (GETTEXT_PACKAGE, String)
 
 #define GTK_SPELL_MISSPELLED_TAG "gtkspell-misspelled"
@@ -35,7 +39,10 @@ static const int debug = 0;
 static const int quiet = 0;
 
 static EnchantBroker *broker = NULL;
-static int broker_ref_cnt;
+static int broker_ref_cnt = 0;
+#ifdef HAVE_ISO_CODES
+static int codetable_ref_cnt = 0;
+#endif
 
 static void gtk_spell_checker_dispose (GObject *object);
 static void gtk_spell_checker_finalize (GObject *object);
@@ -47,6 +54,12 @@ enum
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
+
+enum
+{
+  PROP_0,
+  PROP_DECODE_LANGUAGE_CODES
+};
 
 #define GTK_SPELL_CHECKER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_SPELL_TYPE_CHECKER, GtkSpellCheckerPrivate))
 
@@ -61,6 +74,7 @@ struct _GtkSpellCheckerPrivate
   gboolean deferred_check;
   EnchantDict *speller;
   gchar *lang;
+  gboolean decode_codes;
 };
 
 G_DEFINE_TYPE (GtkSpellChecker, gtk_spell_checker, G_TYPE_INITIALLY_UNOWNED)
@@ -507,6 +521,7 @@ build_languages_menu (GtkSpellChecker *spell)
 {
   GtkWidget *active_item = NULL, *menu = gtk_menu_new ();
   GList *langs;
+  GtkWidget *mi;
   GSList *menu_group = NULL;
 
   struct _languages_cb_struct languages_cb_struct;
@@ -519,7 +534,19 @@ build_languages_menu (GtkSpellChecker *spell)
   for (; langs; langs = langs->next)
     {
       gchar *lang_tag = langs->data;
-      GtkWidget* mi = gtk_radio_menu_item_new_with_label (menu_group, lang_tag);
+#ifdef HAVE_ISO_CODES
+      if (spell->priv->decode_codes == TRUE)
+        {
+          const gchar *lang_name;
+          const gchar *country_name;
+          codetable_lookup (lang_tag, &lang_name, &country_name);
+          gchar *label = g_strdup_printf ("%s (%s)", lang_name, country_name);
+          mi = gtk_radio_menu_item_new_with_label (menu_group, label);
+          g_free (label);
+        }
+      else
+#endif
+        mi = gtk_radio_menu_item_new_with_label (menu_group, lang_tag);
       menu_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (mi));
 
       g_object_set (G_OBJECT (mi), "name", lang_tag, NULL);
@@ -752,12 +779,52 @@ buffer_changed (GtkTextView *view, GParamSpec *pspec, GtkSpellChecker *spell)
 }
 
 static void
+gtk_spell_checker_set_property (GObject *object,
+                                guint propid,
+                                const GValue *value,
+                                GParamSpec *pspec)
+{
+  GtkSpellChecker *spell = GTK_SPELL_CHECKER (object);
+
+  switch (propid)
+    {
+    case PROP_DECODE_LANGUAGE_CODES:
+      spell->priv->decode_codes = g_value_get_boolean (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, propid, pspec);
+      break;
+    }
+}
+
+static void
+gtk_spell_checker_get_property (GObject *object,
+                                guint propid,
+                                GValue *value,
+                                GParamSpec *pspec)
+{
+  GtkSpellChecker *spell = GTK_SPELL_CHECKER (object);
+
+  switch (propid)
+    {
+    case PROP_DECODE_LANGUAGE_CODES:
+      g_value_set_boolean (value, spell->priv->decode_codes);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, propid, pspec);
+      break;
+    }
+}
+
+static void
 gtk_spell_checker_class_init (GtkSpellCheckerClass *klass)
 {
   g_type_class_add_private (klass, sizeof (GtkSpellCheckerPrivate));
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   object_class->dispose = gtk_spell_checker_dispose;
   object_class->finalize = gtk_spell_checker_finalize;
+  object_class->set_property = gtk_spell_checker_set_property;
+  object_class->get_property = gtk_spell_checker_get_property;
 
   /**
    * GtkSpellChecker::language-changed:
@@ -777,6 +844,20 @@ gtk_spell_checker_class_init (GtkSpellCheckerClass *klass)
                       G_TYPE_NONE,
                       1,
                       G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  /**
+   * GtkSpellChecker::decode-language-codes:
+   *
+   * Whether to show decoded language codes in the context menu
+   * (requires the iso-codes package).
+   */
+  g_object_class_install_property (object_class, PROP_DECODE_LANGUAGE_CODES,
+        g_param_spec_boolean ("decode-language-codes",
+                              "Decode language codes",
+                              "Whether to show decoded language codes in the "\
+                              "context menu (requires the iso-codes package).",
+                              FALSE,
+                              G_PARAM_READWRITE));
 }
 
 static void
@@ -804,6 +885,12 @@ gtk_spell_checker_init (GtkSpellChecker *self)
       broker_ref_cnt = 0;
     }
   broker_ref_cnt++;
+
+#ifdef HAVE_ISO_CODES
+  if (codetable_ref_cnt == 0)
+    codetable_init ();
+  codetable_ref_cnt++;
+#endif
 
   set_language_internal (self, NULL, NULL);
 }
@@ -833,6 +920,13 @@ gtk_spell_checker_finalize (GObject *object)
           enchant_broker_free (broker);
           broker = NULL;
         }
+
+#ifdef HAVE_ISO_CODES
+      codetable_ref_cnt--;
+      if (codetable_ref_cnt == 0)
+        codetable_free ();
+#endif
+
     }
 
   g_free (spell->priv->lang);

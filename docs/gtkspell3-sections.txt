@@ -30,4 +30,7 @@ GTK_SPELL_IS_CHECKER_CLASS
 GTK_SPELL_CHECKER_CLASS
 GTK_SPELL_CHECKER_GET_CLASS
 GtkSpellCheckerPrivate
+codetable_free
+codetable_init
+codetable_lookup
 </SECTION> 

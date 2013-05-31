@@ -65,7 +65,7 @@ dnl *************************** Internationalization **************************
 IT_PROG_INTLTOOL([0.35.0])
 GETTEXT_PACKAGE=$PACKAGE_NAME
 AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [GETTEXT package name])
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [GETTEXT package name])
 AM_GLIB_GNU_GETTEXT
 
 dnl ************************** Libtool initialization *************************
@@ -103,6 +103,19 @@ case "$host" in
 esac
 AC_MSG_RESULT([$platform_win32])
 AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
+
+dnl ******************************** iso-codes ********************************
+AC_MSG_CHECKING([for iso-codes package])
+have_iso_codes=no
+if $PKG_CONFIG --exists iso-codes; then
+	have_iso_codes=yes
+	AC_DEFINE_UNQUOTED([ISO_CODES_PREFIX],
+	                   ["`$PKG_CONFIG --variable=prefix iso-codes`"],
+		               [ISO codes prefix])
+	AC_DEFINE([HAVE_ISO_CODES], [1], [iso-codes available])
+fi
+AC_MSG_RESULT([$have_iso_codes])
+AM_CONDITIONAL(HAVE_ISO_CODES, test "$have_iso_codes" = "yes")
 
 
 AC_SUBST(GTK_SPELL_VERSION_MINOR)

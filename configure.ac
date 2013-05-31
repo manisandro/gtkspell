@@ -28,21 +28,21 @@ dnl ************************ Enable Gtk2 GtkSpell build ***********************
 AC_ARG_ENABLE([gtk2],
      AS_HELP_STRING([--enable-gtk2], [enable gtk2 build (default is no)]),
      [case "${enableval}" in
-       yes) gtk2=true ;;
-       no)  gtk2=false ;;
+       yes) gtk2=yes ;;
+       no)  gtk2=no ;;
        *) AC_MSG_ERROR([bad value ${enableval} for --enable-gtk2]) ;;
-     esac],[gtk2=false])
-AM_CONDITIONAL([ENABLE_GTK2], [test x$gtk2 = xtrue])
+     esac],[gtk2=no])
+AM_CONDITIONAL([ENABLE_GTK2], [test x$gtk2 = xyes])
 
 dnl ************************ Enable Gtk3 GtkSpell build ***********************
 AC_ARG_ENABLE([gtk3],
      AS_HELP_STRING([--enable-gtk3], [enable gtk3 build (default is yes)]),
      [case "${enableval}" in
-       yes) gtk3=true ;;
-       no)  gtk3=false ;;
+       yes) gtk3=yes ;;
+       no)  gtk3=no ;;
        *) AC_MSG_ERROR([bad value ${enableval} for --enable-gtk3]) ;;
-     esac],[gtk3=true])
-AM_CONDITIONAL([ENABLE_GTK3], [test x$gtk3 = xtrue])
+     esac],[gtk3=yes])
+AM_CONDITIONAL([ENABLE_GTK3], [test x$gtk3 = xyes])
 
 dnl ************************** Gobject Introspection **************************
 dnl See https://live.gnome.org/GObjectIntrospection/AutotoolsIntegration
@@ -117,6 +117,17 @@ fi
 AC_MSG_RESULT([$have_iso_codes])
 AM_CONDITIONAL(HAVE_ISO_CODES, test "$have_iso_codes" = "yes")
 
+dnl ********************************* Summary *********************************
+echo
+echo "Configuration summary for $PACKAGE $VERSION:"
+echo "  - Host:                  ${host}"
+echo "  - GTK+2 support:         $gtk2"
+echo "  - GTK+3 support:         $gtk3"
+echo "  - GObject introspection: $enable_introspection"
+echo "  - Vala bindings:         $enable_vala"
+echo "  - Iso-codes support:     $have_iso_codes"
+echo "  - Documentation:         $enable_gtk_doc"
+echo
 
 AC_SUBST(GTK_SPELL_VERSION_MINOR)
 AC_SUBST(GTK_SPELL_VERSION_MICRO)

@@ -72,12 +72,12 @@ dnl ************************** Libtool initialization *************************
 LT_INIT
 
 dnl ********************************* Modules *********************************
-if test x$gtk3 = xtrue; then
+if test x$gtk3 = xyes; then
 	PKG_CHECK_MODULES(GTK_SPELL3, [glib-2.0 gtk+-3.0 enchant ])
 	SPEC_ENABLE_GTK3=1
 fi
 
-if test x$gtk2 = xtrue; then
+if test x$gtk2 = xyes; then
 	PKG_CHECK_MODULES(GTK_SPELL2, [glib-2.0 gtk+-2.0 enchant ])
 	SPEC_ENABLE_GTK2=1
 fi

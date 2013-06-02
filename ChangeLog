@@ -1,3 +1,13 @@
+version 3.0.3 (2013-06-03):
+	* Add decode-language-codes property (to show more friendly dictionary
+	  names in the context menu), implemented using iso-codes
+	* Add gtk_spell_checker_decode_language_code method
+	* Use g_win32_get_package_installation_directory_of_module on win32
+	* Add -no-undefined when building on for win32
+	* Use $(foo) instead of @foo@ in Makefiles
+	* Fix GTK_SPELL_CFLAGS -> GTK_SPELL3_CFLAGS typo
+	* Translation updates (see po/ChangeLog)
+
 version 3.0.2 (2013-03-05):
 	* Added vala bindings (thanks to Evan Nemerson)
 	* Added some documentation on language bindings

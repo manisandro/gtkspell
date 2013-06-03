@@ -42,8 +42,8 @@ G_END_DECLS
 #undef ISO_CODES_PREFIX
 #define ISO_CODES_PREFIX get_win32_prefix ()
 
-#undef ISOCODESLOCALEDIR
-#define ISOCODESLOCALEDIR get_win32_localedir ()
+#undef ISO_CODES_LOCALEDIR
+#define ISO_CODES_LOCALEDIR get_win32_localedir ()
 
 #endif /* HAVE_ISO_CODES */
 

@@ -32,7 +32,6 @@
 
 #define ISO_639_DOMAIN	"iso_639"
 #define ISO_3166_DOMAIN	"iso_3166"
-#define ISOCODESLOCALEDIR ISO_CODES_PREFIX "/share/locale"
 
 static GHashTable *iso_639_table = NULL;
 static GHashTable *iso_3166_table = NULL;

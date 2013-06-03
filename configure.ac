@@ -118,6 +118,7 @@ if test x$iso_codes = xyes; then
     iso_codes_prefix=`$PKG_CONFIG --variable=prefix iso-codes 2>/dev/null || /usr`
     AC_MSG_NOTICE([iso-codes prefix: $iso_codes_prefix])
     AC_DEFINE_UNQUOTED([ISO_CODES_PREFIX], ["$iso_codes_prefix"], [ISO codes prefix])
+    AC_DEFINE_UNQUOTED([ISO_CODES_LOCALEDIR], ["$iso_codes_prefix/share/locale"], [ISO codes locale dir])
     AC_DEFINE([HAVE_ISO_CODES], [1], [iso-codes available])
 fi
 

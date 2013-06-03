@@ -1,4 +1,4 @@
-version 3.0.3 (2013-06-03):
+version 3.0.3 (2013-06-04):
 	* Add decode-language-codes property (to show more friendly dictionary
 	  names in the context menu), implemented using iso-codes
 	* Add gtk_spell_checker_decode_language_code method

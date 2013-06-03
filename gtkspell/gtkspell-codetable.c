@@ -149,10 +149,10 @@ codetable_init (void)
   g_return_if_fail (iso_639_table == NULL);
 
 #ifdef ENABLE_NLS
-  bindtextdomain (ISO_639_DOMAIN, ISOCODESLOCALEDIR);
+  bindtextdomain (ISO_639_DOMAIN, ISO_CODES_LOCALEDIR);
   bind_textdomain_codeset (ISO_639_DOMAIN, "UTF-8");
 
-  bindtextdomain (ISO_3166_DOMAIN, ISOCODESLOCALEDIR);
+  bindtextdomain (ISO_3166_DOMAIN, ISO_CODES_LOCALEDIR);
   bind_textdomain_codeset (ISO_3166_DOMAIN, "UTF-8");
 #endif
 

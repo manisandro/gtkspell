@@ -8,6 +8,6 @@ includedir=@includedir@/gtkspell-3.0
 Name: gtkspell3
 Description: On-the-fly spell checking for GtkTextView widgets.
 Version: @VERSION@
-Requires: gtk+-3.0
+Requires: @GTKSPELL3_MODULES@
 Libs: -L${libdir} -lgtkspell3-3
 Cflags: -I${includedir}

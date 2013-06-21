@@ -146,7 +146,7 @@ codetable_init (void)
   };
 
   g_return_if_fail (iso_639_table == NULL);
-  g_return_if_fail (iso_639_table == NULL);
+  g_return_if_fail (iso_3166_table == NULL);
 
 #ifdef ENABLE_NLS
   bindtextdomain (ISO_639_DOMAIN, ISO_CODES_LOCALEDIR);
@@ -174,7 +174,7 @@ void
 codetable_free (void)
 {
   g_return_if_fail (iso_639_table != NULL);
-  g_return_if_fail (iso_639_table != NULL);
+  g_return_if_fail (iso_3166_table != NULL);
 
   g_hash_table_unref (iso_639_table);
   g_hash_table_unref (iso_3166_table);
@@ -201,7 +201,7 @@ codetable_lookup (const gchar *language_code, const gchar **language_name, const
   gchar **parts;
 
   g_return_if_fail (iso_639_table != NULL);
-  g_return_if_fail (iso_639_table != NULL);
+  g_return_if_fail (iso_3166_table != NULL);
 
   /* Split language code into parts. */
   parts = g_strsplit (language_code, "_", 2);

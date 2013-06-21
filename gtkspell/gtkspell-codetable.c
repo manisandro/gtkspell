@@ -208,6 +208,12 @@ codetable_lookup (const gchar *language_code, const gchar **language_name, const
 
   g_return_if_fail (parts != NULL);
 
+  if (g_strv_length (parts) != 2)
+    {
+      g_strfreev (parts);
+      g_return_if_reached ();
+	}
+
   *language_name = g_hash_table_lookup (iso_639_table, parts[0]);
   if (*language_name == NULL)
     {

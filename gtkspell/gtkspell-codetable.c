@@ -206,13 +206,7 @@ codetable_lookup (const gchar *language_code, const gchar **language_name, const
   /* Split language code into parts. */
   parts = g_strsplit (language_code, "_", 2);
 
-  g_return_if_fail (parts != NULL);
-
-  if (g_strv_length (parts) != 2)
-    {
-      g_strfreev (parts);
-      g_return_if_reached ();
-	}
+  g_return_if_fail (*parts != NULL);
 
   *language_name = g_hash_table_lookup (iso_639_table, parts[0]);
   if (*language_name == NULL)
@@ -222,12 +216,15 @@ codetable_lookup (const gchar *language_code, const gchar **language_name, const
       *language_name = g_hash_table_lookup (iso_639_table, parts[0]);
     }
 
-  *country_name = g_hash_table_lookup (iso_3166_table, parts[1]);
-  if (*country_name == NULL)
+  if (g_strv_length (parts) == 2)
     {
-      g_hash_table_insert (iso_3166_table, g_strdup (parts[1]),
-                           g_strdup (parts[1]));
       *country_name = g_hash_table_lookup (iso_3166_table, parts[1]);
+      if (*country_name == NULL)
+        {
+          g_hash_table_insert (iso_3166_table, g_strdup (parts[1]),
+                               g_strdup (parts[1]));
+          *country_name = g_hash_table_lookup (iso_3166_table, parts[1]);
+        }
     }
 
   g_strfreev (parts);

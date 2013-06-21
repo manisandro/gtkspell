@@ -145,7 +145,7 @@ AC_SUBST(GTK_SPELL2_LIBS)
 AC_SUBST(GTK_SPELL3_CFLAGS)
 AC_SUBST(GTK_SPELL3_LIBS)
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 gtkspell3.spec
 gtkspell/gtkspell3-2.0.pc
@@ -155,3 +155,5 @@ examples/Makefile
 docs/Makefile
 docs/version.xml
 po/Makefile.in])
+
+AC_OUTPUT

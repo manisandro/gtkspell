@@ -15,14 +15,14 @@ AM_SILENT_RULES([yes])
 
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 
+AC_SUBST(GTK_SPELL_VERSION_MINOR, gtkspell_version_minor)
+AC_SUBST(GTK_SPELL_VERSION_MICRO, gtkspell_version_micro)
+
 dnl See http://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
 AC_SUBST([GTK_SPELL_SO_VERSION], [1:0:1])
 
 AC_PROG_CC
 AM_PROG_CC_C_O
-
-GTK_SPELL_VERSION_MINOR=gtkspell_version_minor
-GTK_SPELL_VERSION_MICRO=gtkspell_version_micro
 
 dnl ************************ Enable Gtk2 GtkSpell build ***********************
 AC_ARG_ENABLE([gtk2],
@@ -57,7 +57,7 @@ VAPIGEN_CHECK([0.18])
 
 if test "$enable_vala" != "no"; then
 	AC_PATH_PROG([VALAC], [valac], [])
-	SPEC_ENABLE_VALA=1
+	AC_SUBST(SPEC_ENABLE_VALA, 1)
 fi
 AM_CONDITIONAL(HAVE_VALAC, test "x$VALAC" != "x")
 
@@ -75,20 +75,20 @@ dnl ********************************* Modules *********************************
 if test x$gtk3 = xyes; then
 	AC_SUBST([GTKSPELL3_MODULES], ['glib-2.0 gtk+-3.0 enchant'])
 	PKG_CHECK_MODULES(GTK_SPELL3, [$GTKSPELL3_MODULES])
-	SPEC_ENABLE_GTK3=1
+	AC_SUBST(SPEC_ENABLE_GTK3, 1)
 fi
 
 if test x$gtk2 = xyes; then
 	AC_SUBST([GTKSPELL2_MODULES], ['glib-2.0 gtk+-2.0 enchant'])
 	PKG_CHECK_MODULES(GTK_SPELL2, [$GTKSPELL2_MODULES])
-	SPEC_ENABLE_GTK2=1
+	AC_SUBST(SPEC_ENABLE_GTK2, 1)
 fi
 
 dnl ********************************* GTK-Doc *********************************
 dnl See http://developer.gnome.org/gtk-doc-manual/unstable/settingup_autoconf.html.en
 m4_ifdef([GTK_DOC_CHECK], [
 GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
-SPEC_ENABLE_GTK_DOC=1
+AC_SUBST(SPEC_ENABLE_GTK_DOC, 1)
 ],[
 AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 ])
@@ -135,13 +135,6 @@ echo "  - Vala bindings:         $enable_vala"
 echo "  - iso-codes support:     $iso_codes"
 echo "  - Documentation:         $enable_gtk_doc"
 echo
-
-AC_SUBST(GTK_SPELL_VERSION_MINOR)
-AC_SUBST(GTK_SPELL_VERSION_MICRO)
-AC_SUBST(SPEC_ENABLE_GTK_DOC)
-AC_SUBST(SPEC_ENABLE_GTK2)
-AC_SUBST(SPEC_ENABLE_GTK3)
-AC_SUBST(SPEC_ENABLE_VALA)
 
 AC_CONFIG_FILES([
 Makefile

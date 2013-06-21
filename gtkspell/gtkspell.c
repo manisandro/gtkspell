@@ -541,8 +541,8 @@ build_languages_menu (GtkSpellChecker *spell)
 #ifdef HAVE_ISO_CODES
       if (spell->priv->decode_codes == TRUE)
         {
-          const gchar *lang_name;
-          const gchar *country_name;
+          const gchar *lang_name = "\0";
+          const gchar *country_name = "\0";
           codetable_lookup (lang_tag, &lang_name, &country_name);
           gchar *label = g_strdup_printf ("%s (%s)", lang_name, country_name);
           mi = gtk_radio_menu_item_new_with_label (menu_group, label);
@@ -1099,7 +1099,7 @@ gtk_spell_checker_get_language_list (void)
 
 /**
  * gtk_spell_checker_decode_language_code:
- * @lang: The language locale specifier (i.e. "en", or "en_US").
+ * @lang: The language locale specifier (i.e. "en_US").
  *
  * Translates the language code to a human readable format
  * (i.e. "en_US" -> "English (United States)").
@@ -1115,8 +1115,8 @@ gchar*
 gtk_spell_checker_decode_language_code (const gchar *lang)
 {
 #ifdef HAVE_ISO_CODES
-  const gchar *lang_name;
-  const gchar *country_name;
+  const gchar *lang_name = "\0";
+  const gchar *country_name = "\0";
   if (codetable_ref_cnt == 0)
     codetable_init ();
   codetable_lookup (lang, &lang_name, &country_name);
@@ -1131,7 +1131,7 @@ gtk_spell_checker_decode_language_code (const gchar *lang)
 /**
  * gtk_spell_checker_set_language:
  * @spell: The #GtkSpellChecker object.
- * @lang: (allow-none): The language to use, as a locale specifier (i.e. "en", or "en_US").
+ * @lang: (allow-none): The language to use, as a locale specifier (i.e. "en_US").
  * If #NULL, attempt to use the default system locale (LANG).
  * @error: (out) (allow-none): Return location for error.
  *

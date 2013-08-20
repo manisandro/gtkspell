@@ -463,18 +463,26 @@ add_suggestion_menus (GtkSpellChecker *spell, const char *word, GtkWidget *topme
 
   /* + Add to Dictionary */
   label = g_strdup_printf (_("Add \"%s\" to Dictionary"), word);
+#if GTK_CHECK_VERSION(3,9,0)
+  mi = gtk_menu_item_new_with_label (label);
+#else
   mi = gtk_image_menu_item_new_with_label (label);
-  g_free (label);
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (mi),
                  gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
+#endif
+  g_free (label);
   g_signal_connect (mi, "activate", G_CALLBACK (add_to_dictionary), spell);
   gtk_widget_show_all (mi);
   gtk_menu_shell_insert (GTK_MENU_SHELL (topmenu), mi, menu_position++);
 
   /* - Ignore All */
+#if GTK_CHECK_VERSION(3,9,0)
+  mi = gtk_menu_item_new_with_label (_("Ignore All"));
+#else
   mi = gtk_image_menu_item_new_with_label (_("Ignore All"));
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (mi),
               gtk_image_new_from_stock (GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU));
+#endif
   g_signal_connect (mi, "activate", G_CALLBACK (ignore_all), spell);
   gtk_widget_show_all (mi);
   gtk_menu_shell_insert (GTK_MENU_SHELL (topmenu), mi, menu_position++);

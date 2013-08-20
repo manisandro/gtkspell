@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell3 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-20 17:07+0100\n"
+"POT-Creation-Date: 2013-08-20 21:07+0200\n"
 "PO-Revision-Date: 2009-10-09 01:33+0200\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <translation-team-sq@lists.sourceforge.net>\n"
@@ -17,28 +17,31 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../gtkspell/gtkspell.c:410
+#: ../gtkspell/gtkspell.c:428
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(pa këshillime)</i>"
 
-#: ../gtkspell/gtkspell.c:426
+#: ../gtkspell/gtkspell.c:444
 msgid "More..."
 msgstr "Më tepër..."
 
-#: ../gtkspell/gtkspell.c:447
+#. + Add to Dictionary
+#: ../gtkspell/gtkspell.c:465
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Shtoje \"%s\" te Fjalori"
 
-#: ../gtkspell/gtkspell.c:457
+#. - Ignore All
+#: ../gtkspell/gtkspell.c:475
 msgid "Ignore All"
 msgstr "Shpërfilli të Tëra"
 
-#: ../gtkspell/gtkspell.c:559
+#. on top: language selection
+#: ../gtkspell/gtkspell.c:590
 msgid "Languages"
 msgstr "Gjuhë"
 
-#: ../gtkspell/gtkspell.c:659
+#: ../gtkspell/gtkspell.c:690
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "gabim Enchant për gjuhën: %s"

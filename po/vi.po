@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell3 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-20 17:07+0100\n"
+"POT-Creation-Date: 2013-08-20 21:07+0200\n"
 "PO-Revision-Date: 2010-03-06 22:40+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -19,28 +19,31 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: LocFactoryEditor 1.8\n"
 
-#: ../gtkspell/gtkspell.c:410
+#: ../gtkspell/gtkspell.c:428
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(không có góp ý nào)</i>"
 
-#: ../gtkspell/gtkspell.c:426
+#: ../gtkspell/gtkspell.c:444
 msgid "More..."
 msgstr "Tiếp..."
 
-#: ../gtkspell/gtkspell.c:447
+#. + Add to Dictionary
+#: ../gtkspell/gtkspell.c:465
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Thêm « %s » vào Từ điển"
 
-#: ../gtkspell/gtkspell.c:457
+#. - Ignore All
+#: ../gtkspell/gtkspell.c:475
 msgid "Ignore All"
 msgstr "Lờ tất cả"
 
-#: ../gtkspell/gtkspell.c:559
+#. on top: language selection
+#: ../gtkspell/gtkspell.c:590
 msgid "Languages"
 msgstr "Ngôn ngữ"
 
-#: ../gtkspell/gtkspell.c:659
+#: ../gtkspell/gtkspell.c:690
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "gặp lỗi enchant đối với ngôn ngữ : %s"

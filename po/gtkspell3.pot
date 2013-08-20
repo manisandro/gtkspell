@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-08-20 21:07+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../gtkspell/gtkspell.c:428
+msgid "<i>(no suggestions)</i>"
+msgstr ""
+
+#: ../gtkspell/gtkspell.c:444
+msgid "More..."
+msgstr ""
+
+#. + Add to Dictionary
+#: ../gtkspell/gtkspell.c:465
+#, c-format
+msgid "Add \"%s\" to Dictionary"
+msgstr ""
+
+#. - Ignore All
+#: ../gtkspell/gtkspell.c:475
+msgid "Ignore All"
+msgstr ""
+
+#. on top: language selection
+#: ../gtkspell/gtkspell.c:590
+msgid "Languages"
+msgstr ""
+
+#: ../gtkspell/gtkspell.c:690
+#, c-format
+msgid "enchant error for language: %s"
+msgstr ""

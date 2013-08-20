@@ -8,7 +8,7 @@ INTLTOOL_FILES = intltool-extract.in \
 	intltool-merge.in \
 	intltool-update.in
 
-EXTRA_DIST = autogen.sh $(gtkspelldoc_DATA) $(INTLTOOL_FILES)
+EXTRA_DIST = autogen.sh $(gtkspelldoc_DATA) $(INTLTOOL_FILES) po/$(GETTEXT_PACKAGE).pot
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-introspection --enable-gtk-doc
 	

@@ -75,6 +75,13 @@ fi
   NO_AUTOMAKE=yes
 }
 
+(gtkdocize --version) < /dev/null > /dev/null 2>&1 || {
+  echo
+  echo "**Error**: You must have \`gtk-doc' installed."
+  echo "You can get it from: http://ftp.gnome.org/pub/GNOME/sources/gtk-doc/"
+  DIE=1
+}
+
 
 # if no automake, don't bother testing for aclocal
 test -n "$NO_AUTOMAKE" || (aclocal --version) < /dev/null > /dev/null 2>&1 || {

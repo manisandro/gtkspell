@@ -551,8 +551,12 @@ build_languages_menu (GtkSpellChecker *spell)
         {
           const gchar *lang_name = "\0";
           const gchar *country_name = "\0";
+          gchar *label;
           codetable_lookup (lang_tag, &lang_name, &country_name);
-          gchar *label = g_strdup_printf ("%s (%s)", lang_name, country_name);
+          if (strlen (country_name) != 0)
+            label = g_strdup_printf ("%s (%s)", lang_name, country_name);
+          else
+            label = g_strdup_printf ("%s", lang_name);
           mi = gtk_radio_menu_item_new_with_label (menu_group, label);
           g_free (label);
         }
@@ -1130,7 +1134,10 @@ gtk_spell_checker_decode_language_code (const gchar *lang)
   codetable_lookup (lang, &lang_name, &country_name);
   if (codetable_ref_cnt == 0)
     codetable_free ();
-  return g_strdup_printf ("%s (%s)", lang_name, country_name);
+  if (strlen (country_name) != 0)
+    return g_strdup_printf ("%s (%s)", lang_name, country_name);
+  else
+    return g_strdup_printf ("%s", lang_name);
 #else
   return g_strdup (lang);
 #endif

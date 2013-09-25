@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell3 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-20 21:07+0200\n"
+"POT-Creation-Date: 2013-09-25 23:44+0200\n"
 "PO-Revision-Date: 2009-12-09 23:57+0100\n"
 "Last-Translator: Mikel Olasagasti Uranga <hey_neken@mundurat.net>\n"
 "Language-Team: Basque <translation-team-eu@lists.sourceforge.net>\n"
@@ -31,17 +31,16 @@ msgstr "Gehiago..."
 msgid "Add \"%s\" to Dictionary"
 msgstr "Gehitu \"%s\" hiztegiari"
 
-#. - Ignore All
-#: ../gtkspell/gtkspell.c:475
+#: ../gtkspell/gtkspell.c:480 ../gtkspell/gtkspell.c:482
 msgid "Ignore All"
 msgstr "Ignoratu guztiak"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:590
+#: ../gtkspell/gtkspell.c:602
 msgid "Languages"
 msgstr "Hizkuntzak"
 
-#: ../gtkspell/gtkspell.c:690
+#: ../gtkspell/gtkspell.c:702
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "enchant-en errorea hizkuntza honentzat: %s"

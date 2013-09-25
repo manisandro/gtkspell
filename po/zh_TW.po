@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 3.0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-20 21:07+0200\n"
+"POT-Creation-Date: 2013-09-25 23:44+0200\n"
 "PO-Revision-Date: 2013-08-17 15:58+0800\n"
 "Last-Translator: Anthony Fok <foka@debian.org>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -31,17 +31,16 @@ msgstr "還有..."
 msgid "Add \"%s\" to Dictionary"
 msgstr "將「%s」加入字典"
 
-#. - Ignore All
-#: ../gtkspell/gtkspell.c:475
+#: ../gtkspell/gtkspell.c:480 ../gtkspell/gtkspell.c:482
 msgid "Ignore All"
 msgstr "全部略過"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:590
+#: ../gtkspell/gtkspell.c:602
 msgid "Languages"
 msgstr "語言"
 
-#: ../gtkspell/gtkspell.c:690
+#: ../gtkspell/gtkspell.c:702
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "拼字檢查函式庫 Enchant 處理語言 %s 時發生錯誤"

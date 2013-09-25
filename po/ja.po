@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell3 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-20 21:07+0200\n"
+"POT-Creation-Date: 2013-09-25 23:44+0200\n"
 "PO-Revision-Date: 2011-02-04 00:17+0900\n"
 "Last-Translator: Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -32,17 +32,16 @@ msgstr "さらに表示..."
 msgid "Add \"%s\" to Dictionary"
 msgstr "\"%s\" を辞書に追加する"
 
-#. - Ignore All
-#: ../gtkspell/gtkspell.c:475
+#: ../gtkspell/gtkspell.c:480 ../gtkspell/gtkspell.c:482
 msgid "Ignore All"
 msgstr "全て無視する"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:590
+#: ../gtkspell/gtkspell.c:602
 msgid "Languages"
 msgstr "言語"
 
-#: ../gtkspell/gtkspell.c:690
+#: ../gtkspell/gtkspell.c:702
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "言語 %s で enchant のエラーが発生しました"

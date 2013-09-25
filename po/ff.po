@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell3 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-20 21:07+0200\n"
+"POT-Creation-Date: 2013-09-25 23:44+0200\n"
 "PO-Revision-Date: 2010-11-19 21:01+0200\n"
 "Last-Translator: Ibrahima SARR <ibrahima.sarr@pulaagu.com>\n"
 "Language-Team: Fula <LL@li.org>\n"
@@ -32,17 +32,16 @@ msgstr "Jokku..."
 msgid "Add \"%s\" to Dictionary"
 msgstr "Ɓeydu \"%s\" e Saggitorde"
 
-#. - Ignore All
-#: ../gtkspell/gtkspell.c:475
+#: ../gtkspell/gtkspell.c:480 ../gtkspell/gtkspell.c:482
 msgid "Ignore All"
 msgstr "Faalkiso Fof"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:590
+#: ../gtkspell/gtkspell.c:602
 msgid "Languages"
 msgstr "Ɗemɗe"
 
-#: ../gtkspell/gtkspell.c:690
+#: ../gtkspell/gtkspell.c:702
 #, c-format
 msgid "enchant error for language: %s"
 msgstr ""

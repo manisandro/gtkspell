@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell3 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-20 21:07+0200\n"
+"POT-Creation-Date: 2013-09-25 23:44+0200\n"
 "PO-Revision-Date: 2008-03-22 16:42+0100\n"
 "Last-Translator: Roy Hvaara <roy.hvaara@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <i18n-nb@lister.ping.uio.no>\n"
@@ -31,18 +31,17 @@ msgstr "Flere..."
 msgid "Add \"%s\" to Dictionary"
 msgstr "Legg til \"%s\" i ordboken"
 
-#. - Ignore All
-#: ../gtkspell/gtkspell.c:475
+#: ../gtkspell/gtkspell.c:480 ../gtkspell/gtkspell.c:482
 msgid "Ignore All"
 msgstr "Ignorer alle"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:590
+#: ../gtkspell/gtkspell.c:602
 #, fuzzy
 msgid "Languages"
 msgstr "Språk"
 
-#: ../gtkspell/gtkspell.c:690
+#: ../gtkspell/gtkspell.c:702
 #, fuzzy, c-format
 msgid "enchant error for language: %s"
 msgstr "enchant språk mistak: %s"

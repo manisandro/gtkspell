@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell3 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-25 23:44+0200\n"
+"POT-Creation-Date: 2014-04-19 23:04+0200\n"
 "PO-Revision-Date: 2009-10-20 22:38-0300\n"
 "Last-Translator: Felipe Castro <fefcas@gmail.com>\n"
 "Language-Team: Esperanto <translation-team-eo@lists.sourceforge.net>\n"
@@ -18,30 +18,30 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../gtkspell/gtkspell.c:428
+#: ../gtkspell/gtkspell.c:427
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(neniu sugesto)</i>"
 
-#: ../gtkspell/gtkspell.c:444
+#: ../gtkspell/gtkspell.c:443
 msgid "More..."
 msgstr "Pli..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:465
+#: ../gtkspell/gtkspell.c:464
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Aldoni \"%s\" al la Vortaro"
 
-#: ../gtkspell/gtkspell.c:480 ../gtkspell/gtkspell.c:482
+#: ../gtkspell/gtkspell.c:479 ../gtkspell/gtkspell.c:481
 msgid "Ignore All"
 msgstr "Ignori Ĉiujn"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:602
+#: ../gtkspell/gtkspell.c:601
 msgid "Languages"
 msgstr "Lingvoj"
 
-#: ../gtkspell/gtkspell.c:702
+#: ../gtkspell/gtkspell.c:701
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "eraro de enchant por la lingvo: %s"

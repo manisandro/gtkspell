@@ -1,14 +1,16 @@
 # Dutch translations of gtkspell3
-# Copyright (C) 2013 the gtkspell3 copyright holder
+# Copyright (C) 2014 the gtkspell3 copyright holder
 # This file is distributed under the same license as the gtkspell3 package.
+# Jan Claeys <janc@lugwv.be>, 2005.
 # Reinout van Schouwen <reinout@cs.vu.nl>, 2005.
+# Benno Schulenberg <benno@vertaalt.nl>, 2014.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell3 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-25 23:44+0200\n"
+"POT-Creation-Date: 2014-04-19 23:04+0200\n"
 "PO-Revision-Date: 2005-11-29 10:52+0100\n"
 "Last-Translator: Jan Claeys <janc@lugwv.be>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -18,34 +20,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Dutch\n"
 
-#: ../gtkspell/gtkspell.c:428
+#: ../gtkspell/gtkspell.c:427
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(geen suggesties)</i>"
 
-#: ../gtkspell/gtkspell.c:444
+#: ../gtkspell/gtkspell.c:443
 msgid "More..."
 msgstr "Meer..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:465
+#: ../gtkspell/gtkspell.c:464
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "\"%s\" toevoegen aan woordenboek"
 
-#: ../gtkspell/gtkspell.c:480 ../gtkspell/gtkspell.c:482
+#: ../gtkspell/gtkspell.c:479 ../gtkspell/gtkspell.c:481
 msgid "Ignore All"
 msgstr "Alles negeren"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:602
+#: ../gtkspell/gtkspell.c:601
 #, fuzzy
 msgid "Languages"
 msgstr "Talen"
 
-#: ../gtkspell/gtkspell.c:702
+#: ../gtkspell/gtkspell.c:701
 #, fuzzy, c-format
 msgid "enchant error for language: %s"
-msgstr "enchant fout voor taal: %s"
+msgstr "'enchant'-fout voor taal: %s"
 
 #~ msgid "Spelling Suggestions"
 #~ msgstr "Spellingsuggesties"

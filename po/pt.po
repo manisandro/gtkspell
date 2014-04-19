@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell3 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-25 23:44+0200\n"
+"POT-Creation-Date: 2014-04-19 23:04+0200\n"
 "PO-Revision-Date: 2009-01-27 03:05+0100\n"
 "Last-Translator: Hugo Patrício <hugo.a.patricio@gmail.com>\n"
 "Language-Team: Portuguese <translation-team-pt@lists.sourceforge.net>\n"
@@ -20,30 +20,30 @@ msgstr ""
 "X-Poedit-Country: PORTUGAL\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../gtkspell/gtkspell.c:428
+#: ../gtkspell/gtkspell.c:427
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(sem sugestões)</i>"
 
-#: ../gtkspell/gtkspell.c:444
+#: ../gtkspell/gtkspell.c:443
 msgid "More..."
 msgstr "Mais..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:465
+#: ../gtkspell/gtkspell.c:464
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Adicionar \"%s\" ao Dicionário"
 
-#: ../gtkspell/gtkspell.c:480 ../gtkspell/gtkspell.c:482
+#: ../gtkspell/gtkspell.c:479 ../gtkspell/gtkspell.c:481
 msgid "Ignore All"
 msgstr "Ignorar Tudo"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:602
+#: ../gtkspell/gtkspell.c:601
 msgid "Languages"
 msgstr "Idiomas"
 
-#: ../gtkspell/gtkspell.c:702
+#: ../gtkspell/gtkspell.c:701
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "enchant erro para o idioma: %s"

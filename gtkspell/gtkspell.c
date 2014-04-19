@@ -116,10 +116,9 @@ gtk_spell_text_iter_backward_word_start (GtkTextIter *i)
     return FALSE;
 
   iter = *i;
-  if (gtk_text_iter_backward_char (&iter) &&
-      gtk_text_iter_get_char (&iter) == '\'' &&
+  if (g_unichar_isalpha (gtk_text_iter_get_char (&iter) &&
       gtk_text_iter_backward_char (&iter) &&
-      g_unichar_isalpha (gtk_text_iter_get_char (&iter)))
+      gtk_text_iter_get_char (&iter) == '\''))
     return (gtk_text_iter_backward_word_start (i));
 
   return TRUE;

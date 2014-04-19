@@ -1,3 +1,8 @@
+version 3.0.5 (2014-04-19):
+	* Fix incorrect handling of single quotes
+	* Buildsystem cleanups and tweaks
+	* Translation updates (see po/ChangeLog)
+
 version 3.0.4 (2013-09-25):
 	* Make decode-language-codes more robust
 	* Don't use deprecated symbols when compiled against gtk3 >= 3.9

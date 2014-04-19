@@ -3,11 +3,12 @@ dnl Process this file with autoconf to produce a configure script.
 m4_define(gtkspell_version_minor, 0)
 m4_define(gtkspell_version_micro, 5)
 
-AC_PREREQ(2.62)
 AC_INIT(gtkspell3, 3.gtkspell_version_minor.gtkspell_version_micro)
-AC_CONFIG_MACRO_DIR(m4)
-AC_CONFIG_SRCDIR(gtkspell/gtkspell.c)
+AC_CONFIG_AUX_DIR([build])
+AC_CONFIG_MACRO_DIR([build])
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_SRCDIR(gtkspell/gtkspell.c)
+AC_CANONICAL_HOST
 
 AM_INIT_AUTOMAKE([-Wall])
 

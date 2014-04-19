@@ -2,7 +2,7 @@
 
 SUBDIRS = gtkspell examples po docs
 
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I build
 
 INTLTOOL_FILES = intltool-extract.in \
 	intltool-merge.in \

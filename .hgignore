@@ -4,7 +4,7 @@ build
 Makefile.in*
 aclocal.m4
 autom4te.cache
-config.h.in
+config.h.in*
 examples/simple-vala.c
 examples/simple_gtk3_vala_vala.stamp
 gtk-doc.make

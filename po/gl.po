@@ -1,18 +1,18 @@
-# Galician translations of gtkspell3
-# Copyright (C) 2013 the gtkspell3 copyright holder
-# This file is distributed under the same license as the gtkspell3 package.
+# Galician translation of gtkspell
+# This file is distributed under the same license as the gtkspell package.
+# Copyright (C) 2010, 2012 Leandro Regueiro.
+#
 # Diego Pérez Montes <kabute@gulo.org>, 2008.
 # Leandro Regueiro <leandro.regueiro@gmail.com>, 2010, 2012.
 #
 # Proxecto Trasno - Adaptación do software libre á lingua galega:  Se desexas
 # colaborar connosco, podes atopar máis información en <http://www.trasno.net>
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkspell3 3.0.1\n"
+"Project-Id-Version: gtkspell-2.0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-19 23:04+0200\n"
+"POT-Creation-Date: 2014-04-23 02:04+0200\n"
 "PO-Revision-Date: 2012-11-10 13:49+0200\n"
 "Last-Translator: Leandro Regueiro <leandro.regueiro@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"

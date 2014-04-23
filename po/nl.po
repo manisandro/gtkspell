@@ -1,24 +1,25 @@
-# Dutch translations of gtkspell3
-# Copyright (C) 2014 the gtkspell3 copyright holder
-# This file is distributed under the same license as the gtkspell3 package.
+# Dutch translations for gtkspell.
+# Copyright (C) 2014 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gtkspell package.
+#
 # Jan Claeys <janc@lugwv.be>, 2005.
 # Reinout van Schouwen <reinout@cs.vu.nl>, 2005.
 # Benno Schulenberg <benno@vertaalt.nl>, 2014.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkspell3 3.0.1\n"
+"Project-Id-Version: gtkspell 2.0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-19 23:04+0200\n"
-"PO-Revision-Date: 2005-11-29 10:52+0100\n"
-"Last-Translator: Jan Claeys <janc@lugwv.be>\n"
+"POT-Creation-Date: 2014-04-23 02:04+0200\n"
+"PO-Revision-Date: 2014-02-04 11:35+0100\n"
+"Last-Translator: Benno Schulenberg <benno@vertaalt.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Dutch\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gtkspell/gtkspell.c:427
 msgid "<i>(no suggestions)</i>"
@@ -40,12 +41,11 @@ msgstr "Alles negeren"
 
 #. on top: language selection
 #: ../gtkspell/gtkspell.c:601
-#, fuzzy
 msgid "Languages"
 msgstr "Talen"
 
 #: ../gtkspell/gtkspell.c:701
-#, fuzzy, c-format
+#, c-format
 msgid "enchant error for language: %s"
 msgstr "'enchant'-fout voor taal: %s"
 

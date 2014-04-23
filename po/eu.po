@@ -1,14 +1,15 @@
-# Basque translations of gtkspell3
-# Copyright (C) 2013 the gtkspell3 copyright holder
-# This file is distributed under the same license as the gtkspell3 package.
+# Basque translation of gtkspell.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gtkspell package.
 # Mikel Olasagasti Uranga <hey_neken@mundurat.net>, 2004, 2009.
+# , fuzzy
 #
-#, fuzzy
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkspell3 3.0.1\n"
+"Project-Id-Version: gtkspell 2.0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-19 23:04+0200\n"
+"POT-Creation-Date: 2014-04-23 02:04+0200\n"
 "PO-Revision-Date: 2009-12-09 23:57+0100\n"
 "Last-Translator: Mikel Olasagasti Uranga <hey_neken@mundurat.net>\n"
 "Language-Team: Basque <translation-team-eu@lists.sourceforge.net>\n"

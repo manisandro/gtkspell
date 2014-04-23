@@ -1,14 +1,12 @@
-# Czech translations of gtkspell3
-# Copyright (C) 2013 the gtkspell3 copyright holder
-# This file is distributed under the same license as the gtkspell3 package.
+# Czech translation of gtkspell.
+# Copyright (C) 2007, 2009 the author(s) of gtkspell.
+# This file is distributed under the same license as the gtkspell package.
 # Petr Kovar <pknbe@volny.cz>, 2007, 2009.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkspell3 3.0.1\n"
+"Project-Id-Version: gtkspell 2.0.16-pre1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-19 23:04+0200\n"
+"POT-Creation-Date: 2014-04-23 02:04+0200\n"
 "PO-Revision-Date: 2009-10-10 19:24+0200\n"
 "Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"

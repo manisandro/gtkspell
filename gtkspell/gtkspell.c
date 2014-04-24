@@ -91,12 +91,14 @@ gtk_spell_text_iter_forward_word_end (GtkTextIter *i)
   /* heuristic:
    * if we're on an singlequote/apostrophe and
    * if the next letter is alphanumeric,
-   * this is an apostrophe. */
+   * this is an apostrophe (either single quote, or U+2019 = 8217. */
 
   if (!gtk_text_iter_forward_word_end (i))
     return FALSE;
 
-  if (gtk_text_iter_get_char (i) != '\'')
+  g_print ("%d == %d\n", apostrophe, gtk_text_iter_get_char (i));
+  if (gtk_text_iter_get_char (i) != '\'' &&
+      gtk_text_iter_get_char (i) != 8217)
     return TRUE;
 
   iter = *i;
@@ -116,9 +118,10 @@ gtk_spell_text_iter_backward_word_start (GtkTextIter *i)
     return FALSE;
 
   iter = *i;
-  if (g_unichar_isalpha (gtk_text_iter_get_char (&iter) &&
+  if (g_unichar_isalpha (gtk_text_iter_get_char (&iter)) &&
       gtk_text_iter_backward_char (&iter) &&
-      gtk_text_iter_get_char (&iter) == '\''))
+      (gtk_text_iter_get_char (&iter) == '\'' ||
+       gtk_text_iter_get_char (&iter) == 8217))
     return (gtk_text_iter_backward_word_start (i));
 
   return TRUE;

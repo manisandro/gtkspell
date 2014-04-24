@@ -1,3 +1,8 @@
+version 3.0.6 (2014-04-24):
+	* Fix badly merged translations
+	* Also recognize U+2019 as apostrophe
+	* Translation updates (see po/ChangeLog)
+
 version 3.0.5 (2014-04-19):
 	* Fix incorrect handling of single quotes
 	* Buildsystem cleanups and tweaks

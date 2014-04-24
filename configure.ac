@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 m4_define(gtkspell_version_minor, 0)
-m4_define(gtkspell_version_micro, 6)
+m4_define(gtkspell_version_micro, 7)
 
 AC_INIT(gtkspell3, 3.gtkspell_version_minor.gtkspell_version_micro)
 AC_CONFIG_AUX_DIR([build])

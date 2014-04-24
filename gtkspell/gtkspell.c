@@ -96,7 +96,6 @@ gtk_spell_text_iter_forward_word_end (GtkTextIter *i)
   if (!gtk_text_iter_forward_word_end (i))
     return FALSE;
 
-  g_print ("%d == %d\n", apostrophe, gtk_text_iter_get_char (i));
   if (gtk_text_iter_get_char (i) != '\'' &&
       gtk_text_iter_get_char (i) != 8217)
     return TRUE;

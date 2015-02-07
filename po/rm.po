@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell3 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-24 20:57+0200\n"
+"POT-Creation-Date: 2015-02-07 18:53+0100\n"
 "PO-Revision-Date: 2005-02-06 12:28+0100\n"
 "Last-Translator: Florian Verdet _goto <fvgoto@linuxbourg.ch>\n"
 "Language-Team: Rhaeto-Romance <gnu-rumantsch@guglielmtux.ch>\n"
@@ -19,30 +19,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.2\n"
 
-#: ../gtkspell/gtkspell.c:427
+#: ../gtkspell/gtkspell.c:429
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(ingünas propostas)</i>"
 
-#: ../gtkspell/gtkspell.c:443
+#: ../gtkspell/gtkspell.c:445
 msgid "More..."
 msgstr "Daplü..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:464
+#: ../gtkspell/gtkspell.c:466
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Agiundscher \"%s\" al dicziunari"
 
-#: ../gtkspell/gtkspell.c:479 ../gtkspell/gtkspell.c:481
+#: ../gtkspell/gtkspell.c:481 ../gtkspell/gtkspell.c:483
 msgid "Ignore All"
 msgstr "Ignorar tuots"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:601
+#: ../gtkspell/gtkspell.c:603
 msgid "Languages"
 msgstr "Linguas"
 
-#: ../gtkspell/gtkspell.c:701
+#: ../gtkspell/gtkspell.c:703
 #, fuzzy, c-format
 msgid "enchant error for language: %s"
 msgstr "enchant lingua sbagl: %s"

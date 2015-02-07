@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell-2.0.6-pre1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-24 20:58+0200\n"
+"POT-Creation-Date: 2015-02-07 18:53+0100\n"
 "PO-Revision-Date: 2004-06-19 22:45+0200\n"
 "Last-Translator: Pablo Saratxaga <pablo@walon.org>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
@@ -15,30 +15,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.0.2\n"
 
-#: ../gtkspell/gtkspell.c:427
+#: ../gtkspell/gtkspell.c:429
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(nole sudjestion)</i>"
 
-#: ../gtkspell/gtkspell.c:443
+#: ../gtkspell/gtkspell.c:445
 msgid "More..."
 msgstr "Co des ôtes..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:464
+#: ../gtkspell/gtkspell.c:466
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Radjouter «%s» å motî"
 
-#: ../gtkspell/gtkspell.c:479 ../gtkspell/gtkspell.c:481
+#: ../gtkspell/gtkspell.c:481 ../gtkspell/gtkspell.c:483
 msgid "Ignore All"
 msgstr "Passer tofer houte"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:601
+#: ../gtkspell/gtkspell.c:603
 msgid "Languages"
 msgstr ""
 
-#: ../gtkspell/gtkspell.c:701
+#: ../gtkspell/gtkspell.c:703
 #, c-format
 msgid "enchant error for language: %s"
 msgstr ""

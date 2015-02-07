@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 2.0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-24 20:57+0200\n"
+"POT-Creation-Date: 2015-02-07 18:53+0100\n"
 "PO-Revision-Date: 2012-04-16 01:59+0200\n"
 "Last-Translator: Tomislav Krznar <tomislav.krznar@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -18,30 +18,30 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
-#: ../gtkspell/gtkspell.c:427
+#: ../gtkspell/gtkspell.c:429
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(nema prijedloga)</i>"
 
-#: ../gtkspell/gtkspell.c:443
+#: ../gtkspell/gtkspell.c:445
 msgid "More..."
 msgstr "Više..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:464
+#: ../gtkspell/gtkspell.c:466
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Dodaj „%s” u rječnik"
 
-#: ../gtkspell/gtkspell.c:479 ../gtkspell/gtkspell.c:481
+#: ../gtkspell/gtkspell.c:481 ../gtkspell/gtkspell.c:483
 msgid "Ignore All"
 msgstr "Zanemari sve"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:601
+#: ../gtkspell/gtkspell.c:603
 msgid "Languages"
 msgstr "Jezici"
 
-#: ../gtkspell/gtkspell.c:701
+#: ../gtkspell/gtkspell.c:703
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "enchant greška za jezik: %s"

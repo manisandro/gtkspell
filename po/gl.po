@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell-2.0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-24 20:57+0200\n"
+"POT-Creation-Date: 2015-02-07 18:53+0100\n"
 "PO-Revision-Date: 2012-11-10 13:49+0200\n"
 "Last-Translator: Leandro Regueiro <leandro.regueiro@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
@@ -23,30 +23,30 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Virtaal 0.7.0\n"
 
-#: ../gtkspell/gtkspell.c:427
+#: ../gtkspell/gtkspell.c:429
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(non hai recomendacións)</i>"
 
-#: ../gtkspell/gtkspell.c:443
+#: ../gtkspell/gtkspell.c:445
 msgid "More..."
 msgstr "Máis..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:464
+#: ../gtkspell/gtkspell.c:466
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Engadir «%s» ao dicionario"
 
-#: ../gtkspell/gtkspell.c:479 ../gtkspell/gtkspell.c:481
+#: ../gtkspell/gtkspell.c:481 ../gtkspell/gtkspell.c:483
 msgid "Ignore All"
 msgstr "Ignorar todo"
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:601
+#: ../gtkspell/gtkspell.c:603
 msgid "Languages"
 msgstr "Idiomas"
 
-#: ../gtkspell/gtkspell.c:701
+#: ../gtkspell/gtkspell.c:703
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "erro de enchant para o idioma: %s"

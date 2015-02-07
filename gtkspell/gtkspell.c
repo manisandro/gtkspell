@@ -567,7 +567,7 @@ build_languages_menu (GtkSpellChecker *spell)
       menu_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (mi));
 
       g_object_set (G_OBJECT (mi), "name", lang_tag, NULL);
-      if (strcmp (spell->priv->lang, lang_tag) == 0)
+      if (spell->priv->lang && strcmp (spell->priv->lang, lang_tag) == 0)
         active_item = mi;
       else
         g_signal_connect (mi, "activate",

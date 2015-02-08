@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 2.0.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-07 18:53+0100\n"
+"POT-Creation-Date: 2015-02-08 22:40+0100\n"
 "PO-Revision-Date: 2009-01-21 23:14+0200\n"
 "Last-Translator: Dwayne Bailey <dwayne@translate.org.za>\n"
 "Language-Team: Afrikaans <i18n@af.org.za>\n"
@@ -35,13 +35,19 @@ msgstr "Voeg \"%s\" by die woordeboek"
 msgid "Ignore All"
 msgstr "Ignoreer almal"
 
+#. For the situation where no language is active (i.e.
+#. * spell->priv->lang == NULL), create a "None" item which is active.
+#: ../gtkspell/gtkspell.c:583
+msgid "None"
+msgstr ""
+
 # New menu entry added in v2.0.14 (no available POT file)
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:603
+#: ../gtkspell/gtkspell.c:619
 msgid "Languages"
 msgstr "Tale"
 
-#: ../gtkspell/gtkspell.c:703
+#: ../gtkspell/gtkspell.c:719
 #, c-format
 msgid "enchant error for language: %s"
 msgstr ""

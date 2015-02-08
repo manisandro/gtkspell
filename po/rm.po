@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell3 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-07 18:53+0100\n"
+"POT-Creation-Date: 2015-02-08 22:40+0100\n"
 "PO-Revision-Date: 2005-02-06 12:28+0100\n"
 "Last-Translator: Florian Verdet _goto <fvgoto@linuxbourg.ch>\n"
 "Language-Team: Rhaeto-Romance <gnu-rumantsch@guglielmtux.ch>\n"
@@ -37,12 +37,18 @@ msgstr "Agiundscher \"%s\" al dicziunari"
 msgid "Ignore All"
 msgstr "Ignorar tuots"
 
+#. For the situation where no language is active (i.e.
+#. * spell->priv->lang == NULL), create a "None" item which is active.
+#: ../gtkspell/gtkspell.c:583
+msgid "None"
+msgstr ""
+
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:603
+#: ../gtkspell/gtkspell.c:619
 msgid "Languages"
 msgstr "Linguas"
 
-#: ../gtkspell/gtkspell.c:703
+#: ../gtkspell/gtkspell.c:719
 #, fuzzy, c-format
 msgid "enchant error for language: %s"
 msgstr "enchant lingua sbagl: %s"

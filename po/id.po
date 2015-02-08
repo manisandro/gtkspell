@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 2.0.16-pre1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-07 18:53+0100\n"
+"POT-Creation-Date: 2015-02-08 22:40+0100\n"
 "PO-Revision-Date: 2009-10-08 11:38-0400\n"
 "Last-Translator: Andhika Padmawan <andhika.padmawan@gmail.com>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
@@ -34,12 +34,18 @@ msgstr "Tambah \"%s\" ke Kamus"
 msgid "Ignore All"
 msgstr "Abaikan Semua"
 
+#. For the situation where no language is active (i.e.
+#. * spell->priv->lang == NULL), create a "None" item which is active.
+#: ../gtkspell/gtkspell.c:583
+msgid "None"
+msgstr ""
+
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:603
+#: ../gtkspell/gtkspell.c:619
 msgid "Languages"
 msgstr "Bahasa"
 
-#: ../gtkspell/gtkspell.c:703
+#: ../gtkspell/gtkspell.c:719
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "galat panggilan untuk bahasa: %s"

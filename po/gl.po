@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell-2.0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-07 18:53+0100\n"
+"POT-Creation-Date: 2015-02-08 22:40+0100\n"
 "PO-Revision-Date: 2012-11-10 13:49+0200\n"
 "Last-Translator: Leandro Regueiro <leandro.regueiro@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
@@ -41,12 +41,18 @@ msgstr "Engadir «%s» ao dicionario"
 msgid "Ignore All"
 msgstr "Ignorar todo"
 
+#. For the situation where no language is active (i.e.
+#. * spell->priv->lang == NULL), create a "None" item which is active.
+#: ../gtkspell/gtkspell.c:583
+msgid "None"
+msgstr ""
+
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:603
+#: ../gtkspell/gtkspell.c:619
 msgid "Languages"
 msgstr "Idiomas"
 
-#: ../gtkspell/gtkspell.c:703
+#: ../gtkspell/gtkspell.c:719
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "erro de enchant para o idioma: %s"

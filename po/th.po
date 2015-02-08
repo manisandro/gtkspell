@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell-2.0.16-pre1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-07 18:53+0100\n"
+"POT-Creation-Date: 2015-02-08 22:40+0100\n"
 "PO-Revision-Date: 2009-10-17 00:53+0700\n"
 "Last-Translator: Seksan Poltree <seksan.poltree@gmail.com>\n"
 "Language-Team: Thai <translation-team-th@lists.sourceforge.net>\n"
@@ -36,12 +36,18 @@ msgstr "เพิ่ม \"%s\" ไปยังพจนานุกรม"
 msgid "Ignore All"
 msgstr "เพิกเฉยทั้งหมด"
 
+#. For the situation where no language is active (i.e.
+#. * spell->priv->lang == NULL), create a "None" item which is active.
+#: ../gtkspell/gtkspell.c:583
+msgid "None"
+msgstr ""
+
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:603
+#: ../gtkspell/gtkspell.c:619
 msgid "Languages"
 msgstr "ภาษา"
 
-#: ../gtkspell/gtkspell.c:703
+#: ../gtkspell/gtkspell.c:719
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "เกิดข้อผิดพลาดสำหรับภาษา: %s"

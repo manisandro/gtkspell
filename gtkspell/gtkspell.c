@@ -569,9 +569,6 @@ build_languages_menu (GtkSpellChecker *spell)
       g_object_set (G_OBJECT (mi), "name", lang_tag, NULL);
       if (spell->priv->lang && strcmp (spell->priv->lang, lang_tag) == 0)
         active_item = mi;
-      else
-        g_signal_connect (mi, "activate",
-                          G_CALLBACK (language_change_callback), spell);
       gtk_widget_show (mi);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
 
@@ -587,6 +584,16 @@ build_languages_menu (GtkSpellChecker *spell)
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
       gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (mi), TRUE);
       gtk_widget_show (mi);
+    }
+  /* Connect signals to menu items after determining which one is active,
+   * since otherwise the signal is potentially already fired once (since the
+   * first item added to the group is active by default. */
+  for (; menu_group; menu_group = menu_group->next)
+    {
+        mi = menu_group->data;
+        if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (mi)))
+          g_signal_connect (mi, "activate",
+                            G_CALLBACK (language_change_callback), spell);
     }
 
   g_list_free (languages_cb_struct.langs);

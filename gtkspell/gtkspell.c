@@ -582,11 +582,11 @@ build_languages_menu (GtkSpellChecker *spell)
   else
     {
       /* For the situation where no language is active (i.e.
-       * spell->priv->lang == NULL), create a dummy, hidden item which is
-       * active, so that for the user it looks like there is no active item. */
-      mi = gtk_radio_menu_item_new_with_label (menu_group, "");
+       * spell->priv->lang == NULL), create a "None" item which is active. */
+      mi = gtk_radio_menu_item_new_with_label (menu_group, _("None"));
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
       gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (mi), TRUE);
+      gtk_widget_show (mi);
     }
 
   g_list_free (languages_cb_struct.langs);

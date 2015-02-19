@@ -596,7 +596,7 @@ build_languages_menu (GtkSpellChecker *spell)
                             G_CALLBACK (language_change_callback), spell);
     }
 
-  g_list_free_full (languages_cb_struct.langs);
+  g_list_free (languages_cb_struct.langs);
 
   return menu;
 }
@@ -1099,7 +1099,7 @@ gtk_spell_checker_get_language (GtkSpellChecker *spell)
  * Requests the list of available languages from the enchant broker.
  *
  * Returns: (transfer full) (element-type utf8): a #GList of the available languages.
- * Use g_list_free_full to free the list after use.
+ * Use g_list_free_full with g_free to free the list after use.
  *
  * Since: 3.0.3
  */

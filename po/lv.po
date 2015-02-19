@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell-3.0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 22:40+0100\n"
+"POT-Creation-Date: 2014-04-19 23:04+0200\n"
 "PO-Revision-Date: 2014-04-20 16:45+0300\n"
 "Last-Translator: Rihards Prieditis <rprieditis@gmail.com>\n"
 "Language-Team: Latvian <translation-team-lv@lists.sourceforge.net>\n"
@@ -17,39 +17,32 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.5\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);\n"
 
-#: ../gtkspell/gtkspell.c:429
+#: ../gtkspell/gtkspell.c:427
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(nav  priekšlikumu)</i>"
 
-#: ../gtkspell/gtkspell.c:445
+#: ../gtkspell/gtkspell.c:443
 msgid "More..."
 msgstr "Vairāk..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:466
+#: ../gtkspell/gtkspell.c:464
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Pievienot “%s” vārdnīcai"
 
-#: ../gtkspell/gtkspell.c:481 ../gtkspell/gtkspell.c:483
+#: ../gtkspell/gtkspell.c:479 ../gtkspell/gtkspell.c:481
 msgid "Ignore All"
 msgstr "Ignorēt visu"
 
-#. For the situation where no language is active (i.e.
-#. * spell->priv->lang == NULL), create a "None" item which is active.
-#: ../gtkspell/gtkspell.c:583
-msgid "None"
-msgstr ""
-
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:619
+#: ../gtkspell/gtkspell.c:601
 msgid "Languages"
 msgstr "Valodas"
 
-#: ../gtkspell/gtkspell.c:719
+#: ../gtkspell/gtkspell.c:701
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "uzlabot kļūdu valodai: %s"

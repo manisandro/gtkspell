@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell 2.0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 22:40+0100\n"
+"POT-Creation-Date: 2009-10-22 22:57-0400\n"
 "PO-Revision-Date: 2013-08-17 15:00+0800\n"
 "Last-Translator: Anthony Fok <foka@debian.org>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -18,36 +18,31 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../gtkspell/gtkspell.c:429
+#: ../gtkspell/gtkspell.c:356
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(没有建议)</i>"
 
-#: ../gtkspell/gtkspell.c:445
+#: ../gtkspell/gtkspell.c:368
 msgid "More..."
 msgstr "更多..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:466
+#: ../gtkspell/gtkspell.c:388
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "将“%s”添加至词典"
 
-#: ../gtkspell/gtkspell.c:481 ../gtkspell/gtkspell.c:483
+#. - Ignore All
+#: ../gtkspell/gtkspell.c:399
 msgid "Ignore All"
 msgstr "全部忽略"
 
-#. For the situation where no language is active (i.e.
-#. * spell->priv->lang == NULL), create a "None" item which is active.
-#: ../gtkspell/gtkspell.c:583
-msgid "None"
-msgstr ""
-
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:619
+#: ../gtkspell/gtkspell.c:494
 msgid "Languages"
 msgstr "语言"
 
-#: ../gtkspell/gtkspell.c:719
+#: ../gtkspell/gtkspell.c:584
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "拼写检查库 Enchant 处理语言 %s 时发生错误"

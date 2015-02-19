@@ -5,50 +5,35 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell-2.0.6-pre1\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 22:40+0100\n"
+"Report-Msgid-Bugs-To: nathan@silverorange.com\n"
+"POT-Creation-Date: 2004-06-10 19:31-0400\n"
 "PO-Revision-Date: 2004-07-26 12:54+0200\n"
 "Last-Translator: Sanlig Badral <badral@users.sourceforge.net>\n"
 "Language-Team: Mongolian <openmn-translation@lists.sourceforge.net>\n"
-"Language: mn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.3.1\n"
 
-#: ../gtkspell/gtkspell.c:429
+#: gtkspell/gtkspell.c:381
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(хувилбар алга)</i>"
 
-#: ../gtkspell/gtkspell.c:445
+#: gtkspell/gtkspell.c:395
 msgid "More..."
 msgstr "Илүү..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:466
+#: gtkspell/gtkspell.c:421
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "\"%s\" Лавлар руу нэмэх"
 
-#: ../gtkspell/gtkspell.c:481 ../gtkspell/gtkspell.c:483
+#. - Ignore All
+#: gtkspell/gtkspell.c:432
 msgid "Ignore All"
 msgstr "Бүгдийг үл хэрэгс"
 
-#. For the situation where no language is active (i.e.
-#. * spell->priv->lang == NULL), create a "None" item which is active.
-#: ../gtkspell/gtkspell.c:583
-msgid "None"
-msgstr ""
-
-#. on top: language selection
-#: ../gtkspell/gtkspell.c:619
-msgid "Languages"
-msgstr ""
-
-#: ../gtkspell/gtkspell.c:719
-#, c-format
-msgid "enchant error for language: %s"
-msgstr ""
-
-#~ msgid "Spelling Suggestions"
-#~ msgstr "Зөв дүрэм санал болгох"
+#: gtkspell/gtkspell.c:465
+msgid "Spelling Suggestions"
+msgstr "Зөв дүрэм санал болгох"

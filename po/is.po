@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkspell-2.0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 22:40+0100\n"
+"POT-Creation-Date: 2009-10-22 22:57-0400\n"
 "PO-Revision-Date: 2011-05-12 20:43+0000\n"
 "Last-Translator: Sveinn í Felli <sveinki@nett.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
@@ -17,36 +17,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../gtkspell/gtkspell.c:429
+#: ../gtkspell/gtkspell.c:356
 msgid "<i>(no suggestions)</i>"
 msgstr "<i>(engar tillögur)</i>"
 
-#: ../gtkspell/gtkspell.c:445
+#: ../gtkspell/gtkspell.c:368
 msgid "More..."
 msgstr "Meira..."
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:466
+#: ../gtkspell/gtkspell.c:388
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr "Bæta \"%s\" við orðalista"
 
-#: ../gtkspell/gtkspell.c:481 ../gtkspell/gtkspell.c:483
+#. - Ignore All
+#: ../gtkspell/gtkspell.c:399
 msgid "Ignore All"
 msgstr "Hunsa allt"
 
-#. For the situation where no language is active (i.e.
-#. * spell->priv->lang == NULL), create a "None" item which is active.
-#: ../gtkspell/gtkspell.c:583
-msgid "None"
-msgstr ""
-
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:619
+#: ../gtkspell/gtkspell.c:494
 msgid "Languages"
 msgstr "Tungumál"
 
-#: ../gtkspell/gtkspell.c:719
+#: ../gtkspell/gtkspell.c:584
 #, c-format
 msgid "enchant error for language: %s"
 msgstr "villa í enchant varðandi tungumálið: %s"

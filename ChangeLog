@@ -1,3 +1,9 @@
+version 3.0.7 (2015-02-20):
+	* Fix crash when building context menu if no spelling dictionary is active
+	* Fix gtk_spell_checker_get_language_list docstring - g_list_free_full
+	  needs to be used, not g_list_free
+	* Translation updates
+
 version 3.0.6 (2014-04-24):
 	* Fix badly merged translations
 	* Also recognize U+2019 as apostrophe

@@ -224,6 +224,11 @@ check_range (GtkSpellChecker *spell, GtkTextIter start,
       wend = wstart;
       gtk_text_iter_forward_word_end (&wend);
 
+      /* make sure we've actually advanced
+       * (we don't advance in some corner cases, such as after punctuation) */
+      if (gtk_text_iter_equal (&wstart, &wend))
+        break;
+
       inword = (gtk_text_iter_compare (&wstart, &cursor) < 0) &&
                (gtk_text_iter_compare (&cursor, &wend) <= 0);
 

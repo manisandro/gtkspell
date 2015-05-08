@@ -151,6 +151,47 @@ print_iter (char *name, GtkTextIter *iter)
            gtk_text_iter_ends_word (iter) ? 'e' : ' ');
 }
 
+gboolean
+skip_no_spell_check (GtkTextTag  *no_spell_check_tag,
+                     GtkTextIter *start,
+                     GtkTextIter *end)
+{
+  if (no_spell_check_tag == NULL)
+    return TRUE;
+
+  while (gtk_text_iter_has_tag (start, no_spell_check_tag))
+    {
+      GtkTextIter last = *start;
+
+      if (!gtk_text_iter_forward_to_tag_toggle (start, no_spell_check_tag))
+        return FALSE;
+
+      if (gtk_text_iter_compare (start, &last) <= 0)
+        return FALSE;
+
+      gtk_text_iter_forward_word_end (start);
+      gtk_text_iter_backward_word_start (start);
+
+      if (gtk_text_iter_compare (start, &last) <= 0)
+        return FALSE;
+
+      if (gtk_text_iter_compare (start, end) >= 0)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static GtkTextTag *
+get_no_spell_check_tag (GtkSpellChecker *spell)
+{
+  GtkTextTagTable *tag_table;
+
+  tag_table = gtk_text_buffer_get_tag_table (spell->priv->buffer);
+
+  return gtk_text_tag_table_lookup (tag_table, "gtksourceview:context-classes:no-spell-check");
+}
+
 static void
 check_range (GtkSpellChecker *spell, GtkTextIter start,
              GtkTextIter end, gboolean force_all)
@@ -162,6 +203,7 @@ check_range (GtkSpellChecker *spell, GtkTextIter start,
    * so we don't have to figure it out. */
 
   GtkTextIter wstart, wend, cursor, precursor;
+  GtkTextTag *no_spell_check_tag;
   gboolean inword, highlight;
   if (debug)
     {
@@ -217,8 +259,11 @@ check_range (GtkSpellChecker *spell, GtkTextIter start,
       g_print ("\n");
     }
 
+  no_spell_check_tag = get_no_spell_check_tag (spell);
+
   wstart = start;
-  while (gtk_text_iter_compare (&wstart, &end) < 0)
+  while (skip_no_spell_check (no_spell_check_tag, &wstart, &end) &&
+         gtk_text_iter_compare (&wstart, &end) < 0)
     {
       /* move wend to the end of the current word. */
       wend = wstart;

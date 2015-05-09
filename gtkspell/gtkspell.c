@@ -39,6 +39,8 @@
 #define GTK_SPELL_MISSPELLED_TAG "gtkspell-misspelled"
 #define GTK_SPELL_OBJECT_KEY "gtkspell"
 
+#define GTK_SOURCE_VIEW_NO_SPELL_CHECK "gtksourceview:context-classes:no-spell-check"
+
 static const int debug = 0;
 static const int quiet = 0;
 
@@ -189,7 +191,7 @@ get_no_spell_check_tag (GtkSpellChecker *spell)
 
   tag_table = gtk_text_buffer_get_tag_table (spell->priv->buffer);
 
-  return gtk_text_tag_table_lookup (tag_table, "gtksourceview:context-classes:no-spell-check");
+  return gtk_text_tag_table_lookup (tag_table, GTK_SOURCE_VIEW_NO_SPELL_CHECK);
 }
 
 static void
@@ -779,16 +781,36 @@ set_language_internal (GtkSpellChecker *spell, const gchar *lang, GError **error
   return TRUE;
 }
 
+static void
+tag_added_or_removed (GtkTextTagTable *tag_table,
+                      GtkTextTag      *tag,
+                      GtkSpellChecker *spell)
+{
+  gchar *name;
+
+  g_object_get (tag, "name", &name, NULL);
+
+  if (g_strcmp0 (name, GTK_SOURCE_VIEW_NO_SPELL_CHECK) == 0)
+    gtk_spell_checker_recheck_all (spell);
+
+  g_free (name);
+}
+
 /* changes the buffer
  * a NULL buffer is acceptable and will only release the current one */
 static void
 set_buffer (GtkSpellChecker *spell, GtkTextBuffer *buffer)
 {
   GtkTextIter start, end;
+  GtkTextTagTable *tagtable;
 
   if (spell->priv->buffer)
     {
       g_signal_handlers_disconnect_matched (spell->priv->buffer, G_SIGNAL_MATCH_DATA,
+                                            0, 0, NULL, NULL, spell);
+
+      tagtable = gtk_text_buffer_get_tag_table (spell->priv->buffer);
+      g_signal_handlers_disconnect_matched (tagtable, G_SIGNAL_MATCH_DATA,
                                             0, 0, NULL, NULL, spell);
 
       gtk_text_buffer_get_bounds (spell->priv->buffer, &start, &end);
@@ -831,6 +853,11 @@ set_buffer (GtkSpellChecker *spell, GtkTextBuffer *buffer)
                                          GTK_SPELL_MISSPELLED_TAG, "underline",
                                          PANGO_UNDERLINE_ERROR, NULL);
         }
+
+      g_signal_connect (tagtable, "tag-added",
+                        G_CALLBACK (tag_added_or_removed), spell);
+      g_signal_connect (tagtable, "tag-removed",
+                        G_CALLBACK (tag_added_or_removed), spell);
 
       /* we create the mark here, but we don't use it until text is
        * inserted, so we don't really care where iter points.  */

@@ -74,6 +74,7 @@ struct _GtkSpellCheckerPrivate
   GtkTextView *view;
   GtkTextBuffer *buffer;
   GtkTextTag *tag_highlight;
+  GtkTextTag *tag_no_spell_check;
   GtkTextMark *mark_insert_start;
   GtkTextMark *mark_insert_end;
   GtkTextMark *mark_click;
@@ -184,16 +185,6 @@ skip_no_spell_check (GtkTextTag  *no_spell_check_tag,
   return TRUE;
 }
 
-static GtkTextTag *
-get_no_spell_check_tag (GtkSpellChecker *spell)
-{
-  GtkTextTagTable *tag_table;
-
-  tag_table = gtk_text_buffer_get_tag_table (spell->priv->buffer);
-
-  return gtk_text_tag_table_lookup (tag_table, GTK_SOURCE_VIEW_NO_SPELL_CHECK);
-}
-
 static void
 check_range (GtkSpellChecker *spell, GtkTextIter start,
              GtkTextIter end, gboolean force_all)
@@ -205,7 +196,6 @@ check_range (GtkSpellChecker *spell, GtkTextIter start,
    * so we don't have to figure it out. */
 
   GtkTextIter wstart, wend, cursor, precursor;
-  GtkTextTag *no_spell_check_tag;
   gboolean inword, highlight;
   if (debug)
     {
@@ -261,10 +251,8 @@ check_range (GtkSpellChecker *spell, GtkTextIter start,
       g_print ("\n");
     }
 
-  no_spell_check_tag = get_no_spell_check_tag (spell);
-
   wstart = start;
-  while (skip_no_spell_check (no_spell_check_tag, &wstart, &end) &&
+  while (skip_no_spell_check (spell->priv->tag_no_spell_check, &wstart, &end) &&
          gtk_text_iter_compare (&wstart, &end) < 0)
     {
       /* move wend to the end of the current word. */
@@ -788,29 +776,46 @@ apply_or_remove_tag (GtkTextBuffer   *buffer,
                      GtkTextIter     *end,
                      GtkSpellChecker *spell)
 {
-  gchar *name;
-
-  g_object_get (tag, "name", &name, NULL);
-
-  if (g_strcmp0 (name, GTK_SOURCE_VIEW_NO_SPELL_CHECK) == 0)
+  if (spell->priv->tag_no_spell_check != NULL &&
+      spell->priv->tag_no_spell_check == tag)
     check_range (spell, *start, *end, TRUE);
-
-  g_free (name);
 }
 
 static void
-tag_added_or_removed (GtkTextTagTable *tag_table,
-                      GtkTextTag      *tag,
-                      GtkSpellChecker *spell)
+tag_added (GtkTextTagTable *tag_table,
+           GtkTextTag      *tag,
+           GtkSpellChecker *spell)
 {
   gchar *name;
 
   g_object_get (tag, "name", &name, NULL);
 
   if (g_strcmp0 (name, GTK_SOURCE_VIEW_NO_SPELL_CHECK) == 0)
-    gtk_spell_checker_recheck_all (spell);
+    {
+      if (spell->priv->tag_no_spell_check != NULL)
+        g_return_if_reached ();
+
+      spell->priv->tag_no_spell_check = g_object_ref (tag);
+
+      gtk_spell_checker_recheck_all (spell);
+    }
 
   g_free (name);
+}
+
+static void
+tag_removed (GtkTextTagTable *tag_table,
+             GtkTextTag      *tag,
+             GtkSpellChecker *spell)
+{
+  if (spell->priv->tag_no_spell_check != NULL &&
+      spell->priv->tag_no_spell_check == tag)
+    {
+      g_object_unref (spell->priv->tag_no_spell_check);
+      spell->priv->tag_no_spell_check = NULL;
+
+      gtk_spell_checker_recheck_all (spell);
+    }
 }
 
 /* changes the buffer
@@ -834,6 +839,12 @@ set_buffer (GtkSpellChecker *spell, GtkTextBuffer *buffer)
       gtk_text_buffer_remove_tag (spell->priv->buffer, spell->priv->tag_highlight,
                                   &start, &end);
       spell->priv->tag_highlight = NULL;
+
+      if (spell->priv->tag_no_spell_check != NULL)
+        {
+          g_object_unref (spell->priv->tag_no_spell_check);
+          spell->priv->tag_no_spell_check = NULL;
+        }
 
       gtk_text_buffer_delete_mark (spell->priv->buffer, spell->priv->mark_insert_start);
       spell->priv->mark_insert_start = NULL;
@@ -875,10 +886,15 @@ set_buffer (GtkSpellChecker *spell, GtkTextBuffer *buffer)
                                          PANGO_UNDERLINE_ERROR, NULL);
         }
 
+      spell->priv->tag_no_spell_check = gtk_text_tag_table_lookup (tagtable,
+                                                                   GTK_SOURCE_VIEW_NO_SPELL_CHECK);
+      if (spell->priv->tag_no_spell_check != NULL)
+        g_object_ref (spell->priv->tag_no_spell_check);
+
       g_signal_connect (tagtable, "tag-added",
-                        G_CALLBACK (tag_added_or_removed), spell);
+                        G_CALLBACK (tag_added), spell);
       g_signal_connect (tagtable, "tag-removed",
-                        G_CALLBACK (tag_added_or_removed), spell);
+                        G_CALLBACK (tag_removed), spell);
 
       /* we create the mark here, but we don't use it until text is
        * inserted, so we don't really care where iter points.  */

@@ -19,6 +19,24 @@
 
 /* vim: set ts=4 sw=4 wm=5 : */
 
+/**
+ * SECTION:gtkspell
+ * @Title: GtkSpellChecker
+ * @Short_description: A spell checker for GtkTextView
+ *
+ * The #GtkSpellChecker class provides word-processor-style highlighting and
+ * replacement of misspelled words in a #GtkTextView widget. Right-clicking a
+ * misspelled word pops up a menu of suggested replacements.
+ *
+ * The Enchant library is used as the backend.
+ *
+ * #GtkSpellChecker works well with the GtkSourceView library (without a
+ * dependency to it). GtkSourceView provides the no-spell-check context class,
+ * that defines a region in the #GtkTextBuffer where the spell checking should
+ * be disabled. #GtkSpellChecker retrieves the corresponding #GtkTextTag and
+ * skips that region.
+ */
+
 #include "../config.h"
 #include "gtkspell.h"
 #include <string.h>
@@ -38,6 +56,8 @@
 
 #define GTK_SPELL_MISSPELLED_TAG "gtkspell-misspelled"
 #define GTK_SPELL_OBJECT_KEY "gtkspell"
+
+#define GTK_SOURCE_VIEW_NO_SPELL_CHECK "gtksourceview:context-classes:no-spell-check"
 
 static const int debug = 0;
 static const int quiet = 0;
@@ -72,6 +92,7 @@ struct _GtkSpellCheckerPrivate
   GtkTextView *view;
   GtkTextBuffer *buffer;
   GtkTextTag *tag_highlight;
+  GtkTextTag *tag_no_spell_check;
   GtkTextMark *mark_insert_start;
   GtkTextMark *mark_insert_end;
   GtkTextMark *mark_click;
@@ -151,6 +172,37 @@ print_iter (char *name, GtkTextIter *iter)
            gtk_text_iter_ends_word (iter) ? 'e' : ' ');
 }
 
+gboolean
+skip_no_spell_check (GtkTextTag  *no_spell_check_tag,
+                     GtkTextIter *start,
+                     GtkTextIter *end)
+{
+  if (no_spell_check_tag == NULL)
+    return TRUE;
+
+  while (gtk_text_iter_has_tag (start, no_spell_check_tag))
+    {
+      GtkTextIter last = *start;
+
+      if (!gtk_text_iter_forward_to_tag_toggle (start, no_spell_check_tag))
+        return FALSE;
+
+      if (gtk_text_iter_compare (start, &last) <= 0)
+        return FALSE;
+
+      gtk_text_iter_forward_word_end (start);
+      gtk_text_iter_backward_word_start (start);
+
+      if (gtk_text_iter_compare (start, &last) <= 0)
+        return FALSE;
+
+      if (gtk_text_iter_compare (start, end) >= 0)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 check_range (GtkSpellChecker *spell, GtkTextIter start,
              GtkTextIter end, gboolean force_all)
@@ -218,7 +270,8 @@ check_range (GtkSpellChecker *spell, GtkTextIter start,
     }
 
   wstart = start;
-  while (gtk_text_iter_compare (&wstart, &end) < 0)
+  while (skip_no_spell_check (spell->priv->tag_no_spell_check, &wstart, &end) &&
+         gtk_text_iter_compare (&wstart, &end) < 0)
     {
       /* move wend to the end of the current word. */
       wend = wstart;
@@ -734,22 +787,101 @@ set_language_internal (GtkSpellChecker *spell, const gchar *lang, GError **error
   return TRUE;
 }
 
+static void
+apply_or_remove_tag (GtkTextBuffer   *buffer,
+                     GtkTextTag      *tag,
+                     GtkTextIter     *start,
+                     GtkTextIter     *end,
+                     GtkSpellChecker *spell)
+{
+  if (spell->priv->tag_no_spell_check != NULL &&
+      spell->priv->tag_no_spell_check == tag)
+    check_range (spell, *start, *end, TRUE);
+}
+
+static void
+set_tag_no_spell_check (GtkSpellChecker *spell,
+                        GtkTextTag      *tag)
+{
+  if (spell->priv->tag_no_spell_check == tag)
+    return;
+
+  if (spell->priv->tag_no_spell_check != NULL)
+    {
+      g_object_unref (spell->priv->tag_no_spell_check);
+
+      g_signal_handlers_disconnect_by_func (spell->priv->buffer,
+                                            apply_or_remove_tag,
+                                            spell);
+    }
+
+  spell->priv->tag_no_spell_check = tag;
+
+  if (tag != NULL)
+    {
+      g_object_ref (tag);
+
+      g_signal_connect_after (spell->priv->buffer, "apply-tag",
+                              G_CALLBACK (apply_or_remove_tag), spell);
+      g_signal_connect_after (spell->priv->buffer, "remove-tag",
+                              G_CALLBACK (apply_or_remove_tag), spell);
+    }
+}
+
+static void
+tag_added (GtkTextTagTable *tag_table,
+           GtkTextTag      *tag,
+           GtkSpellChecker *spell)
+{
+  gchar *name;
+
+  g_object_get (tag, "name", &name, NULL);
+
+  if (g_strcmp0 (name, GTK_SOURCE_VIEW_NO_SPELL_CHECK) == 0)
+    {
+      set_tag_no_spell_check (spell, tag);
+      gtk_spell_checker_recheck_all (spell);
+    }
+
+  g_free (name);
+}
+
+static void
+tag_removed (GtkTextTagTable *tag_table,
+             GtkTextTag      *tag,
+             GtkSpellChecker *spell)
+{
+  if (spell->priv->tag_no_spell_check != NULL &&
+      spell->priv->tag_no_spell_check == tag)
+    {
+      set_tag_no_spell_check (spell, NULL);
+      gtk_spell_checker_recheck_all (spell);
+    }
+}
+
 /* changes the buffer
  * a NULL buffer is acceptable and will only release the current one */
 static void
 set_buffer (GtkSpellChecker *spell, GtkTextBuffer *buffer)
 {
   GtkTextIter start, end;
+  GtkTextTagTable *tagtable;
 
   if (spell->priv->buffer)
     {
       g_signal_handlers_disconnect_matched (spell->priv->buffer, G_SIGNAL_MATCH_DATA,
                                             0, 0, NULL, NULL, spell);
 
+      tagtable = gtk_text_buffer_get_tag_table (spell->priv->buffer);
+      g_signal_handlers_disconnect_matched (tagtable, G_SIGNAL_MATCH_DATA,
+                                            0, 0, NULL, NULL, spell);
+
       gtk_text_buffer_get_bounds (spell->priv->buffer, &start, &end);
       gtk_text_buffer_remove_tag (spell->priv->buffer, spell->priv->tag_highlight,
                                   &start, &end);
       spell->priv->tag_highlight = NULL;
+
+      set_tag_no_spell_check (spell, NULL);
 
       gtk_text_buffer_delete_mark (spell->priv->buffer, spell->priv->mark_insert_start);
       spell->priv->mark_insert_start = NULL;
@@ -765,6 +897,8 @@ set_buffer (GtkSpellChecker *spell, GtkTextBuffer *buffer)
 
   if (spell->priv->buffer)
     {
+      GtkTextTag *tag_no_spell_check;
+
       g_object_ref (spell->priv->buffer);
 
       g_signal_connect (spell->priv->buffer, "insert-text",
@@ -786,6 +920,15 @@ set_buffer (GtkSpellChecker *spell, GtkTextBuffer *buffer)
                                          GTK_SPELL_MISSPELLED_TAG, "underline",
                                          PANGO_UNDERLINE_ERROR, NULL);
         }
+
+      tag_no_spell_check = gtk_text_tag_table_lookup (tagtable,
+                                                      GTK_SOURCE_VIEW_NO_SPELL_CHECK);
+      set_tag_no_spell_check (spell, tag_no_spell_check);
+
+      g_signal_connect (tagtable, "tag-added",
+                        G_CALLBACK (tag_added), spell);
+      g_signal_connect (tagtable, "tag-removed",
+                        G_CALLBACK (tag_removed), spell);
 
       /* we create the mark here, but we don't use it until text is
        * inserted, so we don't really care where iter points.  */

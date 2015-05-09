@@ -782,6 +782,23 @@ set_language_internal (GtkSpellChecker *spell, const gchar *lang, GError **error
 }
 
 static void
+apply_or_remove_tag (GtkTextBuffer   *buffer,
+                     GtkTextTag      *tag,
+                     GtkTextIter     *start,
+                     GtkTextIter     *end,
+                     GtkSpellChecker *spell)
+{
+  gchar *name;
+
+  g_object_get (tag, "name", &name, NULL);
+
+  if (g_strcmp0 (name, GTK_SOURCE_VIEW_NO_SPELL_CHECK) == 0)
+    check_range (spell, *start, *end, TRUE);
+
+  g_free (name);
+}
+
+static void
 tag_added_or_removed (GtkTextTagTable *tag_table,
                       GtkTextTag      *tag,
                       GtkSpellChecker *spell)
@@ -842,6 +859,10 @@ set_buffer (GtkSpellChecker *spell, GtkTextBuffer *buffer)
                         G_CALLBACK (delete_range_after), spell);
       g_signal_connect (spell->priv->buffer, "mark-set",
                         G_CALLBACK (mark_set), spell);
+      g_signal_connect_after (spell->priv->buffer, "apply-tag",
+                              G_CALLBACK (apply_or_remove_tag), spell);
+      g_signal_connect_after (spell->priv->buffer, "remove-tag",
+                              G_CALLBACK (apply_or_remove_tag), spell);
 
       GtkTextTagTable *tagtable = gtk_text_buffer_get_tag_table (spell->priv->buffer);
       spell->priv->tag_highlight = gtk_text_tag_table_lookup (tagtable,

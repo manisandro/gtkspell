@@ -19,6 +19,24 @@
 
 /* vim: set ts=4 sw=4 wm=5 : */
 
+/**
+ * SECTION:gtkspell
+ * @Title: GtkSpellChecker
+ * @Short_description: A spell checker for GtkTextView
+ *
+ * The #GtkSpellChecker class provides word-processor-style highlighting and
+ * replacement of misspelled words in a #GtkTextView widget. Right-clicking a
+ * misspelled word pops up a menu of suggested replacements.
+ *
+ * The Enchant library is used as the backend.
+ *
+ * #GtkSpellChecker works well with the GtkSourceView library (without a
+ * dependency to it). GtkSourceView provides the no-spell-check context class,
+ * that defines a region in the #GtkTextBuffer where the spell checking should
+ * be disabled. #GtkSpellChecker retrieves the corresponding #GtkTextTag and
+ * skips that region.
+ */
+
 #include "../config.h"
 #include "gtkspell.h"
 #include <string.h>

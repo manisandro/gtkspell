@@ -1231,6 +1231,31 @@ gtk_spell_checker_recheck_all (GtkSpellChecker *spell)
 }
 
 /**
+ * gtk_spell_checker_get_suggestions:
+ * @spell: A #GtkSpellChecker.
+ * @word: The word for which to fetch suggestions
+ *
+ * Retreives a list of spelling suggestions for the specified word.
+ *
+ * Returns: (transfer full) (element-type utf8): the list of spelling
+ * suggestions for the specified word, or NULL if there are no suggestions.
+ */
+GList*
+gtk_spell_checker_get_suggestions (GtkSpellChecker *spell, const gchar* word)
+{
+  char **suggestions;
+  size_t n_suggs, i;
+  GList* result = NULL;
+  suggestions = enchant_dict_suggest (spell->priv->speller, word,
+                                      strlen (word), &n_suggs);
+  for (i = 0; i < n_suggs; ++i)
+    {
+      result = g_list_append (result, g_strdup (suggestions[i]));
+    }
+  return result;
+}
+
+/**
  * gtk_spell_checker_get_suggestions_menu:
  * @spell: A #GtkSpellChecker.
  * @iter: Textiter of position in buffer to be corrected if necessary.

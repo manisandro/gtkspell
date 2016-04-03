@@ -93,6 +93,8 @@ gboolean         gtk_spell_checker_attach               (GtkSpellChecker *spell,
                                                          GtkTextView   *view);
 GtkSpellChecker *gtk_spell_checker_get_from_text_view   (GtkTextView   *view);
 void             gtk_spell_checker_detach               (GtkSpellChecker *spell);
+GList           *gtk_spell_checker_get_suggestions      (GtkSpellChecker *spell,
+                                                         const gchar* word);
 GtkWidget       *gtk_spell_checker_get_suggestions_menu (GtkSpellChecker *spell,
                                                          GtkTextIter   *iter);
 gboolean         gtk_spell_checker_set_language         (GtkSpellChecker *spell,

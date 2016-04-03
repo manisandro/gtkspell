@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 m4_define(gtkspell_version_minor, 0)
-m4_define(gtkspell_version_micro, 7)
+m4_define(gtkspell_version_micro, 8)
 
 AC_INIT(gtkspell3, 3.gtkspell_version_minor.gtkspell_version_micro)
 AC_CONFIG_AUX_DIR([build])
@@ -20,7 +20,7 @@ AC_SUBST(GTK_SPELL_VERSION_MINOR, gtkspell_version_minor)
 AC_SUBST(GTK_SPELL_VERSION_MICRO, gtkspell_version_micro)
 
 dnl See http://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
-AC_SUBST([GTK_SPELL_SO_VERSION], [1:0:1])
+AC_SUBST([GTK_SPELL_SO_VERSION], [2:0:2])
 
 AC_PROG_CC
 AM_PROG_CC_C_O

@@ -1,3 +1,9 @@
+version 3.0.8 (2016-04-03):
+	* Fix cases where check_word is called on an empty range
+	* Add gtk_spell_checker_check_word
+	* Add gtk_spell_checker_get_suggestions
+	* Translation updates
+
 version 3.0.7 (2015-02-20):
 	* Fix crash when building context menu if no spelling dictionary is active
 	* Fix gtk_spell_checker_get_language_list docstring - g_list_free_full

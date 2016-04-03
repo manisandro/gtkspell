@@ -101,6 +101,8 @@ gboolean         gtk_spell_checker_set_language         (GtkSpellChecker *spell,
 const gchar     *gtk_spell_checker_get_language         (GtkSpellChecker *spell);
 GList           *gtk_spell_checker_get_language_list    (void);
 gchar           *gtk_spell_checker_decode_language_code (const gchar *lang);
+gboolean         gtk_spell_checker_check_word           (GtkSpellChecker *spell,
+                                                         const gchar *word);
 void             gtk_spell_checker_recheck_all          (GtkSpellChecker *spell);
 
 G_END_DECLS

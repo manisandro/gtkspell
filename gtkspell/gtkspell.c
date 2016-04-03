@@ -1193,6 +1193,24 @@ gtk_spell_checker_set_language (GtkSpellChecker *spell, const gchar *lang, GErro
 }
 
 /**
+ * gtk_spell_checker_check_word:
+ * @spell: The #GtkSpellChecker object.
+ * @word: The word to check.
+ *
+ * Check the specified word.
+ *
+ * Returns: TRUE if the word is correctly spelled, FALSE otherwise.
+ */
+gboolean
+gtk_spell_checker_check_word (GtkSpellChecker *spell, const gchar *word)
+{
+  if (g_unichar_isdigit (*word) == TRUE || /* don't check numbers */
+      enchant_dict_check (spell->priv->speller, word, strlen (word)) == 0)
+    return TRUE;
+  return FALSE;
+}
+
+/**
  * gtk_spell_checker_recheck_all:
  * @spell: The #GtkSpellChecker object.
  *

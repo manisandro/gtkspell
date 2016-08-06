@@ -1202,6 +1202,8 @@ gtk_spell_checker_set_language (GtkSpellChecker *spell, const gchar *lang, GErro
  * Check the specified word.
  *
  * Returns: TRUE if the word is correctly spelled, FALSE otherwise.
+ *
+ * Since: 3.0.8
  */
 gboolean
 gtk_spell_checker_check_word (GtkSpellChecker *spell, const gchar *word)
@@ -1273,6 +1275,8 @@ gtk_spell_checker_ignore_word (GtkSpellChecker *spell, const gchar *word)
  *
  * Returns: (transfer full) (element-type utf8): the list of spelling
  * suggestions for the specified word, or NULL if there are no suggestions.
+ *
+ * Since: 3.0.8
  */
 GList*
 gtk_spell_checker_get_suggestions (GtkSpellChecker *spell, const gchar* word)

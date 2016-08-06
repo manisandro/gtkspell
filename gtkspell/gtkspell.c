@@ -1233,6 +1233,38 @@ gtk_spell_checker_recheck_all (GtkSpellChecker *spell)
 }
 
 /**
+ * gtk_spell_checker_add_to_dictionary:
+ * @spell: The #GtkSpellChecker object.
+ * @word:  The word to add to the user dictionary.
+ *
+ * Add the specified word to the user dictionary.
+ *
+ * Since: 3.0.9
+ */
+void
+gtk_spell_checker_add_to_dictionary (GtkSpellChecker *spell, const gchar *word)
+{
+  enchant_dict_add_to_pwl (spell->priv->speller, word, strlen (word));
+  gtk_spell_checker_recheck_all (spell);
+}
+
+/**
+ * gtk_spell_checker_ignore_word:
+ * @spell: The #GtkSpellChecker object.
+ * @word:  The word to add to the user ignore list.
+ *
+ * Add the specified word to the user ignore list.
+ *
+ * Since: 3.0.9
+ */
+void
+gtk_spell_checker_ignore_word (GtkSpellChecker *spell, const gchar *word)
+{
+  enchant_dict_add_to_session (spell->priv->speller, word, strlen (word));
+  gtk_spell_checker_recheck_all (spell);
+}
+
+/**
  * gtk_spell_checker_get_suggestions:
  * @spell: A #GtkSpellChecker.
  * @word: The word for which to fetch suggestions

@@ -1148,21 +1148,23 @@ gtk_spell_checker_get_language_list (void)
 gchar*
 gtk_spell_checker_decode_language_code (const gchar *lang)
 {
+  gchar* result;
 #ifdef HAVE_ISO_CODES
   const gchar *lang_name = "\0";
   const gchar *country_name = "\0";
   if (codetable_ref_cnt == 0)
     codetable_init ();
   codetable_lookup (lang, &lang_name, &country_name);
+  if (strlen (country_name) != 0)
+    result = g_strdup_printf ("%s (%s)", lang_name, country_name);
+  else
+    result = g_strdup_printf ("%s", lang_name);
   if (codetable_ref_cnt == 0)
     codetable_free ();
-  if (strlen (country_name) != 0)
-    return g_strdup_printf ("%s (%s)", lang_name, country_name);
-  else
-    return g_strdup_printf ("%s", lang_name);
 #else
-  return g_strdup (lang);
+  result = g_strdup (lang);
 #endif
+  return result;
 }
 
 /**

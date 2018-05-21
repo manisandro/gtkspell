@@ -26,7 +26,7 @@ srcdir="$(dirname "$(readlink -f $0)")"
 }
 
 (autoreconf --version) < /dev/null > /dev/null 2>&1 || {
-  echo "**Error**: You must have \`autoreconf' installed."
+  echo "**Error**: You must have \`autoconf' installed."
   echo "Download the appropriate package for your distribution,"
   echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
   echo
@@ -34,7 +34,7 @@ srcdir="$(dirname "$(readlink -f $0)")"
 }
 
 (aclocal --version) < /dev/null > /dev/null 2>&1 || {
-  echo "**Error**: You must have \`aclocal' installed."
+  echo "**Error**: You must have \`automake' installed."
   echo "Download the appropriate package for your distribution,"
   echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
   echo

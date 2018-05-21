@@ -54,6 +54,7 @@ srcdir="$(dirname "$(readlink -f "$0")")"
 
 (
   cd "$srcdir"
+  mkdir -p build
   echo "Running intltoolize..."
   intltoolize --force --copy --automake || exit 1
 )

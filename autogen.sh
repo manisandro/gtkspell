@@ -3,9 +3,9 @@
 
 set -o errexit
 
-srcdir="$(dirname "$(readlink -f $0)")"
+srcdir="$(dirname "$(readlink -f "$0")")"
 
-(test -f $srcdir/configure.ac) || {
+(test -f "$srcdir"/configure.ac) || {
   echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
   echo " top-level package directory"
   echo
@@ -74,7 +74,7 @@ autoreconf -fiv "$srcdir" || exit 1
 
 if test x$NOCONFIGURE = x; then
   echo Running $srcdir/configure "$@" ...
-  $srcdir/configure "$@" \
+  "$srcdir"/configure "$@" \
   && echo Now type \`make\' to compile. || exit 1
 else
   echo Skipping configure process.

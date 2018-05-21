@@ -1,6 +1,8 @@
 #!/bin/sh
 # Run this to generate all the initial makefiles, etc.
 
+set -o errexit
+
 srcdir="$(dirname "$(readlink -f $0)")"
 
 (test -f $srcdir/configure.ac) || {

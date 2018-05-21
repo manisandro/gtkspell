@@ -33,6 +33,14 @@ srcdir="$(dirname "$(readlink -f $0)")"
   exit 1
 }
 
+(aclocal --version) < /dev/null > /dev/null 2>&1 || {
+  echo "**Error**: You must have \`aclocal' installed."
+  echo "Download the appropriate package for your distribution,"
+  echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
+  echo
+  exit 1
+}
+
 (stat "$(aclocal --print-ac-dir)/ax_cxx_compile_stdcxx_11.m4") < /dev/null > /dev/null 2>&1 || {
   echo "**Error**: You must have the \`ax_cxx_compile_stdcxx_11.m4' macro installed-"
   echo "Download the appropriate package for your distribution,"

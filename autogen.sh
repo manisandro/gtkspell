@@ -61,8 +61,7 @@ srcdir="$(dirname "$(readlink -f "$0")")"
 
 
 echo "Running gtkdocize..."
-GTKDOCIZE=`which gtkdocize`
-if test -z $GTKDOCIZE; then
+if ! command -v gtkdocize >/dev/null; then
   echo "gtkdocize not found, skipping"
 else
   gtkdocize --srcdir "$srcdir" || exit 1

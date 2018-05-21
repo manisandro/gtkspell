@@ -10,13 +10,13 @@ srcdir="$(dirname "$(readlink -f $0)")"
   exit 1
 }
 
-# (intltoolize --version) < /dev/null > /dev/null 2>&1 || {
-#   echo "**Error**: You must have \`intltool' installed."
-#   echo "You can get it from:"
-#   echo "  ftp://ftp.gnome.org/pub/GNOME/"
-#   echo
-#   exit 1
-# }
+(intltoolize --version) < /dev/null > /dev/null 2>&1 || {
+  echo "**Error**: You must have \`intltool' installed."
+  echo "You can get it from:"
+  echo "  https://launchpad.net/intltool"
+  echo
+  exit 1
+}
 
 (libtool --version) < /dev/null > /dev/null 2>&1 || {
   echo "**Error**: You must have \`libtool' installed."

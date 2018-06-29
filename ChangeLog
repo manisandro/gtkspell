@@ -1,3 +1,7 @@
+version 3.0.10 (2018-06-30)
+	* Port to enchant-2
+	* Translation updates
+
 version 3.0.9 (2016-08-08):
 	* Add gtk_spell_checker_add_to_dictionary
 	* Add gtk_spell_checker_ignore_word

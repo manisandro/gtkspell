@@ -14,7 +14,7 @@ Source: %{name}-%{version}.tar.xz
 
 Requires: iso-codes
 
-BuildRequires: enchant-devel
+BuildRequires: enchant2-devel
 BuildRequires: gobject-introspection-devel
 BuildRequires: intltool
 BuildRequires: libtool

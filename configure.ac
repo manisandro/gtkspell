@@ -74,13 +74,13 @@ LT_INIT
 
 dnl ********************************* Modules *********************************
 if test x$gtk3 = xyes; then
-	AC_SUBST([GTKSPELL3_MODULES], ['glib-2.0 gtk+-3.0 enchant'])
+	AC_SUBST([GTKSPELL3_MODULES], ['glib-2.0 gtk+-3.0 enchant-2'])
 	PKG_CHECK_MODULES(GTK_SPELL3, [$GTKSPELL3_MODULES])
 	AC_SUBST(SPEC_ENABLE_GTK3, 1)
 fi
 
 if test x$gtk2 = xyes; then
-	AC_SUBST([GTKSPELL2_MODULES], ['glib-2.0 gtk+-2.0 enchant'])
+	AC_SUBST([GTKSPELL2_MODULES], ['glib-2.0 gtk+-2.0 enchant-2'])
 	PKG_CHECK_MODULES(GTK_SPELL2, [$GTKSPELL2_MODULES])
 	AC_SUBST(SPEC_ENABLE_GTK2, 1)
 fi

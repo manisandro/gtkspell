@@ -353,7 +353,7 @@ add_to_dictionary (GtkWidget *menuitem, GtkSpellChecker *spell)
   get_word_extents_from_mark (spell->priv->buffer, &start, &end, spell->priv->mark_click);
   word = gtk_text_buffer_get_text (spell->priv->buffer, &start, &end, FALSE);
 
-  enchant_dict_add_to_pwl (spell->priv->speller, word, strlen (word));
+  enchant_dict_add (spell->priv->speller, word, strlen (word));
 
   gtk_spell_checker_recheck_all (spell);
 
@@ -1246,7 +1246,7 @@ gtk_spell_checker_recheck_all (GtkSpellChecker *spell)
 void
 gtk_spell_checker_add_to_dictionary (GtkSpellChecker *spell, const gchar *word)
 {
-  enchant_dict_add_to_pwl (spell->priv->speller, word, strlen (word));
+  enchant_dict_add (spell->priv->speller, word, strlen (word));
   gtk_spell_checker_recheck_all (spell);
 }
 

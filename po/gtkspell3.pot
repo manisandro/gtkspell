@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 22:40+0100\n"
+"POT-Creation-Date: 2018-06-30 00:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,36 +17,36 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../gtkspell/gtkspell.c:429
+#: ../gtkspell/gtkspell.c:434
 msgid "<i>(no suggestions)</i>"
 msgstr ""
 
-#: ../gtkspell/gtkspell.c:445
+#: ../gtkspell/gtkspell.c:450
 msgid "More..."
 msgstr ""
 
 #. + Add to Dictionary
-#: ../gtkspell/gtkspell.c:466
+#: ../gtkspell/gtkspell.c:471
 #, c-format
 msgid "Add \"%s\" to Dictionary"
 msgstr ""
 
-#: ../gtkspell/gtkspell.c:481 ../gtkspell/gtkspell.c:483
+#: ../gtkspell/gtkspell.c:486 ../gtkspell/gtkspell.c:488
 msgid "Ignore All"
 msgstr ""
 
 #. For the situation where no language is active (i.e.
 #. * spell->priv->lang == NULL), create a "None" item which is active.
-#: ../gtkspell/gtkspell.c:583
+#: ../gtkspell/gtkspell.c:588
 msgid "None"
 msgstr ""
 
 #. on top: language selection
-#: ../gtkspell/gtkspell.c:619
+#: ../gtkspell/gtkspell.c:624
 msgid "Languages"
 msgstr ""
 
-#: ../gtkspell/gtkspell.c:719
+#: ../gtkspell/gtkspell.c:724
 #, c-format
 msgid "enchant error for language: %s"
 msgstr ""

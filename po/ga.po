@@ -1,39 +1,55 @@
 # Irish translations for gtkspell.
-# Copyright (C) 2003 Free Software Foundation, Inc.
-# This file is distributed under the same license as the gtkspell package.
-# Kevin Patrick Scannell <scannell@SLU.EDU>, 2004.
+# Copyright (C) 2015 the authors of gtkspell* (msgids)
+# This file is distributed under the same license as the gtkspell3 package.
+# Kevin Patrick Scannell <kscanne@gmail.com>, 2004, 2017
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkspell 2.0.6-pre1\n"
-"Report-Msgid-Bugs-To: nathan@silverorange.com\n"
-"POT-Creation-Date: 2004-06-10 19:31-0400\n"
-"PO-Revision-Date: 2004-06-11 12:05-0500\n"
-"Last-Translator: Kevin Patrick Scannell <scannell@SLU.EDU>\n"
-"Language-Team: Irish <ga@li.org>\n"
+"Project-Id-Version: gtkspell 3.0.7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-08 22:40+0100\n"
+"PO-Revision-Date: 2017-01-09 12:05-0500\n"
+"Last-Translator: Kevin Patrick Scannell <kscanne@gmail.com>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
 
-#: gtkspell/gtkspell.c:381
+#: ../gtkspell/gtkspell.c:429
 msgid "<i>(no suggestions)</i>"
-msgstr "<i>(nÌl aon mholadh)</i>"
+msgstr "<i>(n√≠l aon mholadh)</i>"
 
-#: gtkspell/gtkspell.c:395
+#: ../gtkspell/gtkspell.c:445
 msgid "More..."
 msgstr "Tuilleadh..."
 
 #. + Add to Dictionary
-#: gtkspell/gtkspell.c:421
+#: ../gtkspell/gtkspell.c:466
 #, c-format
 msgid "Add \"%s\" to Dictionary"
-msgstr "Cuir \"%s\" isteach san fhoclÛir"
+msgstr "Cuir \"%s\" san fhocl√≥ir"
 
-#. - Ignore All
-#: gtkspell/gtkspell.c:432
+#: ../gtkspell/gtkspell.c:481 ../gtkspell/gtkspell.c:483
 msgid "Ignore All"
-msgstr "DÈan neamhshuim ar gach"
+msgstr "D√©an neamhaird de gach ceann"
 
-#: gtkspell/gtkspell.c:465
-msgid "Spelling Suggestions"
-msgstr "MoltaÌ Litrithe"
+#. For the situation where no language is active (i.e.
+#. * spell->priv->lang == NULL), create a "None" item which is active.
+#: ../gtkspell/gtkspell.c:583
+msgid "None"
+msgstr "Gan Teanga"
+
+#. on top: language selection
+#: ../gtkspell/gtkspell.c:619
+msgid "Languages"
+msgstr "Teangacha"
+
+#: ../gtkspell/gtkspell.c:719
+#, c-format
+msgid "enchant error for language: %s"
+msgstr "earr√°id enchant le haghaidh teanga: %s"
+
+#~ msgid "Spelling Suggestions"
+#~ msgstr "Molta√≠ Litrithe"
